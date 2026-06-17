@@ -1,0 +1,111 @@
+---
+import { render } from 'astro:content';
+import PageHeader from '~/components/PageHeader.astro';
+import Sources from '~/components/Sources.astro';
+import { getTimeline } from '~/lib/collections';
+import { useTranslations, type Locale } from '~/i18n/utils';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const events = await getTimeline(lang);
+const rendered = await Promise.all(
+  events.map(async (e) => ({ data: e.data, Content: (await render(e)).Content })),
+);
+---
+
+<PageHeader eyebrow={t('nav.timeline')} title={t('timeline.title')} lede={t('timeline.lede')} />
+
+<section class="wrap timeline">
+  <ol>
+    {
+      rendered.map(({ data, Content }) => (
+        <li class="event" data-reveal>
+          <div class="event__rail" aria-hidden="true">
+            <span class="event__dot" />
+          </div>
+          <div class="event__body">
+            <p class="event__date">{data.displayDate ?? data.year}</p>
+            {data.era && <p class="event__era">{data.era}</p>}
+            <h2 class="event__title">{data.title}</h2>
+            <div class="prose event__prose">
+              <Content />
+            </div>
+            <Sources sources={data.sources} lang={lang} variant="inline" />
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .timeline {
+    padding-block-end: 2rem;
+  }
+  .timeline ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-inline-size: 52rem;
+  }
+  .event {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: clamp(1rem, 0.5rem + 2vw, 2rem);
+  }
+  .event__rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .event__dot {
+    inline-size: 0.85rem;
+    block-size: 0.85rem;
+    border-radius: 50%;
+    background: var(--color-terracotta-500);
+    margin-block-start: 0.5rem;
+    box-shadow: 0 0 0 4px var(--color-paper), 0 0 0 5px var(--color-terracotta-200);
+  }
+  .event__rail::after {
+    content: '';
+    inline-size: 2px;
+    flex: 1;
+    background: var(--color-line);
+    margin-block-start: 0.4rem;
+  }
+  .event:last-child .event__rail::after {
+    display: none;
+  }
+  .event__body {
+    padding-block-end: 3rem;
+  }
+  .event__date {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: var(--color-terracotta-600);
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .event__era {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-brass-600);
+    margin: 0.35rem 0 0;
+  }
+  .event__title {
+    font-size: 1.85rem;
+    margin-block: 0.5rem 0.75rem;
+  }
+  .event__prose {
+    font-size: 1.05rem;
+  }
+</style>

@@ -1,0 +1,12 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import TimelineView from '~/components/views/TimelineView.astro';
+import { useTranslations } from '~/i18n/utils';
+
+const lang = 'en' as const;
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={t('timeline.title')} description={t('timeline.lede')}>
+  <TimelineView lang={lang} />
+</BaseLayout>

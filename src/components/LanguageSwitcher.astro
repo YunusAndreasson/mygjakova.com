@@ -1,0 +1,68 @@
+---
+import {
+  locales,
+  localeName,
+  localizedPath,
+  stripLocale,
+  resolveLocale,
+  useTranslations,
+  type Locale,
+} from '~/i18n/utils';
+
+interface Props {
+  lang?: Locale;
+}
+
+const lang = Astro.props.lang ?? resolveLocale(Astro.currentLocale);
+const t = useTranslations(lang);
+const barePath = stripLocale(Astro.url.pathname);
+---
+
+<nav class="lang" aria-label={t('lang.label')}>
+  {
+    locales.map((l, i) => (
+      <>
+        {i > 0 && <span class="lang__sep" aria-hidden="true">/</span>}
+        <a
+          href={localizedPath(l, barePath)}
+          class="lang__link"
+          hreflang={l}
+          lang={l}
+          aria-current={l === lang ? 'true' : undefined}
+        >
+          {l.toUpperCase()}
+          <span class="lang__full">{localeName(l)}</span>
+        </a>
+      </>
+    ))
+  }
+</nav>
+
+<style>
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .lang__sep {
+    color: var(--color-sand-500);
+  }
+  .lang__link {
+    color: var(--color-sand-600);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .lang__link:hover {
+    color: var(--color-terracotta-600);
+  }
+  .lang__link[aria-current='true'] {
+    color: var(--color-ink);
+  }
+  .lang__full {
+    display: none;
+  }
+</style>

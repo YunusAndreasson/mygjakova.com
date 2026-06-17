@@ -1,0 +1,291 @@
+---
+import LanguageSwitcher from '~/components/LanguageSwitcher.astro';
+import { useTranslations, localizedPath, stripLocale, type Locale } from '~/i18n/utils';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const barePath = stripLocale(Astro.url.pathname);
+
+const items = [
+  { key: 'nav.home', path: '/' },
+  { key: 'nav.places', path: '/places' },
+  { key: 'nav.timeline', path: '/timeline' },
+  { key: 'nav.about', path: '/about' },
+] as const;
+
+const isActive = (path: string) =>
+  path === '/' ? barePath === '/' : barePath === path || barePath.startsWith(path + '/');
+---
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a href={localizedPath(lang, '/')} class="brand" aria-label={t('site.name')}>
+      <span class="brand__mark" aria-hidden="true"></span>
+      <span class="brand__name">{t('site.name')}</span>
+    </a>
+
+    <nav class="nav nav--desktop" aria-label="Primary">
+      <ul>
+        {
+          items.map((item) => (
+            <li>
+              <a
+                href={localizedPath(lang, item.path)}
+                class="nav__link"
+                aria-current={isActive(item.path) ? 'page' : undefined}
+              >
+                {t(item.key)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <div class="lang--desktop"><LanguageSwitcher lang={lang} /></div>
+      <button
+        type="button"
+        class="menu-toggle"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        data-menu-toggle
+      >
+        <span class="menu-toggle__bars" aria-hidden="true"></span>
+        <span class="sr-only">{t('a11y.menu')}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-nav" id="mobile-nav" data-mobile-nav hidden>
+    <nav class="wrap" aria-label="Primary">
+      <ul>
+        {
+          items.map((item) => (
+            <li>
+              <a
+                href={localizedPath(lang, item.path)}
+                class="mobile-nav__link"
+                aria-current={isActive(item.path) ? 'page' : undefined}
+              >
+                {t(item.key)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mobile-nav__lang"><LanguageSwitcher lang={lang} /></div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 50;
+    background: color-mix(in oklab, var(--color-paper) 88%, transparent);
+    backdrop-filter: saturate(1.1) blur(8px);
+    border-block-end: 1px solid var(--color-line);
+  }
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    block-size: 4.25rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: var(--color-ink);
+  }
+  .brand__mark {
+    inline-size: 1.15rem;
+    block-size: 1.5rem;
+    background: var(--color-terracotta-500);
+    /* a small pointed arch — the bazaar motif */
+    clip-path: path('M0 24 L0 9 Q9.2 -6 18.4 9 L18.4 24 Z');
+    box-shadow: inset 0 0 0 100px var(--color-terracotta-500);
+  }
+  .brand__name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.4rem;
+    letter-spacing: -0.01em;
+  }
+
+  .nav--desktop ul {
+    display: flex;
+    gap: 1.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav__link {
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--color-sand-700);
+    text-decoration: none;
+    padding-block: 0.35rem;
+    position: relative;
+    transition: color 0.15s ease;
+  }
+  .nav__link::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: 2px;
+    background: var(--color-terracotta-500);
+    transform: scaleX(0);
+    transform-origin: var(--logical-start, left);
+    transition: transform 0.2s ease;
+  }
+  .nav__link:hover {
+    color: var(--color-ink);
+  }
+  .nav__link:hover::after,
+  .nav__link[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+  .nav__link[aria-current='page'] {
+    color: var(--color-ink);
+  }
+
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .menu-toggle {
+    display: none;
+    appearance: none;
+    border: 1px solid var(--color-line);
+    background: transparent;
+    border-radius: var(--radius-sm);
+    inline-size: 2.6rem;
+    block-size: 2.6rem;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+  }
+  .menu-toggle__bars,
+  .menu-toggle__bars::before,
+  .menu-toggle__bars::after {
+    content: '';
+    display: block;
+    inline-size: 1.15rem;
+    block-size: 2px;
+    background: var(--color-ink);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .menu-toggle__bars {
+    position: relative;
+  }
+  .menu-toggle__bars::before {
+    position: absolute;
+    inset-block-start: -6px;
+  }
+  .menu-toggle__bars::after {
+    position: absolute;
+    inset-block-start: 6px;
+  }
+  .menu-toggle[aria-expanded='true'] .menu-toggle__bars {
+    background: transparent;
+  }
+  .menu-toggle[aria-expanded='true'] .menu-toggle__bars::before {
+    transform: translateY(6px) rotate(45deg);
+  }
+  .menu-toggle[aria-expanded='true'] .menu-toggle__bars::after {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  .mobile-nav {
+    border-block-end: 1px solid var(--color-line);
+    background: var(--color-paper);
+  }
+  .mobile-nav[hidden] {
+    display: none;
+  }
+  .mobile-nav ul {
+    list-style: none;
+    margin: 0;
+    padding-block: 0.75rem;
+  }
+  .mobile-nav__link {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--color-ink);
+    text-decoration: none;
+    padding-block: 0.6rem;
+  }
+  .mobile-nav__link[aria-current='page'] {
+    color: var(--color-terracotta-600);
+  }
+  .mobile-nav__lang {
+    padding-block: 1rem 1.5rem;
+    border-block-start: 1px solid var(--color-line);
+  }
+
+  .sr-only {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 767px) {
+    .nav--desktop,
+    .lang--desktop {
+      display: none;
+    }
+    .menu-toggle {
+      display: inline-flex;
+    }
+  }
+</style>
+
+<script>
+  // Mobile menu toggle. Re-binds on every view-transition navigation so it
+  // keeps working after client-side route changes. Bundled by Astro, so the
+  // CSP hash is generated automatically.
+  function setupMenu() {
+    const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+    const panel = document.querySelector<HTMLElement>('[data-mobile-nav]');
+    if (!toggle || !panel) return;
+
+    const close = () => {
+      toggle.setAttribute('aria-expanded', 'false');
+      panel.hidden = true;
+    };
+    const open = () => {
+      toggle.setAttribute('aria-expanded', 'true');
+      panel.hidden = false;
+    };
+
+    toggle.addEventListener('click', () => {
+      toggle.getAttribute('aria-expanded') === 'true' ? close() : open();
+    });
+    panel.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+  }
+
+  document.addEventListener('astro:page-load', setupMenu);
+</script>

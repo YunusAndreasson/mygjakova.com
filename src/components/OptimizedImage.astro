@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  /** Responsive candidate widths handed to Sharp at build time. */
+  widths?: number[];
+  /** `sizes` attribute; tune per layout slot for correct selection. */
+  sizes?: string;
+  loading?: 'lazy' | 'eager';
+  /** Mark above-the-fold images to skip lazy-loading and hint the browser. */
+  priority?: boolean;
+  class?: string;
+  /** CSS aspect-ratio for the crop frame, e.g. "16 / 10". */
+  ratio?: string;
+}
+
+const {
+  src,
+  alt,
+  widths = [480, 768, 1024, 1440, 1920],
+  sizes = '100vw',
+  loading,
+  priority = false,
+  class: className,
+  ratio,
+} = Astro.props;
+
+const resolvedLoading = loading ?? (priority ? 'eager' : 'lazy');
+const style = ratio ? `aspect-ratio:${ratio}` : undefined;
+---
+
+<figure class:list={['oimg', className]} style={style}>
+  <Image
+    src={src}
+    alt={alt}
+    widths={widths}
+    sizes={sizes}
+    loading={resolvedLoading}
+    decoding="async"
+    fetchpriority={priority ? 'high' : 'auto'}
+  />
+</figure>
+
+<style>
+  .oimg {
+    margin: 0;
+    overflow: hidden;
+    background: var(--color-sand-300);
+  }
+  .oimg :global(img) {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    display: block;
+  }
+</style>

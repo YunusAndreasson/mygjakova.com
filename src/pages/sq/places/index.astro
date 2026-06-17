@@ -1,0 +1,12 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PlacesIndex from '~/components/views/PlacesIndex.astro';
+import { useTranslations } from '~/i18n/utils';
+
+const lang = 'sq' as const;
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={t('places.title')} description={t('places.lede')}>
+  <PlacesIndex lang={lang} />
+</BaseLayout>

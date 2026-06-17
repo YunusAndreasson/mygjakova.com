@@ -1,0 +1,37 @@
+{
+  "name": "gjakova",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An elegant cultural tourist guide to Gjakova, Kosovo.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "check": "astro check",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "preview": "astro preview",
+    "deploy": "astro check && astro build && wrangler pages deploy --branch main",
+    "cf:preview": "astro build && wrangler pages dev dist"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^6.0.3",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "6.4.7"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@biomejs/biome": "2.5.0",
+    "@tailwindcss/vite": "4.3.1",
+    "sharp": "^0.34.5",
+    "tailwindcss": "4.3.1",
+    "typescript": "^6.0.3",
+    "vitest": "4.1.9",
+    "wrangler": "^4.101.0"
+  }
+}

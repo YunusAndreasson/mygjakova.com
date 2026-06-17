@@ -1,0 +1,138 @@
+---
+import { Font } from 'astro:assets';
+import { ClientRouter } from 'astro:transitions';
+import Header from '~/components/Header.astro';
+import Footer from '~/components/Footer.astro';
+import {
+  resolveLocale,
+  getDirection,
+  useTranslations,
+  localizedPath,
+  stripLocale,
+  locales,
+} from '~/i18n/utils';
+import '~/styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Path to an OG image under /public, or absolute URL. */
+  image?: string;
+  noindex?: boolean;
+  /** Extra schema.org node(s) merged into the page's JSON-LD @graph. */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const { title, description, image = '/og-default.jpg', noindex = false, jsonLd } = Astro.props;
+
+const lang = resolveLocale(Astro.currentLocale);
+const dir = getDirection(lang);
+const t = useTranslations(lang);
+
+const siteName = t('site.name');
+const pageTitle = title ? `${title} — ${siteName}` : `${siteName} — ${t('site.tagline')}`;
+const desc = description ?? t('site.description');
+
+// Canonical + hreflang are built from the locale-agnostic path so language
+// alternates stay correct on every route.
+const origin = Astro.site ?? new URL(Astro.url.origin);
+const barePath = stripLocale(Astro.url.pathname);
+const canonical = new URL(localizedPath(lang, barePath), origin);
+const ogImage = new URL(image, origin);
+
+const alternates = locales.map((l) => ({
+  hreflang: l,
+  href: new URL(localizedPath(l, barePath), origin).href,
+}));
+
+// JSON-LD: a site-wide WebSite node on every page, plus any node(s) a page
+// passes (e.g. a TouristAttraction on a place guide), merged into one @graph.
+const ldGraph = [
+  {
+    '@type': 'WebSite',
+    '@id': `${origin.href}#website`,
+    name: siteName,
+    url: origin.href,
+    inLanguage: lang,
+    description: desc,
+  },
+  ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []),
+];
+const ld = { '@context': 'https://schema.org', '@graph': ldGraph };
+---
+
+<!doctype html>
+<html lang={lang} dir={dir}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#f6f1e7" />
+    <meta name="color-scheme" content="light" />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={desc} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="canonical" href={canonical.href} />
+    {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(localizedPath('en', barePath), origin).href} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={lang} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={ogImage.href} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={desc} />
+    <meta name="twitter:image" content={ogImage.href} />
+
+    <!-- Structured data (schema.org) -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(ld)} />
+
+    <!-- Self-hosted fonts (preloaded) -->
+    <Font cssVariable="--ff-display" preload />
+    <Font cssVariable="--ff-serif" preload />
+    <Font cssVariable="--ff-sans" preload />
+
+    <ClientRouter />
+  </head>
+
+  <body>
+    <a href="#main" class="skip-link">{t('a11y.skip')}</a>
+    <Header lang={lang} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+
+    <style>
+      .skip-link {
+        position: fixed;
+        inset-block-start: 0.75rem;
+        inset-inline-start: 0.75rem;
+        z-index: 100;
+        padding: 0.6rem 1rem;
+        border-radius: var(--radius-sm);
+        background: var(--color-ink);
+        color: var(--color-sand-50);
+        font-family: var(--font-sans);
+        font-weight: 600;
+        transform: translateY(-150%);
+        transition: transform 0.18s ease;
+      }
+      .skip-link:focus-visible {
+        transform: translateY(0);
+      }
+      #main {
+        display: block;
+        min-height: 60svh;
+      }
+    </style>
+  </body>
+</html>

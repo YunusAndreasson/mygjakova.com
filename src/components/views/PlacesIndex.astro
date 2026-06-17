@@ -1,0 +1,29 @@
+---
+import PageHeader from '~/components/PageHeader.astro';
+import PlaceCard from '~/components/PlaceCard.astro';
+import { getPlaces } from '~/lib/collections';
+import { useTranslations, type Locale } from '~/i18n/utils';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const places = await getPlaces(lang);
+---
+
+<PageHeader eyebrow={t('nav.places')} title={t('places.title')} lede={t('places.lede')} />
+
+<section class="wrap cards" data-reveal>
+  {places.map((place, i) => <PlaceCard place={place} lang={lang} priority={i < 2} />)}
+</section>
+
+<style>
+  .cards {
+    display: grid;
+    gap: 1.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+    padding-block-end: 2rem;
+  }
+</style>

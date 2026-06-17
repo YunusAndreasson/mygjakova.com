@@ -1,0 +1,12 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import AboutView from '~/components/views/AboutView.astro';
+import { useTranslations } from '~/i18n/utils';
+
+const lang = 'sq' as const;
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={t('about.title')}>
+  <AboutView lang={lang} />
+</BaseLayout>

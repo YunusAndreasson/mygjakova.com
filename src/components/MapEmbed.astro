@@ -1,0 +1,72 @@
+---
+// Lightweight, dependency-free map placeholder. An interactive map (e.g.
+// MapLibre GL) is a deferred feature; this proves the slot and gives a real,
+// useful link to the location in the meantime.
+interface Props {
+  lat: number;
+  lng: number;
+  label?: string;
+  zoom?: number;
+}
+
+const { lat, lng, label, zoom = 16 } = Astro.props;
+const osm = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=${zoom}/${lat}/${lng}`;
+const coords = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+---
+
+<a class="map" href={osm} target="_blank" rel="noopener noreferrer">
+  <span class="map__pin" aria-hidden="true"></span>
+  <span class="map__text">
+    {label && <strong>{label}</strong>}
+    <span class="map__coords">{coords}</span>
+    <span class="map__hint">View on OpenStreetMap →</span>
+  </span>
+</a>
+
+<style>
+  .map {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    text-decoration: none;
+    color: var(--color-ink);
+    transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  .map:hover {
+    border-color: var(--color-terracotta-400);
+    box-shadow: var(--shadow-soft);
+  }
+  .map__pin {
+    flex: none;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    border-radius: 50% 50% 50% 0;
+    background: var(--color-terracotta-500);
+    transform: rotate(-45deg);
+    box-shadow: 0 4px 10px -4px rgb(180 85 45 / 0.7);
+  }
+  .map__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    font-family: var(--font-sans);
+    line-height: 1.4;
+  }
+  .map__text strong {
+    font-weight: 600;
+  }
+  .map__coords {
+    font-size: 0.85rem;
+    color: var(--color-sand-600);
+    font-variant-numeric: tabular-nums;
+  }
+  .map__hint {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-terracotta-600);
+  }
+</style>

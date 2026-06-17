@@ -1,0 +1,192 @@
+---
+import PlaceholderPlate from '~/components/PlaceholderPlate.astro';
+import PlaceCard from '~/components/PlaceCard.astro';
+import { getPlaces, getTimeline } from '~/lib/collections';
+import { useTranslations, localizedPath, type Locale } from '~/i18n/utils';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const places = await getPlaces(lang);
+const featured = [...places]
+  .sort((a, b) => Number(b.data.featured) - Number(a.data.featured))
+  .slice(0, 3);
+const lead = featured[0];
+const timeline = await getTimeline(lang);
+---
+
+<section class="hero">
+  <div class="wrap hero__grid">
+    <div class="hero__text">
+      <p class="eyebrow">{t('home.hero.eyebrow')}</p>
+      <h1 class="hero__title">{t('home.hero.title')}</h1>
+      <p class="hero__lede">{t('home.hero.lede')}</p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href={localizedPath(lang, '/places')}>
+          {t('home.hero.cta.places')}
+        </a>
+        <a class="btn btn--ghost" href={localizedPath(lang, '/timeline')}>
+          {t('home.hero.cta.timeline')}
+        </a>
+      </div>
+    </div>
+    <div class="hero__media">
+      <PlaceholderPlate
+        title={lead?.data.title ?? t('site.name')}
+        kind={lead?.data.category}
+        category={lead?.data.category}
+        aspect="4 / 5"
+        framed
+      />
+    </div>
+  </div>
+</section>
+
+<section class="section wrap" data-reveal>
+  <header class="section__head">
+    <p class="eyebrow">{t('home.places.eyebrow')}</p>
+    <h2 class="section__title">{t('home.places.title')}</h2>
+    <p class="section__lede">{t('home.places.lede')}</p>
+  </header>
+  <div class="cards">
+    {featured.map((place, i) => <PlaceCard place={place} lang={lang} priority={i === 0} />)}
+  </div>
+</section>
+
+{
+  timeline.length > 0 && (
+    <section class="teaser" data-reveal>
+      <div class="wrap">
+        <h2 class="teaser__title">{t('timeline.title')}</h2>
+        <ol class="teaser__list">
+          {timeline.map((e) => (
+            <li class="teaser__item">
+              <span class="teaser__date">{e.data.displayDate ?? e.data.year}</span>
+              <span class="teaser__label">{e.data.title}</span>
+            </li>
+          ))}
+        </ol>
+        <a class="teaser__cta" href={localizedPath(lang, '/timeline')}>
+          {t('home.hero.cta.timeline')}<span aria-hidden="true"> →</span>
+        </a>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  /* Hero */
+  .hero {
+    padding-block: clamp(2.5rem, 1rem + 7vw, 6rem);
+  }
+  .hero__grid {
+    display: grid;
+    gap: clamp(2rem, 1rem + 5vw, 4.5rem);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .hero__grid {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+  }
+  .hero__title {
+    font-size: var(--text-hero);
+    line-height: var(--text-hero--line-height);
+    letter-spacing: var(--text-hero--letter-spacing);
+    margin-block: 1rem 1.25rem;
+    /* Let the grid column govern the measure — a tight ch-cap here left a big
+       empty gap to the right of the wrapped title. */
+    text-wrap: balance;
+  }
+  .hero__lede {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: var(--color-sand-700);
+    max-inline-size: 46ch;
+  }
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-block-start: 2rem;
+  }
+  .hero__media {
+    position: relative;
+  }
+
+  /* Section heading */
+  .section {
+    padding-block: var(--section-y);
+  }
+  .section__head {
+    max-inline-size: 52ch;
+    margin-block-end: 2.5rem;
+  }
+  .section__title {
+    font-size: var(--text-display);
+    line-height: var(--text-display--line-height);
+    margin-block: 0.75rem;
+  }
+  .section__lede {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    color: var(--color-sand-700);
+  }
+  .cards {
+    display: grid;
+    gap: 1.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  }
+
+  /* Timeline teaser */
+  .teaser {
+    background: var(--color-sand-200);
+    padding-block: var(--section-y);
+    border-block: 1px solid var(--color-line);
+  }
+  .teaser__title {
+    font-size: var(--text-display);
+    margin-block-end: 1.5rem;
+  }
+  .teaser__list {
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0;
+    display: grid;
+    gap: 0;
+  }
+  .teaser__item {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: 1.25rem;
+    align-items: baseline;
+    padding-block: 1rem;
+    border-block-start: 1px solid var(--color-line);
+  }
+  .teaser__item:last-child {
+    border-block-end: 1px solid var(--color-line);
+  }
+  .teaser__date {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    color: var(--color-terracotta-600);
+    font-variant-numeric: tabular-nums;
+  }
+  .teaser__label {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+  }
+  .teaser__cta {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--color-terracotta-600);
+    text-decoration: none;
+  }
+</style>

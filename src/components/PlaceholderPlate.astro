@@ -1,0 +1,152 @@
+---
+/**
+ * Designed placeholder "plate" — an *intentional* typographic / duotone panel
+ * shown when a place has no real photograph yet. It reads as a deliberate
+ * editorial choice (name + category set in Fraunces over a warm duotone field
+ * with the bazaar pointed-arch motif), not as a failed photo. No image request:
+ * pure CSS + inline SVG, sharp at any size, and trivially swapped for a real
+ * <OptimizedImage> once photography exists.
+ */
+interface Props {
+  title: string;
+  /** Category label rendered as the eyebrow (already display-cased upstream). */
+  kind?: string;
+  /** Place category — drives the duotone palette (see PLACE_CATEGORIES). */
+  category?: string;
+  /** CSS aspect-ratio for the frame, e.g. "4 / 3" (card), "16 / 9" (guide). */
+  aspect?: string;
+  /** Rounded corners + lift shadow, for standalone use (hero / guide). Cards
+      clip their own corners, so they leave this off. */
+  framed?: boolean;
+  /** Optional view-transition name so a card plate morphs into the guide plate. */
+  transitionName?: string;
+}
+
+const { title, kind, category, aspect = '4 / 3', framed = false, transitionName } = Astro.props;
+
+// Map every category onto one of three warm duotone palettes (unknown → warm).
+const PALETTE: Record<string, 'warm' | 'brass' | 'stone'> = {
+  bazaar: 'warm',
+  bridge: 'warm',
+  monument: 'warm',
+  mosque: 'brass',
+  tekke: 'brass',
+  museum: 'brass',
+  house: 'stone',
+  square: 'stone',
+};
+const palette = PALETTE[category ?? ''] ?? 'warm';
+
+// Aspect ratio is applied via a class (not an inline `style`) so it stays
+// within the project's strict CSP, which doesn't allow inline style attributes.
+const ASPECT_CLASS: Record<string, string> = {
+  '4 / 3': 'plate--ar-4x3',
+  '4 / 5': 'plate--ar-4x5',
+  '16 / 9': 'plate--ar-16x9',
+};
+const aspectClass = ASPECT_CLASS[aspect] ?? 'plate--ar-4x3';
+---
+
+<figure
+  class:list={['plate', `plate--${palette}`, aspectClass, { 'plate--framed': framed }]}
+  transition:name={transitionName}
+  aria-hidden="true"
+>
+  <svg class="plate__arch" viewBox="0 0 100 120" preserveAspectRatio="xMidYMin slice" aria-hidden="true">
+    <path d="M16 122 L16 56 Q50 4 84 56 L84 122" fill="none" stroke="currentColor" stroke-width="1.1" />
+    <path d="M34 122 L34 70 Q50 40 66 70 L66 122" fill="none" stroke="currentColor" stroke-width="1.1" />
+  </svg>
+  <figcaption class="plate__caption">
+    {kind && <span class="plate__kind">{kind}</span>}
+    <span class="plate__title">{title}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .plate {
+    position: relative;
+    margin: 0;
+    inline-size: 100%;
+    overflow: hidden;
+    container-type: size;
+    display: flex;
+    align-items: end;
+    background-image: var(--grain), linear-gradient(155deg, var(--plate-a), var(--plate-b));
+    background-size: 160px 160px, cover;
+    background-blend-mode: soft-light, normal;
+    color: var(--plate-fg);
+    isolation: isolate;
+  }
+  .plate--framed {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lift);
+  }
+
+  /* Aspect ratios (class-based to satisfy the CSP — no inline styles). */
+  .plate--ar-4x3 {
+    aspect-ratio: 4 / 3;
+  }
+  .plate--ar-4x5 {
+    aspect-ratio: 4 / 5;
+  }
+  .plate--ar-16x9 {
+    aspect-ratio: 16 / 9;
+  }
+
+  /* Duotone palettes, built from the existing token ramp. */
+  .plate--warm {
+    --plate-a: var(--color-terracotta-500);
+    --plate-b: var(--color-terracotta-800);
+    --plate-fg: var(--color-sand-50);
+    --plate-accent: var(--color-brass-300);
+  }
+  .plate--brass {
+    --plate-a: var(--color-brass-600);
+    --plate-b: var(--color-sand-900);
+    --plate-fg: var(--color-sand-50);
+    --plate-accent: var(--color-brass-300);
+  }
+  .plate--stone {
+    --plate-a: var(--color-sand-700);
+    --plate-b: var(--color-sand-950);
+    --plate-fg: var(--color-sand-100);
+    --plate-accent: var(--color-brass-400);
+  }
+
+  /* Faint pointed-arch arcade — the bazaar motif, used as a watermark. */
+  .plate__arch {
+    position: absolute;
+    inset-block: 0 -1px;
+    inset-inline-end: 6%;
+    block-size: 100%;
+    inline-size: auto;
+    color: var(--plate-fg);
+    opacity: 0.14;
+    z-index: -1;
+  }
+
+  .plate__caption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5cqmin;
+    padding: clamp(1rem, 6cqmin, 2.25rem);
+  }
+  .plate__kind {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(0.62rem, 3.4cqmin, 0.82rem);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--plate-accent);
+  }
+  .plate__title {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    font-size: clamp(1.45rem, 11cqmin, 3.4rem);
+    text-wrap: balance;
+    max-inline-size: 16ch;
+  }
+</style>

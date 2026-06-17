@@ -1,0 +1,120 @@
+---
+import LanguageSwitcher from '~/components/LanguageSwitcher.astro';
+import { useTranslations, localizedPath, type Locale } from '~/i18n/utils';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+
+const items = [
+  { key: 'nav.places', path: '/places' },
+  { key: 'nav.timeline', path: '/timeline' },
+  { key: 'nav.about', path: '/about' },
+] as const;
+---
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <p class="site-footer__name">{t('site.name')}</p>
+      <p class="site-footer__tagline">{t('footer.tagline')}</p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Footer">
+      <ul>
+        {
+          items.map((item) => (
+            <li>
+              <a href={localizedPath(lang, item.path)}>{t(item.key)}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="site-footer__lang">
+      <LanguageSwitcher lang={lang} />
+    </div>
+  </div>
+
+  <div class="wrap site-footer__base">
+    <p>© {year} {t('site.name')}. {t('footer.rights')}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    isolation: isolate;
+    margin-block-start: 6rem;
+    background: var(--color-sand-900);
+    color: var(--color-sand-200);
+    font-family: var(--font-sans);
+  }
+  /* Same paper grain as the page body — its opaque dark fill hides the global
+     one, so it gets its own faint overlay for a consistent tactile surface. */
+  .site-footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: var(--grain);
+    background-size: 160px 160px;
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+  }
+  .site-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: space-between;
+    padding-block: 3.5rem 2rem;
+  }
+  .site-footer__name {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    color: var(--color-sand-50);
+    margin: 0;
+  }
+  .site-footer__tagline {
+    margin: 0.35rem 0 0;
+    color: var(--color-sand-400);
+    max-inline-size: 28ch;
+  }
+  .site-footer__nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .site-footer__nav a {
+    color: var(--color-sand-200);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .site-footer__nav a:hover {
+    color: var(--color-brass-300);
+  }
+  .site-footer__base {
+    padding-block: 1.25rem 2rem;
+    border-block-start: 1px solid rgb(255 255 255 / 0.08);
+    font-size: 0.85rem;
+    color: var(--color-sand-500);
+  }
+  .site-footer__base p {
+    margin: 0;
+  }
+  /* Brighten the switcher on the dark footer */
+  .site-footer__lang :global(.lang__link) {
+    color: var(--color-sand-300);
+  }
+  .site-footer__lang :global(.lang__link[aria-current='true']) {
+    color: var(--color-sand-50);
+  }
+</style>

@@ -1,0 +1,40 @@
+---
+import PageHeader from '~/components/PageHeader.astro';
+import { useTranslations, type Locale } from '~/i18n/utils';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// About copy lives here for now. When the site grows, this becomes a "pages"
+// content collection so non-developers can edit it.
+const body: Record<Locale, string[]> = {
+  en: [
+    'This is a slow guide to Gjakova — a city in western Kosovo whose old culture lives in its bazaar, its mosques and tekkes, and the stone houses of its highland hinterland.',
+    'Rather than chase every attraction, the guide moves carefully: a few places, told well, set against a single thread of history. The aim is to help you read the old city the way its craftspeople did — patiently, and with respect for what endured.',
+    'The site is a work in progress. Places, photography and stories will keep arriving.',
+  ],
+  sq: [
+    'Ky është një udhërrëfyes i ngadaltë për Gjakovën — një qytet në perëndim të Kosovës, kultura e vjetër e të cilit jeton në çarshinë, xhamitë e teqetë dhe shtëpitë e gurta të malësisë përreth.',
+    'Në vend që të ndjekë çdo atraksion, udhërrëfyesi ecën me kujdes: pak vende, të rrëfyera mirë, përballë një fije të vetme historie. Synimi është të të ndihmojë ta lexosh qytetin e vjetër ashtu si e lexonin mjeshtërit e tij — me durim dhe me respekt për atë që duroi.',
+    'Faqja është në punë e sipër. Vende, fotografi dhe tregime do të vazhdojnë të vijnë.',
+  ],
+};
+---
+
+<PageHeader title={t('about.title')} />
+
+<section class="wrap about">
+  <div class="prose prose--lead">
+    {body[lang].map((p) => <p>{p}</p>)}
+  </div>
+</section>
+
+<style>
+  .about {
+    padding-block-end: 2rem;
+  }
+</style>

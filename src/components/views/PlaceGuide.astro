@@ -1,0 +1,189 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import OptimizedImage from '~/components/OptimizedImage.astro';
+import PlaceholderPlate from '~/components/PlaceholderPlate.astro';
+import MapEmbed from '~/components/MapEmbed.astro';
+import Sources from '~/components/Sources.astro';
+import PlaceCard from '~/components/PlaceCard.astro';
+import { getPlaces, entrySlug } from '~/lib/collections';
+import { useTranslations, localizedPath, type Locale } from '~/i18n/utils';
+
+interface Props {
+  place: CollectionEntry<'places'>;
+  lang: Locale;
+}
+
+const { place, lang } = Astro.props;
+const t = useTranslations(lang);
+const { Content } = await render(place);
+
+const { title, summary, hero, heroAlt, category, era, coordinates, address, related, sources } =
+  place.data;
+const slug = entrySlug(place.id);
+
+const all = await getPlaces(lang);
+const relatedPlaces = all.filter(
+  (p) => related.includes(entrySlug(p.id)) && entrySlug(p.id) !== slug,
+);
+---
+
+<article class="guide">
+  <div class="wrap">
+    <a class="guide__back" href={localizedPath(lang, '/places')}>
+      <span aria-hidden="true">←</span> {t('places.backToPlaces')}
+    </a>
+  </div>
+
+  <div class="wrap">
+    {
+      hero ? (
+        <OptimizedImage
+          src={hero}
+          alt={heroAlt ?? title}
+          priority
+          ratio="16 / 9"
+          sizes="(min-width: 1200px) 72rem, 100vw"
+          widths={[768, 1200, 1600, 1920]}
+          class="guide__hero"
+          transition:name={`place-${slug}`}
+        />
+      ) : (
+        <PlaceholderPlate
+          title={title}
+          kind={category}
+          category={category}
+          aspect="16 / 9"
+          framed
+          transitionName={`place-${slug}`}
+        />
+      )
+    }
+  </div>
+
+  <header class="wrap guide__head">
+    <p class="guide__meta">
+      <span class="guide__cat">{category}</span>
+      {era && <span class="guide__era">{era}</span>}
+    </p>
+    <h1 class="guide__title">{title}</h1>
+    <p class="guide__summary">{summary}</p>
+  </header>
+
+  <div class="wrap guide__layout">
+    <div class="prose prose--lead guide__content">
+      <Content />
+    </div>
+
+    <aside class="guide__aside">
+      {coordinates && <MapEmbed lat={coordinates.lat} lng={coordinates.lng} label={address ?? title} />}
+      {
+        !coordinates && address && (
+          <p class="guide__address">{address}</p>
+        )
+      }
+      <Sources sources={sources} lang={lang} />
+    </aside>
+  </div>
+
+  {
+    relatedPlaces.length > 0 && (
+      <section class="wrap guide__related">
+        <h2 class="guide__related-title">{t('home.places.title')}</h2>
+        <div class="guide__related-grid">
+          {relatedPlaces.map((p) => (
+            <PlaceCard place={p} lang={lang} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+</article>
+
+<style>
+  .guide__back {
+    display: inline-block;
+    margin-block: 1.5rem 1.5rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-sand-700);
+    text-decoration: none;
+  }
+  .guide__back:hover {
+    color: var(--color-terracotta-600);
+  }
+  .guide__hero {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lift);
+    aspect-ratio: 16 / 9;
+  }
+  .guide__head {
+    max-inline-size: 60rem;
+    padding-block: clamp(2rem, 1rem + 4vw, 3.5rem) 1.5rem;
+  }
+  .guide__meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin: 0 0 0.75rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .guide__cat {
+    color: var(--color-sand-50);
+    background: var(--color-terracotta-500);
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-xs);
+  }
+  .guide__era {
+    color: var(--color-brass-600);
+  }
+  .guide__title {
+    font-size: var(--text-display);
+    line-height: var(--text-display--line-height);
+    letter-spacing: var(--text-display--letter-spacing);
+    margin: 0;
+  }
+  .guide__summary {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    line-height: 1.55;
+    color: var(--color-sand-700);
+    margin-block-start: 1rem;
+    max-inline-size: 52ch;
+  }
+  .guide__layout {
+    display: grid;
+    gap: clamp(1.5rem, 0.5rem + 4vw, 3.5rem);
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .guide__layout {
+      grid-template-columns: 1fr 20rem;
+    }
+    .guide__aside {
+      position: sticky;
+      inset-block-start: 5.5rem;
+    }
+  }
+  .guide__address {
+    font-family: var(--font-sans);
+    color: var(--color-sand-700);
+  }
+  .guide__related {
+    margin-block-start: clamp(3rem, 2rem + 4vw, 5rem);
+  }
+  .guide__related-title {
+    font-size: var(--text-display);
+    margin-block-end: 1.75rem;
+  }
+  .guide__related-grid {
+    display: grid;
+    gap: 1.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  }
+</style>
