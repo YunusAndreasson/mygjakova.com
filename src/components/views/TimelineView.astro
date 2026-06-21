@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import PageHeader from '~/components/PageHeader.astro';
 import Sources from '~/components/Sources.astro';
+import Figure from '~/components/Figure.astro';
 import { getTimeline } from '~/lib/collections';
 import { useTranslations, type Locale } from '~/i18n/utils';
 
@@ -35,6 +36,17 @@ const rendered = await Promise.all(
             <div class="prose event__prose">
               <Content />
             </div>
+            {data.image && (
+              <div class="event__figure">
+                <Figure
+                  src={data.image}
+                  alt={data.imageAlt ?? data.title}
+                  caption={data.imageCaption}
+                  credit={data.imageCredit}
+                  sizes="(min-width: 60rem) 40rem, 90vw"
+                />
+              </div>
+            )}
             <Sources sources={data.sources} lang={lang} variant="inline" />
           </div>
         </li>
@@ -45,7 +57,7 @@ const rendered = await Promise.all(
 
 <style>
   .timeline {
-    padding-block-end: 2rem;
+    padding-block-end: var(--space-xl);
   }
   .timeline ol {
     list-style: none;
@@ -56,7 +68,7 @@ const rendered = await Promise.all(
   .event {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: clamp(1rem, 0.5rem + 2vw, 2rem);
+    gap: var(--gap-rail);
   }
   .event__rail {
     display: flex;
@@ -68,7 +80,7 @@ const rendered = await Promise.all(
     block-size: 0.85rem;
     border-radius: 50%;
     background: var(--color-terracotta-500);
-    margin-block-start: 0.5rem;
+    margin-block-start: var(--space-xs);
     box-shadow: 0 0 0 4px var(--color-paper), 0 0 0 5px var(--color-terracotta-200);
   }
   .event__rail::after {
@@ -76,13 +88,13 @@ const rendered = await Promise.all(
     inline-size: 2px;
     flex: 1;
     background: var(--color-line);
-    margin-block-start: 0.4rem;
+    margin-block-start: var(--space-2xs);
   }
   .event:last-child .event__rail::after {
     display: none;
   }
   .event__body {
-    padding-block-end: 3rem;
+    padding-block-end: var(--space-2xl);
   }
   .event__date {
     font-family: var(--font-display);
@@ -99,13 +111,20 @@ const rendered = await Promise.all(
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--color-brass-600);
-    margin: 0.35rem 0 0;
+    margin: var(--space-2xs) 0 0;
   }
   .event__title {
     font-size: 1.85rem;
-    margin-block: 0.5rem 0.75rem;
+    margin-block: var(--space-xs) var(--space-sm);
   }
   .event__prose {
     font-size: 1.05rem;
+  }
+  /* Supporting figure for an event — capped to the reading column. The wrapper
+     (not a class passed to <Figure>) carries the spacing, since this component's
+     scoped styles don't reach the child component's root element. */
+  .event__figure {
+    margin-block-start: var(--space-lg);
+    max-inline-size: 40rem;
   }
 </style>

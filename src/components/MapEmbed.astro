@@ -1,15 +1,20 @@
 ---
-// Lightweight, dependency-free map placeholder. An interactive map (e.g.
-// MapLibre GL) is a deferred feature; this proves the slot and gives a real,
-// useful link to the location in the meantime.
+// Lightweight, dependency-free OpenStreetMap link card. This is the static,
+// no-JS fallback layer beneath PlaceMap.astro: it always renders, and the
+// interactive MapLibre map replaces it only once it has loaded. On its own it
+// still gives a real, useful link to the location.
+import { useTranslations, type Locale } from '~/i18n/utils';
+
 interface Props {
   lat: number;
   lng: number;
   label?: string;
   zoom?: number;
+  lang: Locale;
 }
 
-const { lat, lng, label, zoom = 16 } = Astro.props;
+const { lat, lng, label, zoom = 16, lang } = Astro.props;
+const t = useTranslations(lang);
 const osm = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=${zoom}/${lat}/${lng}`;
 const coords = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
 ---
@@ -19,7 +24,7 @@ const coords = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
   <span class="map__text">
     {label && <strong>{label}</strong>}
     <span class="map__coords">{coords}</span>
-    <span class="map__hint">View on OpenStreetMap →</span>
+    <span class="map__hint">{t('map.viewOsm')}<span aria-hidden="true"> →</span></span>
   </span>
 </a>
 

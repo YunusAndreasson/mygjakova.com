@@ -1,0 +1,88 @@
+---
+/**
+ * A captioned, credited figure for sourced imagery (timeline events, the About
+ * page). Shows the image at its natural aspect ratio — no forced crop — so a tall
+ * manuscript page or a wide panorama both read correctly, capped by a max height.
+ * Caption + attribution sit beneath. Build-time optimised via astro:assets.
+ * CSP-safe: sizing is class-based, never an inline `style`.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import ImageCredit, { type Credit } from '~/components/ImageCredit.astro';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  caption?: string;
+  credit?: Credit;
+  widths?: number[];
+  sizes?: string;
+  loading?: 'lazy' | 'eager';
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  caption,
+  credit,
+  widths = [480, 768, 1024, 1280],
+  sizes = '(min-width: 60rem) 44rem, 92vw',
+  loading = 'lazy',
+  class: className,
+} = Astro.props;
+
+const hasCaption = Boolean(caption || credit);
+---
+
+<figure class:list={['figure', className]}>
+  <Image
+    src={src}
+    alt={alt}
+    widths={widths}
+    sizes={sizes}
+    loading={loading}
+    decoding="async"
+    class="figure__img"
+  />
+  {
+    hasCaption && (
+      <figcaption class="figure__cap">
+        {caption && <span class="figure__caption">{caption}</span>}
+        <ImageCredit credit={credit} class="figure__credit" />
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .figure {
+    margin: 0;
+  }
+  .figure__img {
+    display: block;
+    inline-size: auto;
+    max-inline-size: 100%;
+    /* Cap height so portrait scans (a manuscript page) don't tower; landscape
+       shots simply fill the column width. Centred either way. */
+    max-block-size: 32rem;
+    margin-inline: auto;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    background: var(--color-sand-200);
+  }
+  .figure__cap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.75rem;
+    margin-block-start: 0.6rem;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: var(--color-sand-600);
+  }
+  .figure__caption {
+    color: var(--color-sand-700);
+  }
+</style>

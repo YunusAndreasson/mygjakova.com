@@ -1,0 +1,206 @@
+---
+/**
+ * Interactive place map — progressive enhancement over the static MapEmbed link.
+ *
+ * Baseline (no JS / load failure): the OpenStreetMap link card renders and stays.
+ * Enhanced: a self-hosted MapLibre GL + Protomaps PMTiles vector map (no API key,
+ * no third-party runtime calls) is lazily initialised when scrolled into view,
+ * with a terracotta marker for the place and muted markers for related places.
+ *
+ * MapLibre's stylesheet is bundled by Astro (same-origin <link> → style-src
+ * 'self'); the heavy JS is dynamically imported only when the map enters the
+ * viewport, so place pages stay light until the map is actually needed.
+ */
+import 'maplibre-gl/dist/maplibre-gl.css';
+import MapEmbed from '~/components/MapEmbed.astro';
+import { useTranslations, type Locale } from '~/i18n/utils';
+
+interface MarkerData {
+  lat: number;
+  lng: number;
+  label: string;
+  href?: string;
+}
+interface Props {
+  lat: number;
+  lng: number;
+  label?: string;
+  zoom?: number;
+  markers?: MarkerData[];
+  lang: Locale;
+}
+
+const { lat, lng, label, zoom = 15, markers = [], lang } = Astro.props;
+const t = useTranslations(lang);
+const markersJson = JSON.stringify(markers);
+---
+
+<figure
+  class="placemap"
+  data-placemap
+  data-lat={lat}
+  data-lng={lng}
+  data-zoom={zoom}
+  data-markers={markersJson}
+>
+  <div
+    class="placemap__canvas"
+    role="application"
+    aria-label={t('map.ariaLabel')}
+    tabindex="0"
+    hidden
+  >
+  </div>
+  <div class="placemap__fallback">
+    <MapEmbed lat={lat} lng={lng} label={label} zoom={zoom} lang={lang} />
+  </div>
+</figure>
+
+<script>
+  type MarkerData = { lat: number; lng: number; label: string; href?: string };
+
+  const prefersReduced =
+    window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+
+  // Module-level so they survive ClientRouter navigations (the script runs once).
+  let protocolRegistered = false;
+  const liveMaps: Array<{ remove: () => void }> = [];
+
+  async function initMap(root: HTMLElement) {
+    if (root.dataset.ready) return;
+    root.dataset.ready = '1';
+
+    const canvas = root.querySelector<HTMLElement>('.placemap__canvas');
+    const fallback = root.querySelector<HTMLElement>('.placemap__fallback');
+    if (!canvas) return;
+
+    try {
+      const [maplibreMod, pmtilesMod] = await Promise.all([
+        import('maplibre-gl'),
+        import('pmtiles'),
+      ]);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const maplibregl: any = (maplibreMod as any).default ?? maplibreMod;
+
+      if (!protocolRegistered) {
+        const protocol = new pmtilesMod.Protocol();
+        maplibregl.addProtocol('pmtiles', protocol.tile);
+        protocolRegistered = true;
+      }
+
+      const lat = Number(root.dataset.lat);
+      const lng = Number(root.dataset.lng);
+      const zoom = Number(root.dataset.zoom) || 15;
+
+      canvas.hidden = false;
+      const map = new maplibregl.Map({
+        container: canvas,
+        style: '/map/style.json',
+        center: [lng, lat],
+        zoom,
+        minZoom: 11,
+        maxZoom: 17,
+        cooperativeGestures: true,
+        dragRotate: false,
+        pitchWithRotate: false,
+        attributionControl: { compact: true },
+        fadeDuration: prefersReduced ? 0 : 300,
+      });
+      liveMaps.push(map);
+
+      map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+
+      map.on('load', () => {
+        new maplibregl.Marker({ color: '#b4552d' }).setLngLat([lng, lat]).addTo(map);
+
+        let related: MarkerData[] = [];
+        try {
+          related = JSON.parse(root.dataset.markers || '[]');
+        } catch {
+          related = [];
+        }
+        for (const m of related) {
+          const marker = new maplibregl.Marker({ color: '#927231' }).setLngLat([m.lng, m.lat]);
+          if (m.label) {
+            marker.setPopup(
+              new maplibregl.Popup({ offset: 22, closeButton: false }).setText(m.label),
+            );
+          }
+          marker.addTo(map);
+        }
+      });
+
+      if (fallback) fallback.hidden = true;
+    } catch (err) {
+      // Progressive enhancement: keep the static OpenStreetMap link visible.
+      root.dataset.ready = '';
+      canvas.hidden = true;
+      console.warn('[placemap] interactive map unavailable, using static link', err);
+    }
+  }
+
+  function setupMaps() {
+    const roots = Array.from(document.querySelectorAll<HTMLElement>('[data-placemap]'));
+    if (roots.length === 0) return;
+
+    if (!('IntersectionObserver' in window)) {
+      roots.forEach(initMap);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            obs.unobserve(entry.target);
+            void initMap(entry.target as HTMLElement);
+          }
+        }
+      },
+      { rootMargin: '200px' },
+    );
+    roots.forEach((el) => io.observe(el));
+  }
+
+  function teardownMaps() {
+    while (liveMaps.length > 0) {
+      const map = liveMaps.pop();
+      try {
+        map?.remove();
+      } catch {
+        /* already gone */
+      }
+    }
+  }
+
+  // Runs on first load and after every view-transition navigation; cleanup on
+  // swap prevents leaked WebGL contexts across ClientRouter navigations.
+  document.addEventListener('astro:page-load', setupMaps);
+  document.addEventListener('astro:before-swap', teardownMaps);
+</script>
+
+<style>
+  .placemap {
+    margin: 0;
+  }
+  .placemap__canvas {
+    block-size: 17rem;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    background: var(--color-sand-200);
+  }
+  /* MapLibre injects its own controls/popups — tune them to the palette. */
+  .placemap :global(.maplibregl-ctrl-group) {
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-soft);
+  }
+  .placemap :global(.maplibregl-popup-content) {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    border-radius: var(--radius-sm);
+    padding: var(--space-2xs) var(--space-sm);
+  }
+  .placemap :global(.maplibregl-ctrl-attrib) {
+    font-family: var(--font-sans);
+  }
+</style>

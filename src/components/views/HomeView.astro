@@ -1,6 +1,8 @@
 ---
+import OptimizedImage from '~/components/OptimizedImage.astro';
 import PlaceholderPlate from '~/components/PlaceholderPlate.astro';
 import PlaceCard from '~/components/PlaceCard.astro';
+import Ornament from '~/components/Ornament.astro';
 import { getPlaces, getTimeline } from '~/lib/collections';
 import { useTranslations, localizedPath, type Locale } from '~/i18n/utils';
 
@@ -17,6 +19,9 @@ const featured = [...places]
   .slice(0, 3);
 const lead = featured[0];
 const timeline = await getTimeline(lang);
+// The home page only *teases* the timeline: show the opening of the story and
+// send readers to /timeline for the full arc, rather than listing every event.
+const timelineTeaser = timeline.slice(0, 6);
 ---
 
 <section class="hero">
@@ -35,13 +40,26 @@ const timeline = await getTimeline(lang);
       </div>
     </div>
     <div class="hero__media">
-      <PlaceholderPlate
-        title={lead?.data.title ?? t('site.name')}
-        kind={lead?.data.category}
-        category={lead?.data.category}
-        aspect="4 / 5"
-        framed
-      />
+      {
+        lead?.data.hero ? (
+          <OptimizedImage
+            src={lead.data.hero}
+            alt={lead.data.heroAlt ?? lead.data.title}
+            priority
+            sizes="(min-width: 900px) 34rem, 100vw"
+            widths={[640, 960, 1280, 1672]}
+            class="hero__img"
+          />
+        ) : (
+          <PlaceholderPlate
+            title={lead?.data.title ?? t('site.name')}
+            kind={lead?.data.category}
+            category={lead?.data.category}
+            aspect="4 / 5"
+            framed
+          />
+        )
+      }
     </div>
   </div>
 </section>
@@ -52,40 +70,45 @@ const timeline = await getTimeline(lang);
     <h2 class="section__title">{t('home.places.title')}</h2>
     <p class="section__lede">{t('home.places.lede')}</p>
   </header>
-  <div class="cards">
+  <div class="card-grid">
     {featured.map((place, i) => <PlaceCard place={place} lang={lang} priority={i === 0} />)}
   </div>
 </section>
 
 {
   timeline.length > 0 && (
-    <section class="teaser" data-reveal>
-      <div class="wrap">
-        <h2 class="teaser__title">{t('timeline.title')}</h2>
-        <ol class="teaser__list">
-          {timeline.map((e) => (
-            <li class="teaser__item">
-              <span class="teaser__date">{e.data.displayDate ?? e.data.year}</span>
-              <span class="teaser__label">{e.data.title}</span>
-            </li>
-          ))}
-        </ol>
-        <a class="teaser__cta" href={localizedPath(lang, '/timeline')}>
-          {t('home.hero.cta.timeline')}<span aria-hidden="true"> →</span>
-        </a>
+    <>
+      <div class="wrap home-rule">
+        <Ornament variant="divider" tone="brass" />
       </div>
-    </section>
+      <section class="teaser" data-reveal>
+        <div class="wrap">
+          <h2 class="teaser__title">{t('timeline.title')}</h2>
+          <ol class="teaser__list">
+            {timelineTeaser.map((e) => (
+              <li class="teaser__item">
+                <span class="teaser__date">{e.data.displayDate ?? e.data.year}</span>
+                <span class="teaser__label">{e.data.title}</span>
+              </li>
+            ))}
+          </ol>
+          <a class="teaser__cta" href={localizedPath(lang, '/timeline')}>
+            {t('home.hero.cta.timeline')}<span aria-hidden="true"> →</span>
+          </a>
+        </div>
+      </section>
+    </>
   )
 }
 
 <style>
   /* Hero */
   .hero {
-    padding-block: clamp(2.5rem, 1rem + 7vw, 6rem);
+    padding-block: var(--space-section-lg);
   }
   .hero__grid {
     display: grid;
-    gap: clamp(2rem, 1rem + 5vw, 4.5rem);
+    gap: var(--gap-grid-lg);
     align-items: center;
   }
   @media (min-width: 900px) {
@@ -97,7 +120,7 @@ const timeline = await getTimeline(lang);
     font-size: var(--text-hero);
     line-height: var(--text-hero--line-height);
     letter-spacing: var(--text-hero--letter-spacing);
-    margin-block: 1rem 1.25rem;
+    margin-block: var(--space-md) var(--space-lg);
     /* Let the grid column govern the measure — a tight ch-cap here left a big
        empty gap to the right of the wrapped title. */
     text-wrap: balance;
@@ -107,55 +130,78 @@ const timeline = await getTimeline(lang);
     font-size: 1.2rem;
     line-height: 1.6;
     color: var(--color-sand-700);
-    max-inline-size: 46ch;
+    max-inline-size: var(--measure-head);
   }
   .hero__cta {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.85rem;
-    margin-block-start: 2rem;
+    gap: var(--space-sm);
+    margin-block-start: var(--space-xl);
   }
   .hero__media {
     position: relative;
   }
+  /* Real illustration in the hero — match the framed plate's rounded, lifted look.
+     The 16:9 source is cover-cropped to the portrait frame (centred on the arcade). */
+  .hero__media :global(.hero__img) {
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lift);
+  }
 
   /* Section heading */
   .section {
-    padding-block: var(--section-y);
+    padding-block: var(--space-section);
   }
   .section__head {
-    max-inline-size: 52ch;
-    margin-block-end: 2.5rem;
+    max-inline-size: var(--measure-head);
+    margin-block-end: var(--space-2xl);
   }
   .section__title {
     font-size: var(--text-display);
     line-height: var(--text-display--line-height);
-    margin-block: 0.75rem;
+    margin-block: var(--space-sm);
   }
   .section__lede {
     font-family: var(--font-serif);
     font-size: 1.1rem;
     color: var(--color-sand-700);
   }
-  .cards {
-    display: grid;
-    gap: 1.75rem;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  /* Star separator between the cards and the timeline band: give it symmetric
+     air so it floats on the paper instead of hugging the band's top edge. */
+  .home-rule {
+    margin-block-end: var(--space-section);
   }
-
   /* Timeline teaser */
   .teaser {
+    position: relative;
+    isolation: isolate;
     background: var(--color-sand-200);
-    padding-block: var(--section-y);
-    border-block: 1px solid var(--color-line);
+    /* Lighter top pad — the star rule above already leads into the band. */
+    padding-block: var(--space-lg) var(--space-section);
+    /* Top edge is carried by the star divider above; keep only the lower rule. */
+    border-block-end: 1px solid var(--color-line);
+  }
+  /* Faint eight-point-star lattice over the sand band — the ornamental cousin of
+     the paper grain. Sits behind content; never animated. */
+  .teaser::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: var(--motif-star);
+    background-size: 64px 64px;
+    opacity: 0.05;
+    mix-blend-mode: multiply;
   }
   .teaser__title {
     font-size: var(--text-display);
-    margin-block-end: 1.5rem;
+    margin-block-end: var(--space-lg);
   }
   .teaser__list {
     list-style: none;
-    margin: 0 0 2rem;
+    margin: 0 0 var(--space-xl);
     padding: 0;
     display: grid;
     gap: 0;
@@ -163,9 +209,9 @@ const timeline = await getTimeline(lang);
   .teaser__item {
     display: grid;
     grid-template-columns: 7rem 1fr;
-    gap: 1.25rem;
+    gap: var(--space-lg);
     align-items: baseline;
-    padding-block: 1rem;
+    padding-block: var(--space-md);
     border-block-start: 1px solid var(--color-line);
   }
   .teaser__item:last-child {

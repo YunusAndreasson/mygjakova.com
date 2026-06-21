@@ -1,6 +1,19 @@
 ---
 import PageHeader from '~/components/PageHeader.astro';
-import { useTranslations, type Locale } from '~/i18n/utils';
+import KosovoLocator from '~/components/KosovoLocator.astro';
+import Ornament from '~/components/Ornament.astro';
+import Figure from '~/components/Figure.astro';
+import manuscript from '~/assets/photos/evliyaMs.jpg';
+import { useTranslations, localizedPath, type Locale } from '~/i18n/utils';
+
+// The Seyahatnâme title page that illustrates the 1662 pull-quote. Public-domain
+// scan (printed ed.) via Wikimedia Commons — credited beneath the figure.
+const manuscriptCredit = {
+  author: 'Evliya Çelebi (Atatürk Kitaplığı)',
+  source: 'Wikimedia Commons',
+  license: 'Public domain',
+  url: 'https://commons.wikimedia.org/wiki/File:Seyahatname_C6_Evliya_%C3%87elebi.jpg',
+};
 
 interface Props {
   lang: Locale;
@@ -9,32 +22,385 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
+// The person and portfolio behind the guide. Kept as data so the name appears
+// once, in the colophon, rather than throughout the copy.
+const authorName = 'Yunus Andreasson';
+const authorUrl = 'https://andreassonphoto.com';
+
+interface Fact {
+  term: string;
+  value: string;
+}
+
+// The "hook": a 1662 pull-quote framed by two facts, each linking into a guide.
+// The framing paragraph is split around the two links (grand bazaar / library)
+// the same way the colophon is split around the portfolio link.
+interface AboutHook {
+  eyebrow: string;
+  title: string;
+  quote: string;
+  attribution: string;
+  leadIn: string;
+  bazaarLabel: string;
+  midText: string;
+  libraryLabel: string;
+  tailText: string;
+}
+
+interface AboutCopy {
+  eyebrow: string;
+  lede: string;
+  intro: string[];
+  hook: AboutHook;
+  quoteImageAlt: string;
+  quoteImageCaption: string;
+  factsTitle: string;
+  facts: Fact[];
+  factsNote: string;
+  colophonTitle: string;
+  // The colophon's first sentence brackets the portfolio link, so it is split
+  // around the link rather than stored as one string.
+  colophonLeadBefore: string;
+  colophonLeadAfter: string;
+  colophonRest: string[];
+}
+
 // About copy lives here for now. When the site grows, this becomes a "pages"
 // content collection so non-developers can edit it.
-const body: Record<Locale, string[]> = {
-  en: [
-    'This is a slow guide to Gjakova — a city in western Kosovo whose old culture lives in its bazaar, its mosques and tekkes, and the stone houses of its highland hinterland.',
-    'Rather than chase every attraction, the guide moves carefully: a few places, told well, set against a single thread of history. The aim is to help you read the old city the way its craftspeople did — patiently, and with respect for what endured.',
-    'The site is a work in progress. Places, photography and stories will keep arriving.',
-  ],
-  sq: [
-    'Ky është një udhërrëfyes i ngadaltë për Gjakovën — një qytet në perëndim të Kosovës, kultura e vjetër e të cilit jeton në çarshinë, xhamitë e teqetë dhe shtëpitë e gurta të malësisë përreth.',
-    'Në vend që të ndjekë çdo atraksion, udhërrëfyesi ecën me kujdes: pak vende, të rrëfyera mirë, përballë një fije të vetme historie. Synimi është të të ndihmojë ta lexosh qytetin e vjetër ashtu si e lexonin mjeshtërit e tij — me durim dhe me respekt për atë që duroi.',
-    'Faqja është në punë e sipër. Vende, fotografi dhe tregime do të vazhdojnë të vijnë.',
-  ],
+const copy: Record<Locale, AboutCopy> = {
+  en: {
+    eyebrow: 'An unofficial guide',
+    lede: "A personal, unofficial guide to Gjakova's old town — its bazaar, its mosques, and the Ottoman and Islamic past that shaped them.",
+    intro: [
+      'This is a slow guide to Gjakova, a city in western Kosovo whose old culture still lives in its bazaar, its mosques, and the stone houses of its highland hinterland. It lingers on the old town in particular, and on the Ottoman and Islamic heritage that gave the city its form.',
+      'Rather than chase every attraction, the guide moves carefully: a few places, told well, set against a single thread of history. The aim is to help you read the old city the way its craftspeople did — patiently, and with respect for what endured.',
+    ],
+    hook: {
+      eyebrow: 'Why Gjakova',
+      title: 'A city that has remembered itself',
+      quote:
+        'A flourishing and attractive town consisting of 2,000 houses, all built of stone with roofs and gardens … two richly adorned congregational mosques, several prayer-houses, some khans with leaden roofs, a delightful bathhouse, and about 300 shops like nightingale-nests.',
+      attribution: 'Evliya Çelebi, Seyahatnâme · 1662',
+      leadIn: 'Those 300 shops are the ',
+      bazaarLabel: 'Grand Bazaar',
+      midText:
+        ' — already a century old when the traveller counted them, alive with “a thousand kinds of craft.” In a single week in 1999 most of it burned; it was raised again, shop by shop, on the very lanes you can still walk. Beside it stood the ',
+      libraryLabel: 'Hadum Library',
+      tailText:
+        ', whose shelves held a literature most visitors never learn exists — Albanian written in Arabic script — until its manuscripts were lost in that same fire. Gjakova is a city that has had to remember itself, deliberately, more than once — and that is exactly what makes walking it feel like an act of recovery.',
+    },
+    quoteImageAlt: "The title page of Evliya Çelebi's Seyahatnâme, the 1662 traveller's account.",
+    quoteImageCaption: "Evliya Çelebi's Seyahatnâme (1662), the account quoted here.",
+    factsTitle: 'Gjakova in brief',
+    facts: [
+      { term: 'Region', value: 'Dukagjin Plain, western Kosovo' },
+      { term: 'Population', value: '~41,800 in the city; ~78,700 across the municipality' },
+      { term: 'Faith', value: 'Mostly Muslim, with Kosovo’s largest Catholic community (~17%)' },
+      { term: 'First recorded', value: '1485, as a village with a market; a town by the 1590s' },
+      { term: 'Elevation', value: '375 m (1,230 ft)' },
+      { term: 'Rivers', value: 'the Krena and the Erenik, draining to the White Drin' },
+      { term: 'Old bazaar', value: 'Çarshia e Madhe, among the oldest in the region' },
+    ],
+    factsNote:
+      'Population is from the 2024 Kosovo census; the religious split is from the 2011 census; dates and history draw on the sources cited throughout the guide.',
+    colophonTitle: "Who's behind it",
+    colophonLeadBefore: `The guide is put together by ${authorName} — a photographer (`,
+    colophonLeadAfter:
+      "), not a historian or a local authority. It grew out of repeated visits over the past decade: long walks through the old quarter, the warmth of the people who live there, and what they were generous enough to teach a curious visitor about their city's past.",
+    colophonRest: [
+      "So read it as one traveller's notes rather than a definitive account. Where it can, it leans on published sources and local scholarship — but any mistakes are mine, and corrections are welcome.",
+      'The site is a work in progress. Places, photography and stories will keep arriving.',
+    ],
+  },
+  sq: {
+    eyebrow: 'Një udhërrëfyes joizyrtar',
+    lede: 'Një udhërrëfyes personal e joizyrtar për qytetin e vjetër të Gjakovës — çarshinë, xhamitë, dhe të kaluarën osmane e islame që i formësoi.',
+    intro: [
+      'Ky është një udhërrëfyes i ngadaltë për Gjakovën, një qytet në perëndim të Kosovës, kultura e vjetër e të cilit ende jeton në çarshinë, xhamitë dhe shtëpitë e gurta të malësisë përreth. Ai ndalet veçanërisht te qyteti i vjetër dhe te trashëgimia osmane e islame që i dha qytetit formën e tij.',
+      'Në vend që të ndjekë çdo atraksion, udhërrëfyesi ecën me kujdes: pak vende, të rrëfyera mirë, përballë një fije të vetme historie. Synimi është të të ndihmojë ta lexosh qytetin e vjetër ashtu si e lexonin mjeshtërit e tij — me durim dhe me respekt për atë që duroi.',
+    ],
+    hook: {
+      eyebrow: 'Pse Gjakova',
+      title: 'Një qytet që e ka kujtuar veten',
+      quote:
+        'Një qytet i lulëzuar e tërheqës me 2.000 shtëpi, të gjitha prej guri me çati e kopshte … dy xhami të zbukuruara, disa faltore, ca hane me çati plumbi, një banjë të këndshme dhe rreth 300 dyqane si fole bilbilash.',
+      attribution: 'Evlija Çelebiu, Sejahatname · 1662',
+      leadIn: 'Ato 300 dyqane janë ',
+      bazaarLabel: 'Çarshia e Madhe',
+      midText:
+        ' — tashmë njëqindvjeçare kur udhëtari i numëroi, plot me “një mijë lloje zanatesh.” Brenda një jave të vetme, në vitin 1999, pjesa më e madhe u dogj; u ringrit dyqan pas dyqani, mbi po ato rrugica që ende mund t’i ecësh. Pranë saj qëndronte ',
+      libraryLabel: 'Biblioteka e Hadumit',
+      tailText:
+        ', raftet e së cilës ruanin një letërsi që pak vizitorë e dinë se ekziston — shqipja e shkruar me shkronja arabe — derisa dorëshkrimet u humbën në po atë zjarr. Gjakova është një qytet që ka qenë i detyruar ta kujtojë veten, me vetëdije, më shumë se një herë — dhe pikërisht kjo bën që ta ecësh të duket si një akt rikthimi.',
+    },
+    quoteImageAlt: 'Faqja e parë e Sejahatnamesë së Evlija Çelebiut, rrëfimi i udhëtarit i vitit 1662.',
+    quoteImageCaption: 'Sejahatnameja e Evlija Çelebiut (1662), rrëfimi i cituar këtu.',
+    factsTitle: 'Gjakova në pak fjalë',
+    facts: [
+      { term: 'Rajoni', value: 'Rrafshi i Dukagjinit, Kosova perëndimore' },
+      { term: 'Popullsia', value: '~41,800 në qytet; ~78,700 në tërë komunën' },
+      { term: 'Besimi', value: 'Kryesisht myslimane, me bashkësinë katolike më të madhe të Kosovës (~17%)' },
+      { term: 'Përmendet së pari', value: '1485, si fshat me treg; qytet nga vitet 1590' },
+      { term: 'Lartësia', value: '375 m' },
+      { term: 'Lumenjtë', value: 'Krena dhe Erenika, që derdhen në Drinin e Bardhë' },
+      { term: 'Çarshia e vjetër', value: 'Çarshia e Madhe, ndër më të vjetrat në rajon' },
+    ],
+    factsNote:
+      'Të dhënat e popullsisë janë nga regjistrimi i Kosovës 2024; ndarja fetare është nga regjistrimi i vitit 2011; datat dhe historia mbështeten te burimet e cituara në udhërrëfyes.',
+    colophonTitle: 'Kush qëndron pas tij',
+    colophonLeadBefore: `Udhërrëfyesin e ka përgatitur ${authorName} — një fotograf (`,
+    colophonLeadAfter:
+      '), jo historian a autoritet vendor. Ai lindi nga vizita të përsëritura gjatë dhjetë viteve të fundit: shëtitje të gjata nëpër lagjen e vjetër, ngrohtësia e njerëzve që jetojnë aty, dhe ajo që ata patën zemërgjerësinë t’ia mësonin një vizitori kureshtar për të kaluarën e qytetit të tyre.',
+    colophonRest: [
+      'Pra, lexoje si shënimet e një udhëtari, jo si një rrëfim përfundimtar. Aty ku mundet, mbështetet te burimet e botuara dhe te studiuesit vendorë — por çdo gabim është imi, dhe ndreqjet janë të mirëpritura.',
+      'Faqja është në punë e sipër. Vende, fotografi dhe tregime do të vazhdojnë të vijnë.',
+    ],
+  },
 };
+
+const c = copy[lang];
+// The portfolio link text shows the bare domain, regardless of locale.
+const authorLinkText = authorUrl.replace(/^https?:\/\//, '');
 ---
 
-<PageHeader title={t('about.title')} />
+<PageHeader eyebrow={c.eyebrow} title={t('about.title')} lede={c.lede} />
 
 <section class="wrap about">
-  <div class="prose prose--lead">
-    {body[lang].map((p) => <p>{p}</p>)}
+  <div class="prose prose--lead about__intro">
+    {c.intro.map((p) => <p>{p}</p>)}
+  </div>
+
+  <section class="hook" aria-labelledby="hook-title">
+    <div class="hook__text">
+      <p class="eyebrow">{c.hook.eyebrow}</p>
+      <h2 class="hook__title" id="hook-title">{c.hook.title}</h2>
+      <figure class="hook__quote">
+        <blockquote>{c.hook.quote}</blockquote>
+        <figcaption>{c.hook.attribution}</figcaption>
+      </figure>
+      <p class="hook__body">
+        {c.hook.leadIn}<a href={localizedPath(lang, '/places/grand-bazaar')}>{c.hook.bazaarLabel}</a
+        >{c.hook.midText}<a href={localizedPath(lang, '/places/hadum-library')}
+          >{c.hook.libraryLabel}</a
+        >{c.hook.tailText}
+      </p>
+    </div>
+    <div class="hook__media">
+      <Figure
+        src={manuscript}
+        alt={c.quoteImageAlt}
+        caption={c.quoteImageCaption}
+        credit={manuscriptCredit}
+        widths={[280, 420, 640]}
+        sizes="(min-width: 60rem) 18rem, min(60vw, 16rem)"
+      />
+    </div>
+  </section>
+
+  <div class="brief">
+    <div class="brief__map">
+      <KosovoLocator lang={lang} />
+    </div>
+    <aside class="facts" aria-labelledby="facts-title">
+      <h2 class="facts__title" id="facts-title">{c.factsTitle}</h2>
+      <dl class="facts__grid">
+        {
+          c.facts.map((fact) => (
+            <div class="fact">
+              <dt class="fact__term">{fact.term}</dt>
+              <dd class="fact__value">{fact.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <p class="facts__note">{c.factsNote}</p>
+    </aside>
+  </div>
+
+  <div class="about__rule">
+    <Ornament variant="divider" tone="line" />
+  </div>
+
+  <div class="prose about__colophon">
+    <h2 class="about__colophon-title">{c.colophonTitle}</h2>
+    <p>
+      {c.colophonLeadBefore}<a href={authorUrl} rel="author noopener">{authorLinkText}</a>{
+        c.colophonLeadAfter
+      }
+    </p>
+    {c.colophonRest.map((p) => <p>{p}</p>)}
   </div>
 </section>
 
 <style>
   .about {
-    padding-block-end: 2rem;
+    padding-block-end: var(--space-xl);
+  }
+  /* Rhythm between the blocks (intro → hook → facts → colophon). */
+  .about > * + * {
+    margin-block-start: var(--space-section);
+  }
+
+  /* The hook — a 1662 pull-quote as the page's centrepiece, on the paper
+     ground so it reads distinctly from the tinted facts panel below it. On wide
+     screens the Seyahatnâme title page sits beside the text it is quoted from. */
+  @media (min-width: 60rem) {
+    .hook {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(13rem, 18rem);
+      gap: var(--gap-layout);
+      align-items: start;
+    }
+  }
+  .hook__media {
+    margin-block-start: var(--space-lg);
+    max-inline-size: 16rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 60rem) {
+    .hook__media {
+      /* Drop the plate down so it aligns to the quote rather than the eyebrow. */
+      margin-block-start: var(--space-3xl);
+      margin-inline: 0;
+    }
+  }
+  .hook__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 1.1rem + 2vw, 2.3rem);
+    line-height: 1.1;
+    letter-spacing: var(--text-display--letter-spacing);
+    color: var(--color-ink);
+    margin-block: var(--space-sm) 0;
+    max-inline-size: var(--measure-head);
+    text-wrap: balance;
+  }
+  .hook__quote {
+    margin: var(--space-lg) 0 0;
+    padding-inline-start: var(--space-lg);
+    border-inline-start: 3px solid var(--color-brass-400);
+    max-inline-size: var(--measure);
+  }
+  .hook__quote blockquote {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(1.2rem, 0.95rem + 1.3vw, 1.6rem);
+    line-height: 1.42;
+    color: var(--color-sand-800);
+  }
+  .hook__quote figcaption {
+    margin-block-start: var(--space-sm);
+    font-family: var(--font-sans);
+    font-size: var(--text-eyebrow);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--color-terracotta-600);
+  }
+  .hook__body {
+    margin-block-start: var(--space-lg);
+    max-inline-size: var(--measure);
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    line-height: 1.75;
+    color: var(--color-sand-800);
+  }
+  .hook__body a {
+    color: var(--color-terracotta-600);
+    text-decoration: underline;
+    text-underline-offset: 0.12em;
+  }
+
+  /* Gjakova in brief — a Kosovo locator map paired with a quiet facts plate.
+     Stacks on narrow screens; map beside facts once there's room. */
+  .brief {
+    display: grid;
+    gap: var(--gap-layout);
+    align-items: center;
+  }
+  @media (min-width: 50rem) {
+    .brief {
+      grid-template-columns: minmax(13rem, 0.85fr) 1.15fr;
+    }
+  }
+  .brief__map {
+    inline-size: 100%;
+    max-inline-size: 21rem;
+    margin-inline: auto;
+  }
+  .facts {
+    position: relative;
+    isolation: isolate;
+    background: var(--color-sand-200);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    padding: var(--space-pad-card);
+    box-shadow: var(--shadow-soft);
+  }
+  /* Faint star lattice inside the panel — clipped to the rounded corners and
+     sitting under the text (the calmest of the three motif surfaces). */
+  .facts::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: inherit;
+    overflow: hidden;
+    background-image: var(--motif-star);
+    background-size: 64px 64px;
+    opacity: 0.045;
+    mix-blend-mode: multiply;
+  }
+  .facts__title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--color-ink);
+    margin: 0 0 var(--space-lg);
+  }
+  .facts__grid {
+    margin: 0;
+    display: grid;
+    gap: var(--space-md) var(--space-xl);
+  }
+  @media (min-width: 34rem) {
+    .facts__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .fact {
+    display: grid;
+    gap: var(--space-3xs);
+    padding-block-start: var(--space-sm);
+    border-block-start: 1px solid var(--color-line);
+  }
+  .fact__term {
+    font-family: var(--font-sans);
+    font-size: var(--text-eyebrow);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--color-terracotta-600);
+  }
+  .fact__value {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: var(--color-sand-800);
+  }
+  .facts__note {
+    margin: var(--space-lg) 0 0;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--color-sand-600);
+  }
+
+  /* Colophon — a signed note set apart from the body by the star rule above
+     (which replaces the former hairline border). */
+  .about__colophon-title {
+    font-size: 1.5rem;
+    margin-block: 0 var(--space-sm);
   }
 </style>

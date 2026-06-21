@@ -3,6 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PlaceGuide from '~/components/views/PlaceGuide.astro';
 import { getPlaces, entrySlug } from '~/lib/collections';
+import { buildPlaceJsonLd } from '~/lib/placeJsonLd';
 
 export const getStaticPaths = (async () => {
   const places = await getPlaces('sq');
@@ -16,21 +17,16 @@ const lang = 'sq' as const;
 const { place } = Astro.props;
 
 const origin = Astro.site ?? new URL(Astro.url.origin);
-const { title, summary, coordinates, address } = place.data;
-const placeLd = {
-  '@type': 'TouristAttraction',
-  name: title,
-  description: summary,
+const image = `/og/places/${lang}-${entrySlug(place.id)}.jpg`;
+const placeLd = buildPlaceJsonLd({
+  place,
+  lang,
   url: new URL(Astro.url.pathname, origin).href,
-  inLanguage: lang,
-  isPartOf: { '@id': `${origin.href}#website` },
-  ...(coordinates && {
-    geo: { '@type': 'GeoCoordinates', latitude: coordinates.lat, longitude: coordinates.lng },
-  }),
-  ...(address && { address }),
-};
+  origin: origin.href,
+  image: new URL(image, origin).href,
+});
 ---
 
-<BaseLayout title={place.data.title} description={place.data.summary} jsonLd={placeLd}>
+<BaseLayout title={place.data.title} description={place.data.summary} image={image} jsonLd={placeLd}>
   <PlaceGuide place={place} lang={lang} />
 </BaseLayout>

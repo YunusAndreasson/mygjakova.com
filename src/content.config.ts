@@ -1,5 +1,5 @@
 import { defineCollection } from 'astro:content';
-import { z } from 'astro:schema';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 /**
@@ -18,7 +18,21 @@ const PLACE_CATEGORIES = [
   'monument',
   'tekke',
   'square',
+  'nature',
 ] as const;
+
+/**
+ * Image attribution. Sourced imagery (Wikimedia Commons etc.) must carry visible
+ * credit — author + licence + a link to the file page. Rendered by ImageCredit.astro
+ * (and the gallery credits list). All fields optional so own-work needs no ceremony.
+ */
+const credit = z.object({
+  author: z.string().optional(),
+  source: z.string().optional(), // e.g. "Wikimedia Commons"
+  license: z.string().optional(), // e.g. "CC BY-SA 4.0"
+  licenseUrl: z.string().optional(),
+  url: z.string().optional(), // link to the source / file-description page
+});
 
 const places = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/places' }),
@@ -30,15 +44,23 @@ const places = defineCollection({
       era: z.string().optional(),
       hero: image().optional(),
       heroAlt: z.string().optional(),
+      heroCredit: credit.optional(),
       coordinates: z.object({ lat: z.number(), lng: z.number() }).optional(),
       address: z.string().optional(),
-      gallery: z.array(z.object({ src: image(), alt: z.string() })).default([]),
+      gallery: z
+        .array(
+          z.object({
+            src: image(),
+            alt: z.string(),
+            caption: z.string().optional(),
+            credit: credit.optional(),
+          }),
+        )
+        .default([]),
       /** Slugs of related places (locale-agnostic), e.g. ['hadum-mosque']. */
       related: z.array(z.string()).default([]),
       /** Citations — see docs/SOURCES.md for the curated library to draw from. */
-      sources: z
-        .array(z.object({ label: z.string(), url: z.string().url().optional() }))
-        .default([]),
+      sources: z.array(z.object({ label: z.string(), url: z.url().optional() })).default([]),
       order: z.number().default(100),
       featured: z.boolean().default(false),
       draft: z.boolean().default(false),
@@ -58,9 +80,9 @@ const timeline = defineCollection({
       summary: z.string(),
       image: image().optional(),
       imageAlt: z.string().optional(),
-      sources: z
-        .array(z.object({ label: z.string(), url: z.string().url().optional() }))
-        .default([]),
+      imageCaption: z.string().optional(),
+      imageCredit: credit.optional(),
+      sources: z.array(z.object({ label: z.string(), url: z.url().optional() })).default([]),
       draft: z.boolean().default(false),
     }),
 });

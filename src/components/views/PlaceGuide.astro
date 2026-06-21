@@ -3,9 +3,12 @@ import type { CollectionEntry } from 'astro:content';
 import { render } from 'astro:content';
 import OptimizedImage from '~/components/OptimizedImage.astro';
 import PlaceholderPlate from '~/components/PlaceholderPlate.astro';
-import MapEmbed from '~/components/MapEmbed.astro';
+import PlaceMap from '~/components/PlaceMap.astro';
 import Sources from '~/components/Sources.astro';
 import PlaceCard from '~/components/PlaceCard.astro';
+import Gallery from '~/components/Gallery.astro';
+import TableOfContents from '~/components/TableOfContents.astro';
+import PlaceActions from '~/components/PlaceActions.astro';
 import { getPlaces, entrySlug } from '~/lib/collections';
 import { useTranslations, localizedPath, type Locale } from '~/i18n/utils';
 
@@ -16,16 +19,37 @@ interface Props {
 
 const { place, lang } = Astro.props;
 const t = useTranslations(lang);
-const { Content } = await render(place);
+const { Content, headings } = await render(place);
 
-const { title, summary, hero, heroAlt, category, era, coordinates, address, related, sources } =
-  place.data;
+const {
+  title,
+  summary,
+  hero,
+  heroAlt,
+  category,
+  era,
+  coordinates,
+  address,
+  gallery,
+  related,
+  sources,
+} = place.data;
 const slug = entrySlug(place.id);
 
 const all = await getPlaces(lang);
 const relatedPlaces = all.filter(
   (p) => related.includes(entrySlug(p.id)) && entrySlug(p.id) !== slug,
 );
+
+// Coordinates of related places become muted secondary markers on the map.
+const relatedMarkers = relatedPlaces
+  .filter((p) => p.data.coordinates)
+  .map((p) => ({
+    lat: p.data.coordinates!.lat,
+    lng: p.data.coordinates!.lng,
+    label: p.data.title,
+    href: localizedPath(lang, `/places/${entrySlug(p.id)}`),
+  }));
 ---
 
 <article class="guide">
@@ -51,10 +75,10 @@ const relatedPlaces = all.filter(
       ) : (
         <PlaceholderPlate
           title={title}
-          kind={category}
           category={category}
           aspect="16 / 9"
           framed
+          label={false}
           transitionName={`place-${slug}`}
         />
       )
@@ -76,21 +100,37 @@ const relatedPlaces = all.filter(
     </div>
 
     <aside class="guide__aside">
-      {coordinates && <MapEmbed lat={coordinates.lat} lng={coordinates.lng} label={address ?? title} />}
       {
-        !coordinates && address && (
-          <p class="guide__address">{address}</p>
+        coordinates && (
+          <PlaceMap
+            lat={coordinates.lat}
+            lng={coordinates.lng}
+            label={address ?? title}
+            markers={relatedMarkers}
+            lang={lang}
+          />
         )
       }
+      {!coordinates && address && <p class="guide__address">{address}</p>}
+      <PlaceActions title={title} lat={coordinates?.lat} lng={coordinates?.lng} lang={lang} />
+      <TableOfContents headings={headings} lang={lang} />
       <Sources sources={sources} lang={lang} />
     </aside>
   </div>
 
   {
+    gallery.length > 0 && (
+      <div class="wrap">
+        <Gallery images={gallery} lang={lang} />
+      </div>
+    )
+  }
+
+  {
     relatedPlaces.length > 0 && (
       <section class="wrap guide__related">
-        <h2 class="guide__related-title">{t('home.places.title')}</h2>
-        <div class="guide__related-grid">
+        <h2 class="guide__related-title">{t('places.related')}</h2>
+        <div class="card-grid">
           {relatedPlaces.map((p) => (
             <PlaceCard place={p} lang={lang} />
           ))}
@@ -103,7 +143,7 @@ const relatedPlaces = all.filter(
 <style>
   .guide__back {
     display: inline-block;
-    margin-block: 1.5rem 1.5rem;
+    margin-block: var(--space-lg);
     font-family: var(--font-sans);
     font-weight: 600;
     font-size: 0.9rem;
@@ -119,14 +159,16 @@ const relatedPlaces = all.filter(
     aspect-ratio: 16 / 9;
   }
   .guide__head {
-    max-inline-size: 60rem;
-    padding-block: clamp(2rem, 1rem + 4vw, 3.5rem) 1.5rem;
+    /* No inline-size cap on the header block itself: it is also a .wrap, whose
+       auto margins would centre a capped block and break the shared left edge.
+       The title and summary carry their own measures below instead. */
+    padding-block: var(--space-section) var(--space-lg);
   }
   .guide__meta {
     display: flex;
-    gap: 1rem;
+    gap: var(--space-md);
     align-items: center;
-    margin: 0 0 0.75rem;
+    margin: 0 0 var(--space-sm);
     font-family: var(--font-sans);
     font-size: 0.75rem;
     font-weight: 600;
@@ -136,7 +178,7 @@ const relatedPlaces = all.filter(
   .guide__cat {
     color: var(--color-sand-50);
     background: var(--color-terracotta-500);
-    padding: 0.25rem 0.6rem;
+    padding: var(--space-3xs) var(--space-sm);
     border-radius: var(--radius-xs);
   }
   .guide__era {
@@ -147,27 +189,35 @@ const relatedPlaces = all.filter(
     line-height: var(--text-display--line-height);
     letter-spacing: var(--text-display--letter-spacing);
     margin: 0;
+    /* Keep an editorial measure on very wide screens without auto-centring —
+       a block cap wraps long names early but stays on the left edge. */
+    max-inline-size: var(--measure-tight);
   }
   .guide__summary {
     font-family: var(--font-serif);
     font-size: 1.3rem;
     line-height: 1.55;
     color: var(--color-sand-700);
-    margin-block-start: 1rem;
-    max-inline-size: 52ch;
+    margin-block-start: var(--space-md);
+    max-inline-size: var(--measure-head);
   }
   .guide__layout {
     display: grid;
-    gap: clamp(1.5rem, 0.5rem + 4vw, 3.5rem);
+    gap: var(--gap-layout);
     align-items: start;
+  }
+  .guide__aside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
   }
   @media (min-width: 900px) {
     .guide__layout {
-      grid-template-columns: 1fr 20rem;
+      grid-template-columns: 1fr var(--sidebar);
     }
     .guide__aside {
       position: sticky;
-      inset-block-start: 5.5rem;
+      inset-block-start: calc(var(--header-h) + var(--space-md));
     }
   }
   .guide__address {
@@ -175,15 +225,12 @@ const relatedPlaces = all.filter(
     color: var(--color-sand-700);
   }
   .guide__related {
-    margin-block-start: clamp(3rem, 2rem + 4vw, 5rem);
+    margin-block-start: var(--space-section);
   }
   .guide__related-title {
-    font-size: var(--text-display);
-    margin-block-end: 1.75rem;
-  }
-  .guide__related-grid {
-    display: grid;
-    gap: 1.75rem;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+    /* A subordinate section heading — deliberately set below the page H1
+       (--text-display) so the visual hierarchy reads title → section. */
+    font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.4rem);
+    margin-block-end: var(--space-lg);
   }
 </style>

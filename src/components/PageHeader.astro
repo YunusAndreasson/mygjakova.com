@@ -15,23 +15,26 @@ const { eyebrow, title, lede } = Astro.props;
 
 <style>
   .page-head {
-    padding-block: clamp(2.5rem, 1.5rem + 5vw, 5rem) 2.5rem;
-    /* No width cap here: a 60rem cap + the .wrap auto-margins centred the header
-       inside the wider (76rem) content grid, so it no longer shared the content's
-       left edge. The lede keeps its own readable measure below. */
+    /* No cap on the header block (it is also a .wrap — a cap + auto margins
+       would centre it and break the shared left edge). The title carries its
+       own measure instead; the lede keeps a readable measure below. */
+    padding-block: var(--space-section) var(--space-xl);
   }
   .page-head__title {
     font-size: var(--text-display);
     line-height: var(--text-display--line-height);
     letter-spacing: var(--text-display--letter-spacing);
-    margin-block: 0.85rem 0;
+    margin-block: var(--space-sm) 0;
+    /* Editorial measure (block cap, not auto-centred) so a long title wraps
+       early but stays on the content's left edge. */
+    max-inline-size: var(--measure-tight);
   }
   .page-head__lede {
     font-family: var(--font-serif);
     font-size: 1.25rem;
     line-height: 1.6;
     color: var(--color-sand-700);
-    max-inline-size: 54ch;
-    margin-block-start: 1rem;
+    max-inline-size: var(--measure-head);
+    margin-block-start: var(--space-md);
   }
 </style>

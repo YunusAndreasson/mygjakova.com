@@ -65,16 +65,35 @@
   --color-surface: var(--color-sand-50);
   --color-line: rgb(43 38 32 / 0.12);
 
-  /* --- Radius & shadow ---------------------------------------------------- */
-  --radius-xs: 0.25rem;
-  --radius-sm: 0.5rem;
-  --radius-md: 0.875rem;
-  --radius-lg: 1.25rem;
+  /* --- Radius & shadow ----------------------------------------------------
+     Radii on the same √2 ramp as the spacing scale (each step ×√2, two ×2),
+     so corners share the system's proportion. Names unchanged. */
+  --radius-xs: 0.5rem;
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
   --shadow-soft: 0 1px 2px rgb(43 38 32 / 0.06), 0 8px 24px -12px rgb(43 38 32 / 0.18);
   --shadow-lift: 0 2px 4px rgb(43 38 32 / 0.08), 0 24px 48px -20px rgb(43 38 32 / 0.28);
 
   /* Page measure */
   --spacing-measure: 68ch;
+
+  /* --- Spacing scale: geometric on √2 from a 0.5rem (8px) seed -------------
+     Two steps = ×2, since (√2)² = 2 — the doubling spine xs→md→xl→3xl→5xl is
+     the eight-point-star proportion turned into rhythm. Defined here so the
+     scale also generates spacing utilities; consumed site-wide via var(). */
+  --space-3xs: 0.25rem; /* 4   · step −2 */
+  --space-2xs: 0.375rem; /* 6   · step −1 */
+  --space-xs: 0.5rem; /* 8   · seed   */
+  --space-sm: 0.75rem; /* 12  · step 1 */
+  --space-md: 1rem; /* 16  · step 2 → ×2 seed */
+  --space-lg: 1.5rem; /* 24  · step 3 */
+  --space-xl: 2rem; /* 32  · step 4 → ×2 md */
+  --space-2xl: 2.75rem; /* 44  · step 5 */
+  --space-3xl: 4rem; /* 64  · step 6 → ×2 xl */
+  --space-4xl: 5.5rem; /* 88  · step 7 */
+  --space-5xl: 8rem; /* 128 · step 8 → ×2 3xl */
 }
 
 /* ===========================================================================
@@ -86,24 +105,67 @@
     --gutter: clamp(1.25rem, 0.5rem + 3vw, 4rem);
     color-scheme: light;
 
+    /* Inline-start as a physical keyword for properties that take no logical
+       value (e.g. transform-origin on the nav underline). Flips under [dir=rtl]
+       so those animations grow from the reading-start edge — keeping the site
+       RTL-correct for the planned Arabic locale. */
+    --logical-start: left;
+
     /* Shared motion curve + durations, so every microinteraction (buttons,
        cards, nav underline, reveals) reads as one consistent system. */
     --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
     --dur: 0.18s;
     --dur-slow: 0.4s;
 
-    /* Vertical rhythm scale, applied across views for an even cadence. */
-    --section-y: clamp(2.75rem, 1.25rem + 5vw, 5rem);
-    --stack: clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+    /* --- Fluid spacing: one clamp shape, derived from the √2 scale ----------
+       Collapses what were seven ad-hoc clamp ratios into a single family so
+       every responsive gap/pad reads as one system (slopes in a narrow band). */
+    --space-section: clamp(2.75rem, 1.25rem + 5vw, 5rem); /* canonical section rhythm */
+    --space-section-lg: clamp(4rem, 2rem + 6.5vw, 7rem); /* hero band only */
+    --space-flow: clamp(1.5rem, 1rem + 1.6vw, 2.5rem); /* block-to-block flow */
+    --space-pad-card: clamp(1.5rem, 1rem + 1.5vw, 2rem); /* padded panels (facts box) */
+
+    /* Measure / width tokens — three reading measures + structural widths. */
+    --measure: var(--spacing-measure); /* 68ch — long-form reading */
+    --measure-head: 52ch; /* ledes / summaries / hero copy */
+    --measure-tight: 26ch; /* display headings & tagline that wrap early */
+    --sidebar: 20rem; /* guide aside column */
+
+    /* Gap tokens — grid/flex gaps drawn from the same scale. */
+    --gap-card: var(--space-lg); /* card grids + related places */
+    --gap-grid-lg: clamp(2rem, 1rem + 4vw, 4rem); /* hero 2-col */
+    --gap-layout: clamp(1.5rem, 0.5rem + 3.5vw, 3.5rem); /* article + sidebar */
+    --gap-rail: clamp(1rem, 0.5rem + 1.5vw, 2rem); /* timeline 2-col */
+    --gap-nav: var(--space-lg);
+    --gap-footer: var(--space-xl);
+    --gap-body: var(--space-sm);
+
+    /* Sticky header height — single source for every offset that aligns to it. */
+    --header-h: 4.25rem;
 
     /* Request-free paper grain (inline SVG noise). Layered very faintly under
        the content to give the warm paper a tactile surface — never a pattern. */
     --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+
+    /* Eight-point-star (khatim) tessellation on √2 — the geometric companion to
+       --grain. A 64px tile holds one centred star whose four axis tips touch the
+       edge midpoints, so it meets the neighbouring tiles' tips and wraps into a
+       seamless star-and-octagon lattice. Stroke-only, one baked ink tone
+       (#2b2620 = --color-sand-900; data-URLs can't read CSS vars). Each surface
+       dials the opacity/blend — applied only on the teaser, footer and facts. */
+    --motif-star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cpolygon points='32,0 37.07,19.75 54.63,9.37 44.25,26.93 64,32 44.25,37.07 54.63,54.63 37.07,44.25 32,64 26.93,44.25 9.37,54.63 19.75,37.07 0,32 19.75,26.93 9.37,9.37 26.93,19.75' fill='none' stroke='%232b2620' stroke-width='1'/%3E%3C/svg%3E");
+  }
+
+  :root[dir='rtl'] {
+    --logical-start: right;
   }
 
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
+    /* Offset in-page anchor jumps (TOC links, #main skip-link) so targets land
+       below the sticky header (--header-h) rather than hidden beneath it. */
+    scroll-padding-block-start: calc(var(--header-h) + var(--space-md));
     background-color: var(--color-paper);
   }
 
@@ -182,6 +244,15 @@
     color: var(--color-sand-50);
   }
 
+  /* Keep the faint geometric lattice off printed pages. */
+  @media print {
+    .teaser::before,
+    .site-footer::after,
+    .facts::before {
+      display: none;
+    }
+  }
+
   /* Honour reduced-motion globally */
   @media (prefers-reduced-motion: reduce) {
     html {
@@ -209,6 +280,14 @@
     padding-inline: var(--gutter);
   }
 
+  /* Responsive place-card grid — the single source for the card layout shared by
+     the home, places index, and related-places sections. */
+  .card-grid {
+    display: grid;
+    gap: var(--gap-card);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  }
+
   /* Uppercase tracked label used above headings */
   .eyebrow {
     font-family: var(--font-sans);
@@ -223,12 +302,12 @@
   .btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--space-xs);
     font-family: var(--font-sans);
     font-weight: 600;
     font-size: 0.95rem;
     line-height: 1;
-    padding: 0.85rem 1.4rem;
+    padding: var(--space-sm) var(--space-lg);
     border-radius: var(--radius-sm);
     border: 1px solid transparent;
     text-decoration: none;
@@ -291,7 +370,7 @@
   }
   .prose blockquote {
     margin-inline: 0;
-    padding-inline-start: 1.25rem;
+    padding-inline-start: var(--space-md);
     border-inline-start: 3px solid var(--color-brass-400);
     font-style: italic;
     color: var(--color-sand-700);
@@ -310,20 +389,23 @@
     color: var(--color-sand-600);
   }
 
-  /* Lead article variant: an editorial drop cap on the opening paragraph.
-     Used on long-form pages (a place guide, the about page) — not on the
-     timeline, where each entry is short. `inline-start` keeps it RTL-correct. */
-  .prose--lead > p:first-of-type::first-letter {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-optical-sizing: auto;
-    float: inline-start;
-    margin-inline-end: 0.08em;
-    margin-block-start: 0.02em;
-    padding-inline-end: 0.04em;
-    font-size: 3.4em;
-    line-height: 0.66;
-    color: var(--color-terracotta-600);
+  /* Lead article variant: an editorial drop cap on the opening paragraph, via
+     the native `initial-letter` property — the browser sinks it and aligns it to
+     the cap-height/baseline correctly (the old manual float + line-height hack
+     never aligned cleanly, which read as broken). Wrapped in @supports so a
+     browser without it (e.g. Firefox) simply shows a normal first letter rather
+     than a half-formed cap. Used on long-form pages (a place guide, the about
+     page) — not the timeline, where each entry is short. */
+  @supports (initial-letter: 3) or (-webkit-initial-letter: 3) {
+    .prose--lead > p:first-of-type::first-letter {
+      -webkit-initial-letter: 3;
+      initial-letter: 3;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-optical-sizing: auto;
+      margin-inline-end: 0.12em;
+      color: var(--color-terracotta-600);
+    }
   }
 }
 

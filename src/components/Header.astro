@@ -24,11 +24,26 @@ const isActive = (path: string) =>
 <header class="site-header">
   <div class="wrap site-header__inner">
     <a href={localizedPath(lang, '/')} class="brand" aria-label={t('site.name')}>
-      <span class="brand__mark" aria-hidden="true"></span>
+      <span class="brand__mark" aria-hidden="true">
+        {/* Gjakova's Clock Tower (Sahat Kulla): tapered stone shaft, balcony,
+            bell dome + finial, with a light clock face. An iconic silhouette of
+            the real landmark — kept simple to read at favicon size. */}
+        <svg viewBox="0 0 22 34" class="brand__mark-svg" aria-hidden="true">
+          <path
+            class="bm-body"
+            d="M4.5 33 L6 13 C6 8 8.4 4.3 11 4.3 C13.6 4.3 16 8 16 13 L17.5 33 Z"
+          />
+          <path class="bm-body" d="M3.3 11.8 L18.7 11.8 L18.7 14 L3.3 14 Z" />
+          <path class="bm-body" d="M10.2 4.3 L10.2 2 L11.8 2 L11.8 4.3 Z" />
+          <circle class="bm-body" cx="11" cy="1.6" r="1.4" />
+          <circle class="bm-face" cx="11" cy="20" r="3.9" />
+          <path class="bm-hand" d="M11 20 L11 16.9 M11 20 L13.1 20.9" />
+        </svg>
+      </span>
       <span class="brand__name">{t('site.name')}</span>
     </a>
 
-    <nav class="nav nav--desktop" aria-label="Primary">
+    <nav class="nav nav--desktop" aria-label={t('a11y.primaryNav')}>
       <ul>
         {
           items.map((item) => (
@@ -62,7 +77,7 @@ const isActive = (path: string) =>
   </div>
 
   <div class="mobile-nav" id="mobile-nav" data-mobile-nav hidden>
-    <nav class="wrap" aria-label="Primary">
+    <nav class="wrap" aria-label={t('a11y.primaryNav')}>
       <ul>
         {
           items.map((item) => (
@@ -96,24 +111,41 @@ const isActive = (path: string) =>
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1.5rem;
-    block-size: 4.25rem;
+    gap: var(--space-lg);
+    block-size: var(--header-h);
   }
 
   .brand {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: var(--space-sm);
     text-decoration: none;
     color: var(--color-ink);
   }
   .brand__mark {
-    inline-size: 1.15rem;
+    display: inline-flex;
     block-size: 1.5rem;
-    background: var(--color-terracotta-500);
-    /* a small pointed arch — the bazaar motif */
-    clip-path: path('M0 24 L0 9 Q9.2 -6 18.4 9 L18.4 24 Z');
-    box-shadow: inset 0 0 0 100px var(--color-terracotta-500);
+    inline-size: auto;
+    /* currentColor drives the tower fill — the brand terracotta. */
+    color: var(--color-terracotta-500);
+  }
+  .brand__mark-svg {
+    block-size: 100%;
+    inline-size: auto;
+    display: block;
+  }
+  .bm-body {
+    fill: currentColor;
+  }
+  .bm-face {
+    fill: var(--color-paper);
+  }
+  .bm-hand {
+    fill: none;
+    /* Dark hands so they read on the light clock face. */
+    stroke: var(--color-terracotta-700);
+    stroke-width: 1.2;
+    stroke-linecap: round;
   }
   .brand__name {
     font-family: var(--font-display);
@@ -124,7 +156,7 @@ const isActive = (path: string) =>
 
   .nav--desktop ul {
     display: flex;
-    gap: 1.75rem;
+    gap: var(--gap-nav);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -135,7 +167,7 @@ const isActive = (path: string) =>
     font-weight: 500;
     color: var(--color-sand-700);
     text-decoration: none;
-    padding-block: 0.35rem;
+    padding-block: var(--space-2xs);
     position: relative;
     transition: color 0.15s ease;
   }
@@ -164,7 +196,7 @@ const isActive = (path: string) =>
   .site-header__actions {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--space-md);
   }
 
   .menu-toggle {
@@ -220,7 +252,7 @@ const isActive = (path: string) =>
   .mobile-nav ul {
     list-style: none;
     margin: 0;
-    padding-block: 0.75rem;
+    padding-block: var(--space-sm);
   }
   .mobile-nav__link {
     display: block;
@@ -228,13 +260,13 @@ const isActive = (path: string) =>
     font-size: 1.5rem;
     color: var(--color-ink);
     text-decoration: none;
-    padding-block: 0.6rem;
+    padding-block: var(--space-sm);
   }
   .mobile-nav__link[aria-current='page'] {
     color: var(--color-terracotta-600);
   }
   .mobile-nav__lang {
-    padding-block: 1rem 1.5rem;
+    padding-block: var(--space-md) var(--space-lg);
     border-block-start: 1px solid var(--color-line);
   }
 

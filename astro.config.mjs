@@ -34,11 +34,27 @@ export default defineConfig({
     defaultStrategy: 'hover',
   },
 
-  // Built-in CSP (Astro 6). Auto-hashes Astro's own bundled scripts/styles
-  // (client islands, ClientRouter, injected font styles). Fonts are self-hosted
-  // (same-origin), so the default 'self' policy covers them.
+  // Built-in CSP (Astro 6). Astro auto-manages script-src / style-src / font-src
+  // ('self' + per-build hashes for its bundled scripts and styles). The object
+  // form adds a hardened baseline plus the few extra directives the interactive
+  // place map needs — all same-origin (no third-party, no API keys):
+  //   • worker-src 'self' blob: — MapLibre runs its renderer on a Web Worker
+  //     instantiated from a same-document `blob:` URL (its bundled worker).
+  //   • connect-src 'self'      — PMTiles range requests + glyph PBFs (/map/…).
+  //   • img-src 'self' data: blob: — Astro images, the inline `data:` paper
+  //     grain, and MapLibre canvas/texture sources.
   security: {
-    csp: true,
+    csp: {
+      directives: [
+        "default-src 'self'",
+        "img-src 'self' data: blob:",
+        "worker-src 'self' blob:",
+        "connect-src 'self'",
+        "base-uri 'self'",
+        "object-src 'none'",
+        "frame-ancestors 'self'",
+      ],
+    },
   },
 
   // Self-hosted fonts via Astro's stable Fonts API (downloaded & cached at

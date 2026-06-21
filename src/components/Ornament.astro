@@ -1,0 +1,92 @@
+---
+/**
+ * Ornament — the eight-point-star (khatim) flourish: the geometric companion to
+ * the bazaar pointed-arch motif, drawn from the same √2 star as `--motif-star`.
+ *   • "divider"  a centred hairline rule with a small star at its middle — an
+ *                editorial replacement for plain `border-block` section rules.
+ *   • "seal"     a single small star mark — a quiet flourish (e.g. footer top).
+ *
+ * CSP-safe: inline SVG markup + scoped <style> only; colour comes from tokens
+ * and `currentColor`, never an inline `style=`. The star is 8-fold symmetric, so
+ * it is direction-agnostic and needs no RTL handling.
+ */
+interface Props {
+  variant?: 'divider' | 'seal';
+  /** Mark colour. */
+  tone?: 'line' | 'brass' | 'terracotta';
+  class?: string;
+}
+const { variant = 'divider', tone = 'line', class: className } = Astro.props;
+
+// Eight-point star on √2: outer R=48, inner r=R·(√2−1)≈19.88, centred in 0 0 100 100.
+const STAR =
+  '50,2 57.61,31.63 83.94,16.06 68.37,42.39 98,50 68.37,57.61 83.94,83.94 57.61,68.37 50,98 42.39,68.37 16.06,83.94 31.63,57.61 2,50 31.63,42.39 16.06,16.06 42.39,31.63';
+---
+
+{
+  variant === 'divider' ? (
+    <div
+      class:list={['ornament', 'ornament--divider', `ornament--${tone}`, className]}
+      aria-hidden="true"
+    >
+      <span class="ornament__rule" />
+      <svg class="ornament__star" viewBox="0 0 100 100" aria-hidden="true">
+        <polygon points={STAR} />
+      </svg>
+      <span class="ornament__rule" />
+    </div>
+  ) : (
+    <svg
+      class:list={['ornament', 'ornament--seal', `ornament--${tone}`, className]}
+      viewBox="0 0 100 100"
+      aria-hidden="true"
+    >
+      <polygon points={STAR} />
+    </svg>
+  )
+}
+
+<style>
+  .ornament {
+    color: var(--color-sand-500);
+  }
+  .ornament--brass {
+    color: var(--color-brass-400);
+  }
+  .ornament--terracotta {
+    color: var(--color-terracotta-500);
+  }
+
+  /* Divider: rule — star — rule, centred across the content measure. */
+  .ornament--divider {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    inline-size: 100%;
+  }
+  .ornament__rule {
+    flex: 1;
+    block-size: 1px;
+    background: var(--color-line);
+  }
+  .ornament__star {
+    flex: none;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+  }
+
+  /* Seal: a lone star, centred (so it stays direction-neutral). */
+  .ornament--seal {
+    display: block;
+    inline-size: 2rem;
+    block-size: 2rem;
+    margin-inline: auto;
+  }
+
+  .ornament polygon {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 4;
+    stroke-linejoin: miter;
+  }
+</style>

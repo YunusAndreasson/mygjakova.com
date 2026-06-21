@@ -1,5 +1,6 @@
 ---
 import LanguageSwitcher from '~/components/LanguageSwitcher.astro';
+import Ornament from '~/components/Ornament.astro';
 import { useTranslations, localizedPath, type Locale } from '~/i18n/utils';
 
 interface Props {
@@ -18,13 +19,16 @@ const items = [
 ---
 
 <footer class="site-footer">
+  <div class="wrap site-footer__seal">
+    <Ornament variant="seal" tone="brass" />
+  </div>
   <div class="wrap site-footer__inner">
     <div class="site-footer__brand">
       <p class="site-footer__name">{t('site.name')}</p>
       <p class="site-footer__tagline">{t('footer.tagline')}</p>
     </div>
 
-    <nav class="site-footer__nav" aria-label="Footer">
+    <nav class="site-footer__nav" aria-label={t('a11y.footerNav')}>
       <ul>
         {
           items.map((item) => (
@@ -43,6 +47,10 @@ const items = [
 
   <div class="wrap site-footer__base">
     <p>© {year} {t('site.name')}. {t('footer.rights')}</p>
+    <p class="site-footer__credit">
+      {t('footer.credit')} ·{' '}
+      <a href="https://andreassonphoto.com" rel="author noopener">andreassonphoto.com</a>
+    </p>
   </div>
 </footer>
 
@@ -50,7 +58,7 @@ const items = [
   .site-footer {
     position: relative;
     isolation: isolate;
-    margin-block-start: 6rem;
+    margin-block-start: var(--space-4xl);
     background: var(--color-sand-900);
     color: var(--color-sand-200);
     font-family: var(--font-sans);
@@ -68,12 +76,30 @@ const items = [
     opacity: 0.06;
     mix-blend-mode: overlay;
   }
+  /* Eight-point-star lattice — a second, fainter layer over the dark fill
+     (overlay lifts the baked ink to a faint light line). Behind content. */
+  .site-footer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: var(--motif-star);
+    background-size: 64px 64px;
+    opacity: 0.07;
+    mix-blend-mode: overlay;
+  }
+  /* The seal sits centred above the footer columns. */
+  .site-footer__seal {
+    padding-block-start: var(--space-3xl);
+  }
   .site-footer__inner {
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem;
+    gap: var(--gap-footer);
     justify-content: space-between;
-    padding-block: 3.5rem 2rem;
+    /* Top breathing room is carried by the seal above. */
+    padding-block: var(--space-lg) var(--space-xl);
   }
   .site-footer__name {
     font-family: var(--font-display);
@@ -82,16 +108,16 @@ const items = [
     margin: 0;
   }
   .site-footer__tagline {
-    margin: 0.35rem 0 0;
+    margin: var(--space-2xs) 0 0;
     color: var(--color-sand-400);
-    max-inline-size: 28ch;
+    max-inline-size: var(--measure-tight);
   }
   .site-footer__nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 0.6rem;
+    gap: var(--space-sm);
   }
   .site-footer__nav a {
     color: var(--color-sand-200);
@@ -102,13 +128,26 @@ const items = [
     color: var(--color-brass-300);
   }
   .site-footer__base {
-    padding-block: 1.25rem 2rem;
+    padding-block: var(--space-lg) var(--space-xl);
     border-block-start: 1px solid rgb(255 255 255 / 0.08);
     font-size: 0.85rem;
     color: var(--color-sand-500);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-lg);
+    justify-content: space-between;
   }
   .site-footer__base p {
     margin: 0;
+  }
+  .site-footer__credit a {
+    color: var(--color-sand-400);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    transition: color 0.15s ease;
+  }
+  .site-footer__credit a:hover {
+    color: var(--color-brass-300);
   }
   /* Brighten the switcher on the dark footer */
   .site-footer__lang :global(.lang__link) {

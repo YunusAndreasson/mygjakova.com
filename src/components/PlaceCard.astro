@@ -21,28 +21,28 @@ const href = localizedPath(lang, `/places/${entrySlug(place.id)}`);
   <div class="card__media">
     {
       hero ? (
-        <>
-          <OptimizedImage
-            src={hero}
-            alt={heroAlt ?? title}
-            ratio="4 / 3"
-            sizes="(min-width: 900px) 30rem, 100vw"
-            widths={[400, 600, 900]}
-            priority={priority}
-            transition:name={`place-${entrySlug(place.id)}`}
-          />
-          <span class="card__cat">{category}</span>
-        </>
+        <OptimizedImage
+          src={hero}
+          alt={heroAlt ?? title}
+          ratio="4 / 3"
+          sizes="(min-width: 900px) 30rem, 100vw"
+          widths={[400, 600, 900]}
+          priority={priority}
+          transition:name={`place-${entrySlug(place.id)}`}
+        />
       ) : (
         <PlaceholderPlate
           title={title}
-          kind={category}
           category={category}
           aspect="4 / 3"
+          label={false}
           transitionName={`place-${entrySlug(place.id)}`}
         />
       )
     }
+    {/* Category chip in both cases — single, consistent identifier; the place
+        name lives only in the card body, never duplicated over the media. */}
+    <span class="card__cat">{category}</span>
   </div>
   <div class="card__body">
     <h3 class="card__title">{title}</h3>
@@ -91,8 +91,8 @@ const href = localizedPath(lang, `/places/${entrySlug(place.id)}`);
   }
   .card__cat {
     position: absolute;
-    inset-block-start: 0.85rem;
-    inset-inline-start: 0.85rem;
+    inset-block-start: var(--space-sm);
+    inset-inline-start: var(--space-sm);
     font-family: var(--font-sans);
     font-size: 0.7rem;
     font-weight: 600;
@@ -101,14 +101,14 @@ const href = localizedPath(lang, `/places/${entrySlug(place.id)}`);
     color: var(--color-sand-50);
     background: rgb(28 25 21 / 0.55);
     backdrop-filter: blur(4px);
-    padding: 0.3rem 0.6rem;
+    padding: var(--space-2xs) var(--space-sm);
     border-radius: var(--radius-xs);
   }
   .card__body {
     display: flex;
     flex-direction: column;
-    gap: 0.45rem;
-    padding: 1.4rem;
+    gap: var(--gap-body);
+    padding: var(--space-lg);
   }
   .card__title {
     font-size: 1.5rem;
@@ -128,7 +128,7 @@ const href = localizedPath(lang, `/places/${entrySlug(place.id)}`);
     margin: 0;
   }
   .card__cta {
-    margin-block-start: 0.5rem;
+    margin-block-start: var(--space-xs);
     font-family: var(--font-sans);
     font-weight: 600;
     font-size: 0.9rem;

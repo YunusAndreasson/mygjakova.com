@@ -1,0 +1,78 @@
+---
+/**
+ * A small image-attribution line — author · source · licence, each linked where
+ * a URL exists (the source links to the file-description page, the licence to its
+ * deed). Sourced imagery (Wikimedia Commons) requires visible credit; this is the
+ * single place that formats it, used by Figure.astro and Gallery.astro.
+ * Renders nothing when no meaningful credit is present.
+ */
+export interface Credit {
+  author?: string;
+  source?: string;
+  license?: string;
+  licenseUrl?: string;
+  url?: string;
+}
+
+interface Props {
+  credit?: Credit;
+  class?: string;
+}
+
+const { credit, class: className } = Astro.props;
+const c = credit ?? {};
+const has = Boolean(c.author || c.source || c.license);
+---
+
+{
+  has && (
+    <span class:list={['credit', className]}>
+      {c.author && <span class="credit__author">{c.author}</span>}
+      {c.source &&
+        (c.url ? (
+          <a class="credit__link" href={c.url} target="_blank" rel="noopener noreferrer nofollow">
+            {c.source}
+          </a>
+        ) : (
+          <span>{c.source}</span>
+        ))}
+      {c.license &&
+        (c.licenseUrl ? (
+          <a class="credit__link" href={c.licenseUrl} target="_blank" rel="noopener noreferrer nofollow">
+            {c.license}
+          </a>
+        ) : (
+          <span>{c.license}</span>
+        ))}
+    </span>
+  )
+}
+
+<style>
+  .credit {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    line-height: 1.4;
+    color: var(--color-sand-600);
+  }
+  /* Thin middots between the parts, drawn with ::before so the markup stays clean
+     and no separator hangs at either end. */
+  .credit > * + *::before {
+    content: '·';
+    margin-inline: 0.4em;
+    color: var(--color-sand-500);
+  }
+  .credit__author {
+    font-style: italic;
+  }
+  .credit__link {
+    color: var(--color-sand-600);
+    text-decoration: underline;
+    text-decoration-thickness: from-font;
+    text-underline-offset: 0.15em;
+    transition: color var(--dur) var(--ease);
+  }
+  .credit__link:hover {
+    color: var(--color-terracotta-600);
+  }
+</style>

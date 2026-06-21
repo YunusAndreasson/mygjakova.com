@@ -1,0 +1,76 @@
+---
+/**
+ * "On this page" table of contents, built from the rendered Markdown headings
+ * (Astro auto-assigns matching `id`s to headings, so `#slug` anchors resolve).
+ * Renders only when there are at least two h2/h3 headings to link.
+ */
+import { useTranslations, type Locale } from '~/i18n/utils';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+interface Props {
+  headings: Heading[];
+  lang: Locale;
+}
+
+const { headings, lang } = Astro.props;
+const t = useTranslations(lang);
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+  items.length >= 2 && (
+    <nav class="toc" aria-label={t('toc.title')}>
+      <h2 class="toc__title">{t('toc.title')}</h2>
+      <ol class="toc__list">
+        {items.map((h) => (
+          <li class:list={['toc__item', { 'toc__item--sub': h.depth === 3 }]}>
+            <a class="toc__link" href={`#${h.slug}`}>
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
+
+<style>
+  .toc {
+    border-inline-start: 2px solid var(--color-line);
+    padding-inline-start: var(--space-md);
+  }
+  .toc__title {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-sand-600);
+    margin: 0 0 var(--space-sm);
+  }
+  .toc__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+  .toc__item--sub {
+    padding-inline-start: var(--space-sm);
+  }
+  .toc__link {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    color: var(--color-sand-700);
+    text-decoration: none;
+    transition: color var(--dur) var(--ease);
+  }
+  .toc__link:hover {
+    color: var(--color-terracotta-600);
+  }
+</style>

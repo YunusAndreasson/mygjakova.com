@@ -40,10 +40,10 @@ const t = useTranslations(lang);
 
 <style>
   .sources--inline {
-    margin-block-start: 1rem;
+    margin-block-start: var(--space-md);
   }
   .sources--block {
-    margin-block-start: 1.5rem;
+    margin-block-start: var(--space-lg);
   }
   .sources__title {
     font-family: var(--font-sans);
@@ -52,7 +52,7 @@ const t = useTranslations(lang);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--color-brass-600);
-    margin: 0 0 0.6rem;
+    margin: 0 0 var(--space-sm);
   }
   .sources__list {
     list-style: none;
@@ -64,12 +64,12 @@ const t = useTranslations(lang);
   }
   .sources--block .sources__list {
     display: grid;
-    gap: 0.4rem;
+    gap: var(--space-2xs);
   }
   .sources--inline .sources__list {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem 1rem;
+    gap: var(--space-2xs) var(--space-md);
     font-size: 0.8rem;
   }
   .sources__item a {

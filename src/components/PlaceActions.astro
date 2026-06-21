@@ -1,0 +1,122 @@
+---
+/**
+ * Place actions — share + directions.
+ *  • Share: Web Share API button, progressively enhanced. Hidden by default and
+ *    revealed only where `navigator.share` exists (no broken control elsewhere).
+ *  • Directions: plain links to Google / Apple Maps (no JS needed), shown when
+ *    the place has coordinates. Labels are localized.
+ */
+import { useTranslations, type Locale } from '~/i18n/utils';
+
+interface Props {
+  title: string;
+  lat?: number;
+  lng?: number;
+  lang: Locale;
+}
+
+const { title, lat, lng, lang } = Astro.props;
+const t = useTranslations(lang);
+
+const hasCoords = typeof lat === 'number' && typeof lng === 'number';
+const google = hasCoords
+  ? `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`
+  : null;
+const apple = hasCoords ? `https://maps.apple.com/?daddr=${lat},${lng}` : null;
+---
+
+<div class="actions">
+  <button class="actions__share" type="button" data-share data-title={title} hidden>
+    <span aria-hidden="true">↗</span>
+    {t('actions.share')}
+  </button>
+
+  {
+    hasCoords && (
+      <p class="actions__dir">
+        <span class="actions__dir-label">{t('actions.directions')}</span>
+        <a class="actions__dir-link" href={google} target="_blank" rel="noopener noreferrer">
+          {t('actions.directionsGoogle')}
+        </a>
+        <a class="actions__dir-link" href={apple} target="_blank" rel="noopener noreferrer">
+          {t('actions.directionsApple')}
+        </a>
+      </p>
+    )
+  }
+</div>
+
+<script>
+  function setupShare() {
+    if (!('share' in navigator)) return; // unsupported → button stays hidden
+    document.querySelectorAll<HTMLButtonElement>('[data-share]').forEach((btn) => {
+      btn.hidden = false;
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = '1';
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.share({
+            title: btn.dataset.title || document.title,
+            url: location.href,
+          });
+        } catch {
+          /* user dismissed the share sheet */
+        }
+      });
+    });
+  }
+  document.addEventListener('astro:page-load', setupShare);
+</script>
+
+<style>
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    font-family: var(--font-sans);
+  }
+  .actions__share {
+    align-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--color-sand-400);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition:
+      border-color var(--dur) var(--ease),
+      transform var(--dur) var(--ease);
+  }
+  .actions__share:hover {
+    border-color: var(--color-terracotta-400);
+    transform: translateY(-1px);
+  }
+  .actions__dir {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2xs) var(--space-sm);
+    margin: 0;
+    font-size: 0.9rem;
+  }
+  .actions__dir-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-sand-600);
+  }
+  .actions__dir-link {
+    color: var(--color-terracotta-600);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .actions__dir-link:hover {
+    text-decoration: underline;
+  }
+</style>

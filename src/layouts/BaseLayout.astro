@@ -11,6 +11,7 @@ import {
   stripLocale,
   locales,
 } from '~/i18n/utils';
+import { ogLocales } from '~/i18n/ui';
 import '~/styles/global.css';
 
 interface Props {
@@ -82,15 +83,24 @@ const ld = { '@context': 'https://schema.org', '@graph': ldGraph };
     <!-- Open Graph / Twitter -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteName} />
-    <meta property="og:locale" content={lang} />
+    <meta property="og:locale" content={ogLocales[lang]} />
+    {
+      locales
+        .filter((l) => l !== lang)
+        .map((l) => <meta property="og:locale:alternate" content={ogLocales[l]} />)
+    }
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={desc} />
     <meta property="og:url" content={canonical.href} />
     <meta property="og:image" content={ogImage.href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={pageTitle} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={desc} />
     <meta name="twitter:image" content={ogImage.href} />
+    <meta name="twitter:image:alt" content={pageTitle} />
 
     <!-- Structured data (schema.org) -->
     <script type="application/ld+json" is:inline set:html={JSON.stringify(ld)} />
@@ -114,10 +124,10 @@ const ld = { '@context': 'https://schema.org', '@graph': ldGraph };
     <style>
       .skip-link {
         position: fixed;
-        inset-block-start: 0.75rem;
-        inset-inline-start: 0.75rem;
+        inset-block-start: var(--space-sm);
+        inset-inline-start: var(--space-sm);
         z-index: 100;
-        padding: 0.6rem 1rem;
+        padding: var(--space-sm) var(--space-md);
         border-radius: var(--radius-sm);
         background: var(--color-ink);
         color: var(--color-sand-50);

@@ -15,15 +15,12 @@ const places = await getPlaces(lang);
 
 <PageHeader eyebrow={t('nav.places')} title={t('places.title')} lede={t('places.lede')} />
 
-<section class="wrap cards" data-reveal>
+<section class="wrap card-grid places" data-reveal>
   {places.map((place, i) => <PlaceCard place={place} lang={lang} priority={i < 2} />)}
 </section>
 
 <style>
-  .cards {
-    display: grid;
-    gap: 1.75rem;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
-    padding-block-end: 2rem;
+  .places {
+    padding-block-end: var(--space-xl);
   }
 </style>

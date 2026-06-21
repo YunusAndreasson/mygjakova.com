@@ -7,6 +7,8 @@
  * pure CSS + inline SVG, sharp at any size, and trivially swapped for a real
  * <OptimizedImage> once photography exists.
  */
+import { paletteFor } from '~/lib/placePalette.mjs';
+
 interface Props {
   title: string;
   /** Category label rendered as the eyebrow (already display-cased upstream). */
@@ -18,24 +20,28 @@ interface Props {
   /** Rounded corners + lift shadow, for standalone use (hero / guide). Cards
       clip their own corners, so they leave this off. */
   framed?: boolean;
+  /** Print the name + category caption. On by default — but a plate sitting next
+      to a real heading (a card body, the guide header) sets this `false` so the
+      title isn't duplicated; the plate is then a pure duotone "photo stand-in".
+      Keep it `true` only where the plate is the SOLE label (e.g. the home hero). */
+  label?: boolean;
   /** Optional view-transition name so a card plate morphs into the guide plate. */
   transitionName?: string;
 }
 
-const { title, kind, category, aspect = '4 / 3', framed = false, transitionName } = Astro.props;
+const {
+  title,
+  kind,
+  category,
+  aspect = '4 / 3',
+  framed = false,
+  label = true,
+  transitionName,
+} = Astro.props;
 
 // Map every category onto one of three warm duotone palettes (unknown → warm).
-const PALETTE: Record<string, 'warm' | 'brass' | 'stone'> = {
-  bazaar: 'warm',
-  bridge: 'warm',
-  monument: 'warm',
-  mosque: 'brass',
-  tekke: 'brass',
-  museum: 'brass',
-  house: 'stone',
-  square: 'stone',
-};
-const palette = PALETTE[category ?? ''] ?? 'warm';
+// Shared with the OG image generator via src/lib/placePalette.mjs.
+const palette = paletteFor(category);
 
 // Aspect ratio is applied via a class (not an inline `style`) so it stays
 // within the project's strict CSP, which doesn't allow inline style attributes.
@@ -48,7 +54,12 @@ const aspectClass = ASPECT_CLASS[aspect] ?? 'plate--ar-4x3';
 ---
 
 <figure
-  class:list={['plate', `plate--${palette}`, aspectClass, { 'plate--framed': framed }]}
+  class:list={[
+    'plate',
+    `plate--${palette}`,
+    aspectClass,
+    { 'plate--framed': framed, 'plate--bare': !label },
+  ]}
   transition:name={transitionName}
   aria-hidden="true"
 >
@@ -56,10 +67,14 @@ const aspectClass = ASPECT_CLASS[aspect] ?? 'plate--ar-4x3';
     <path d="M16 122 L16 56 Q50 4 84 56 L84 122" fill="none" stroke="currentColor" stroke-width="1.1" />
     <path d="M34 122 L34 70 Q50 40 66 70 L66 122" fill="none" stroke="currentColor" stroke-width="1.1" />
   </svg>
-  <figcaption class="plate__caption">
-    {kind && <span class="plate__kind">{kind}</span>}
-    <span class="plate__title">{title}</span>
-  </figcaption>
+  {
+    label && (
+      <figcaption class="plate__caption">
+        {kind && <span class="plate__kind">{kind}</span>}
+        <span class="plate__title">{title}</span>
+      </figcaption>
+    )
+  }
 </figure>
 
 <style>
@@ -123,6 +138,15 @@ const aspectClass = ASPECT_CLASS[aspect] ?? 'plate--ar-4x3';
     color: var(--plate-fg);
     opacity: 0.14;
     z-index: -1;
+  }
+
+  /* Text-less plate (card media, guide hero): the title lives in the adjacent
+     heading, so the panel carries identity through the motif alone. Centre and
+     strengthen the arch so it reads as a deliberate plate, never an empty box. */
+  .plate--bare .plate__arch {
+    inset-inline: 0;
+    margin-inline: auto;
+    opacity: 0.2;
   }
 
   .plate__caption {
