@@ -11,7 +11,8 @@ import {
   stripLocale,
   locales,
 } from '~/i18n/utils';
-import { ogLocales } from '~/i18n/ui';
+import { ogLocales, type UIKey } from '~/i18n/ui';
+import { buildBreadcrumbJsonLd, buildOrganization, buildPerson } from '~/lib/jsonLd';
 import '~/styles/global.css';
 
 interface Props {
@@ -46,8 +47,36 @@ const alternates = locales.map((l) => ({
   href: new URL(localizedPath(l, barePath), origin).href,
 }));
 
-// JSON-LD: a site-wide WebSite node on every page, plus any node(s) a page
-// passes (e.g. a TouristAttraction on a place guide), merged into one @graph.
+// Breadcrumb trail (structured data only — no visible UI). Built from the
+// locale-agnostic path: ancestor sections link out, the current page is the
+// leaf. Skipped on the home page, where a one-item crumb is pointless.
+const SECTION_NAV: Record<string, UIKey> = {
+  places: 'nav.places',
+  timeline: 'nav.timeline',
+  about: 'nav.about',
+  visit: 'nav.visit',
+};
+const sectionLabel = (seg: string): string => {
+  const key = SECTION_NAV[seg];
+  return key ? t(key) : seg;
+};
+const segments = barePath.split('/').filter(Boolean);
+const breadcrumb =
+  segments.length > 0
+    ? buildBreadcrumbJsonLd({
+        lang,
+        origin: origin.href,
+        trail: [
+          { name: t('nav.home'), path: '/' },
+          ...segments.slice(0, -1).map((seg) => ({ name: sectionLabel(seg), path: `/${seg}` })),
+        ],
+        leaf: title ?? sectionLabel(segments[segments.length - 1]!),
+      })
+    : null;
+
+// JSON-LD graph: a site-wide WebSite + Organization (publisher) on every page,
+// an optional BreadcrumbList, plus any node(s) a page passes (e.g. a
+// TouristAttraction on a place guide), all merged into one @graph.
 const ldGraph = [
   {
     '@type': 'WebSite',
@@ -56,7 +85,11 @@ const ldGraph = [
     url: origin.href,
     inLanguage: lang,
     description: desc,
+    publisher: { '@id': `${origin.href}#org` },
   },
+  buildOrganization({ name: siteName, origin: origin.href }),
+  buildPerson(),
+  ...(breadcrumb ? [breadcrumb] : []),
   ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []),
 ];
 const ld = { '@context': 'https://schema.org', '@graph': ldGraph };
@@ -66,19 +99,37 @@ const ld = { '@context': 'https://schema.org', '@graph': ldGraph };
 <html lang={lang} dir={dir}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!-- Google Search Console site verification (HTML-tag method). -->
+    <meta name="google-site-verification" content="l0hahSJL9ZCwPWvoVK2trJow4CH7irwIuEFGrb5KkBc" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#f6f1e7" />
     <meta name="color-scheme" content="light" />
+    <!-- Installed / home-screen app feel (iOS + Android): launches fullscreen,
+         titled "myGjakova", with a light status bar matching the theme. -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="myGjakova" />
 
     <title>{pageTitle}</title>
     <meta name="description" content={desc} />
+    <meta name="author" content="Yunus Andreasson" />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <link rel="canonical" href={canonical.href} />
     {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
     <link rel="alternate" hreflang="x-default" href={new URL(localizedPath('en', barePath), origin).href} />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${siteName} — ${t('site.tagline')}`}
+      href={new URL(localizedPath(lang, '/rss.xml'), origin).href}
+    />
 
     <!-- Open Graph / Twitter -->
     <meta property="og:type" content="website" />
@@ -97,6 +148,7 @@ const ld = { '@context': 'https://schema.org', '@graph': ldGraph };
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={pageTitle} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@YunusAndreasson" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={desc} />
     <meta name="twitter:image" content={ogImage.href} />
