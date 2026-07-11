@@ -37,9 +37,13 @@ const {
 const slug = entrySlug(place.id);
 
 const all = await getPlaces(lang);
-const relatedPlaces = all.filter(
-  (p) => related.includes(entrySlug(p.id)) && entrySlug(p.id) !== slug,
-);
+// Cap at three so the related grid is always one tidy row (three columns at
+// desktop) — a fourth card would orphan onto a second row. Order by the author's
+// `related` list so the kept three are the highest-priority picks.
+const relatedPlaces = all
+  .filter((p) => related.includes(entrySlug(p.id)) && entrySlug(p.id) !== slug)
+  .sort((a, b) => related.indexOf(entrySlug(a.id)) - related.indexOf(entrySlug(b.id)))
+  .slice(0, 3);
 
 // Coordinates of related places become muted secondary markers on the map.
 const relatedMarkers = relatedPlaces

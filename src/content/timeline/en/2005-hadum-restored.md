@@ -11,15 +11,13 @@ sources:
     url: https://en.wikipedia.org/wiki/Hadum_Mosque
   - label: 'Cultural Heritage without Borders Kosova'
     url: https://chwbkosova.org/
-image: ../../../assets/photos/hadumInt.jpg
-imageAlt: "The painted interior of the Hadum Mosque, walls covered in floral and cypress motifs."
+image: ../../../assets/photos/ownHadumInt.jpg
+imageAlt: "The painted interior of the Hadum Mosque — its carved wooden minber and walls of calligraphy."
 imageCaption: "Inside the restored Hadum Mosque, its painted decoration brought back."
 imageCredit:
-  author: "Aljabakphoto"
-  source: "Wikimedia Commons"
-  license: "CC BY-SA 4.0"
-  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
-  url: "https://commons.wikimedia.org/wiki/File%3AInside_Hadum_mosque%2C_Gjakova.JPG"
+  author: "Yunus Andreasson"
+  source: "@andreasson.photo"
+  url: "https://www.instagram.com/andreasson.photo/"
 ---
 
 In **2003** the Swedish NGO **Cultural Heritage without Borders**, with the Packard Humanities Institute, takes over the abandoned, war-damaged Hadum complex and restores the mosque itself to international conservation standards, finishing in **2005**. The shot-off **minaret**, the dome, the painted **portico**, the windows and the walled yard are repaired, and the interior's rare wall-paintings brought back.

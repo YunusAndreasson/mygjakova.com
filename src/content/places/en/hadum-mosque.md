@@ -25,33 +25,27 @@ sources:
 order: 2
 featured: true
 gallery:
-  - src: ../../../assets/photos/hadumExt.jpg
-    alt: "The Hadum Mosque today, its dome and minaret above the bazaar."
-    caption: "The Hadum Mosque today."
+  - src: ../../../assets/photos/ownHadum.jpg
+    alt: "The Hadum Mosque's arched, painted portico at dusk, a cypress beside it."
+    caption: "The Hadum Mosque at dusk."
     credit:
-      author: "Albinfo"
-      source: "Wikimedia Commons"
-      license: "CC BY 4.0"
-      licenseUrl: "https://creativecommons.org/licenses/by/4.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AGjakova_Hadum_Aga_Mosque_(WPWTR17).jpg"
-  - src: ../../../assets/photos/hadumInt.jpg
-    alt: "The mosque's painted interior — cypresses, vases and flowers across the walls."
-    caption: "The painted interior — cypresses, vases and flowers."
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
+  - src: ../../../assets/photos/ownHadumInt.jpg
+    alt: "The painted interior — the carved wooden minber and walls of calligraphy."
+    caption: "The painted interior and carved minber."
     credit:
-      author: "Aljabakphoto"
-      source: "Wikimedia Commons"
-      license: "CC BY-SA 4.0"
-      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AInside_Hadum_mosque%2C_Gjakova.JPG"
-  - src: ../../../assets/photos/hadumWar.jpg
-    alt: "A ruined, fire-blackened street in Gjakova's old town after the 1999 war."
-    caption: "Gjakova's old town in ruins after the 1999 war."
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
+  - src: ../../../assets/photos/ownHadumPortico.jpg
+    alt: "A wide view of the mosque's painted porch and courtyard under a dark sky."
+    caption: "The painted porch and courtyard."
     credit:
-      author: "Shkëlzen Rexha"
-      source: "Wikimedia Commons"
-      license: "CC BY-SA 3.0"
-      licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AGjakov%C3%AB_-_Xhamia_e_Hadumit_pas_lyft%C3%ABs_1999.jpg"
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
 ---
 
 Every old city has a first stone. Gjakova's is the **Hadum Mosque** — *Xhamia e Hadumit* — set at the head of the bazaar in **1594–95**, the building from which the rest of the town quite literally grew. Its single dome and slim minaret are handsome enough from the lane; the surprise waits inside, where the plaster is painted like a garden.

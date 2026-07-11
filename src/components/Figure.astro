@@ -63,10 +63,13 @@ const hasCaption = Boolean(caption || credit);
     display: block;
     inline-size: auto;
     max-inline-size: 100%;
-    /* Cap height so portrait scans (a manuscript page) don't tower; landscape
-       shots simply fill the column width. Centred either way. */
-    max-block-size: 32rem;
-    margin-inline: auto;
+    /* Height cap sits just above the timeline column width (≈40rem), so square
+       photos fill the column to the same width as landscape ones instead of
+       reading narrow. Only genuinely tall portrait scans (a manuscript page) are
+       capped, so they don't tower. Aligned to the inline-start so a narrow image
+       lines up with the left-aligned text instead of floating centred. */
+    max-block-size: 42rem;
+    margin-inline-end: auto;
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-soft);
     background: var(--color-sand-200);

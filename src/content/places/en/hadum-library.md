@@ -25,15 +25,13 @@ order: 3
 featured: false
 draft: false
 gallery:
-  - src: ../../../assets/photos/hadumSchool.jpg
-    alt: "The rebuilt school and library building of the Hadum complex."
-    caption: "The rebuilt library and school of the Hadum complex."
+  - src: ../../../assets/photos/ownLibrary.jpg
+    alt: "The rebuilt octagonal Hadum library building among trees, its tiled roof and stone base."
+    caption: "The rebuilt Hadum library building."
     credit:
-      author: "albinfo"
-      source: "Wikimedia Commons"
-      license: "CC0"
-      licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/"
-      url: "https://commons.wikimedia.org/wiki/File%3AXhamia_e_Hadumit_%E2%80%93_minaret_and_school_(OSCAL19_trip).jpg"
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
   - src: ../../../assets/photos/hadumWar.jpg
     alt: "Gjakova's old town in ruins after the 1999 fire that burned the Hadum library."
     caption: "The old town after the 1999 fire that destroyed the library."

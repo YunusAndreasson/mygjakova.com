@@ -23,24 +23,13 @@ order: 5
 featured: false
 draft: false
 gallery:
-  - src: ../../../assets/photos/clock1.jpg
-    alt: "The clock tower of Gjakova rising above the rooftops."
-    caption: "The clock tower on the Field of the Clock."
+  - src: ../../../assets/photos/ownClock.jpg
+    alt: "The clock tower rising above the river embankment at dusk."
+    caption: "The Clock Tower above the river."
     credit:
-      author: "Irvi Hyka"
-      source: "Wikimedia Commons"
-      license: "CC BY-SA 3.0"
-      licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AClock_Tower_of_Gjakova.jpg"
-  - src: ../../../assets/photos/clock2.jpg
-    alt: "The reconstructed stone clock tower with its belfry."
-    caption: "The reconstructed stone tower and belfry."
-    credit:
-      author: "Aljabakphoto"
-      source: "Wikimedia Commons"
-      license: "CC BY-SA 4.0"
-      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AClock_tower%2C_Gjakova.JPG"
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
 ---
 
 A bazaar runs on time, and for centuries Gjakova kept its time from a tower. The **Clock Tower** — *Sahat Kulla* — stands a few steps from the Hadum Mosque, on a spot the old town still calls **Fusha e Sahatit**, the Field of the Clock. The tower you see is young; the role it plays is very old.

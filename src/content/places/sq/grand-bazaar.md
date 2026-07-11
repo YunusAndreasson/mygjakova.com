@@ -19,42 +19,20 @@ sources:
 order: 1
 featured: true
 gallery:
-  - src: ../../../assets/photos/bazaarPano.jpg
-    alt: "Pamje e gjerë e Çarshisë së Madhe me Xhaminë e Hadumit në krye."
-    caption: "Çarshia me Xhaminë e Hadumit në krye."
+  - src: ../../../assets/photos/ownBazaar.jpg
+    alt: "Rruga e Çarshisë në muzg — dyqane me fasada druri përgjatë kalldrëmit."
+    caption: "Rruga e çarshisë në muzg."
     credit:
-      author: "Shkëlzen Rexha (Valed Promotion)"
-      source: "Wikimedia Commons"
-      license: "CC BY-SA 3.0"
-      licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AGjakova_-_%C3%87arshia_e_Madhe_-_Big_Baazar_Panorama.JPG"
-  - src: ../../../assets/photos/bazaarStreet.jpg
-    alt: "Një rrugicë e rindërtuar me dyqane të ulëta me fasada druri në çarshi."
-    caption: "Një rrugicë e rindërtuar dyqanesh."
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
+  - src: ../../../assets/photos/ownBazaar2.jpg
+    alt: "Një rrugicë e çarshisë me një burrë të ulur para një dyqani nën një qiell dramatik."
+    caption: "Një orë e qetë në çarshi."
     credit:
-      author: "Bdx"
-      source: "Wikimedia Commons"
-      license: "CC0"
-      licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/"
-      url: "https://commons.wikimedia.org/wiki/File%3AStreet_in_the_Old_Bazaar_of_Gjakova%2C_2025.jpg"
-  - src: ../../../assets/photos/bazaarCobbles.jpg
-    alt: "Kalldrëmi i çarshisë së vjetër mes radhëve të dyqaneve."
-    caption: "Rrugicat me kalldrëm të Çarshisë."
-    credit:
-      author: "OrgenKelmendi"
-      source: "Wikimedia Commons"
-      license: "CC BY-SA 4.0"
-      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AKalldr%C3%ABmi_i_Qarshis%C3%AB.jpg"
-  - src: ../../../assets/photos/bazaarCarpenter.jpg
-    alt: "Një zdrukthtar duke punuar mes djepave në punishten e tij në çarshi."
-    caption: "Një punishte zdrukthtari — zanatet e vjetra vazhdojnë."
-    credit:
-      author: "Edakaja"
-      source: "Wikimedia Commons"
-      license: "CC BY-SA 3.0"
-      licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AGjakovar_carpenter.JPG"
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
   - src: ../../../assets/photos/devojka.jpg
     alt: "Një portret studioje i vitit 1913 i një vajze nga Gjakova me kostum tradicional të pasur dhe stoli me monedha."
     caption: "Një grua e Gjakovës me veshje tradicionale dhe filigran, 1913 — puna e mjeshtërve të çarshisë, e veshur."
@@ -63,6 +41,15 @@ gallery:
       source: "Wikimedia Commons"
       license: "Public domain"
       url: "https://commons.wikimedia.org/wiki/File%3ADevojka_iz_%C4%90akovice.jpg"
+  - src: ../../../assets/photos/bazaarWar99.jpg
+    alt: "Çarshia e Gjakovës në rrënoja më 1999 — dyqane të shkrumbuara e pa çati përgjatë rrugës me kalldrëm, ca njerëz që kthehen."
+    caption: "Çarshia në rrënoja pak pas zjarrit të vitit 1999."
+    credit:
+      author: "Shkëlzen Rexha"
+      source: "Wikimedia Commons"
+      license: "CC BY-SA 3.0"
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
+      url: "https://commons.wikimedia.org/wiki/File%3AGjakova_1999.jpg"
 ---
 
 **Çarshia e Madhe** është vendi ku tregimi i Gjakovës është rrëfyer përherë: në ritmin e çekiçëve, në erën e drurit të prerë dhe në tregtinë e ngadaltë të samarxhinjve, filigranistëve e shajakpunuesve përgjatë shtyllës së saj me kalldrëm.

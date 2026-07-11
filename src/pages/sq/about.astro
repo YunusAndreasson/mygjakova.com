@@ -7,6 +7,6 @@ const lang = 'sq' as const;
 const t = useTranslations(lang);
 ---
 
-<BaseLayout title={t('about.title')}>
+<BaseLayout title={t('about.title')} description={t('about.description')}>
   <AboutView lang={lang} />
 </BaseLayout>

@@ -17,6 +17,11 @@ let ok = 0;
 let skip = 0;
 let fail = 0;
 for (const { id, file, dest } of Object.values(images)) {
+  // The site's own photography is placed locally, not fetched from Commons.
+  if (!file) {
+    skip++;
+    continue;
+  }
   const abs = resolve(root, dest);
   if (existsSync(abs) && statSync(abs).size > 1024) {
     skip++;

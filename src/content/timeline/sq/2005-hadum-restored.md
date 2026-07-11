@@ -11,15 +11,13 @@ sources:
     url: https://sq.wikipedia.org/wiki/Xhamia_e_Hadumit
   - label: 'Cultural Heritage without Borders Kosova'
     url: https://chwbkosova.org/
-image: ../../../assets/photos/hadumInt.jpg
-imageAlt: "Brendia e pikturuar e Xhamisë së Hadumit, me mure të mbuluara me motive lulesh e selvish."
+image: ../../../assets/photos/ownHadumInt.jpg
+imageAlt: "Brendia e pikturuar e Xhamisë së Hadumit — minberi i gdhendur prej druri dhe muret me kaligrafi."
 imageCaption: "Brenda Xhamisë së restauruar të Hadumit, me zbukurimin e pikturuar të rikthyer."
 imageCredit:
-  author: "Aljabakphoto"
-  source: "Wikimedia Commons"
-  license: "CC BY-SA 4.0"
-  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
-  url: "https://commons.wikimedia.org/wiki/File%3AInside_Hadum_mosque%2C_Gjakova.JPG"
+  author: "Yunus Andreasson"
+  source: "@andreasson.photo"
+  url: "https://www.instagram.com/andreasson.photo/"
 ---
 
 Më **2003** OJQ-ja suedeze **Cultural Heritage without Borders**, bashkë me Packard Humanities Institute, merr përsipër kompleksin e braktisur e të dëmtuar nga lufta të Hadumit dhe e restauron vetë xhaminë sipas standardeve ndërkombëtare të konservimit, duke përfunduar më **2005**. **Minarja** e qëlluar, kubeja, **hajati** i pikturuar, dritaret dhe oborri i rrethuar me mur riparohen, dhe pikturat e rralla murale të brendisë kthehen.

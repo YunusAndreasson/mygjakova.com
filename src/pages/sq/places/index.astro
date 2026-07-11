@@ -1,12 +1,24 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import PlacesIndex from '~/components/views/PlacesIndex.astro';
+import { getPlaces } from '~/lib/collections';
+import { buildPlacesItemList } from '~/lib/jsonLd';
 import { useTranslations } from '~/i18n/utils';
 
 const lang = 'sq' as const;
 const t = useTranslations(lang);
+
+const origin = Astro.site ?? new URL(Astro.url.origin);
+const places = await getPlaces(lang);
+const itemList = buildPlacesItemList({
+  places,
+  lang,
+  origin: origin.href,
+  url: new URL(Astro.url.pathname, origin).href,
+  name: t('places.title'),
+});
 ---
 
-<BaseLayout title={t('places.title')} description={t('places.lede')}>
+<BaseLayout title={t('places.title')} description={t('places.lede')} jsonLd={itemList}>
   <PlacesIndex lang={lang} />
 </BaseLayout>

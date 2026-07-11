@@ -1,0 +1,1221 @@
+---
+import PageHeader from '~/components/PageHeader.astro';
+import FactsPanel from '~/components/FactsPanel.astro';
+import ClimateChart from '~/components/ClimateChart.astro';
+import KosovoLocator from '~/components/KosovoLocator.astro';
+import Ornament from '~/components/Ornament.astro';
+import Sources from '~/components/Sources.astro';
+import PlaceMap from '~/components/PlaceMap.astro';
+import Figure from '~/components/Figure.astro';
+import qylitPhoto from '~/assets/photos/ownQylit.jpg';
+import hadumGate from '~/assets/photos/ownHadumGate.jpg';
+import mosquePhoto from '~/assets/photos/ownMosque.jpg';
+import hadumWindow from '~/assets/photos/ownHadumWindow.jpg';
+import hadumCourt from '~/assets/photos/ownHadum.jpg';
+import hadumPortico from '~/assets/photos/ownHadumPortico.jpg';
+import { mosques } from '~/lib/visitData';
+import { useTranslations, localizedPath, type Locale } from '~/i18n/utils';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+interface Fact {
+  term: string;
+  value: string;
+}
+interface Route {
+  origin: string;
+  badge?: string;
+  meta: string;
+  note: string;
+}
+interface Season {
+  name: string;
+  pick: boolean;
+  note: string;
+}
+interface Stay {
+  name: string;
+  type: string;
+  best: string;
+  note: string;
+}
+/** The one paragraph with links is split around them, the AboutView way. */
+interface Halal {
+  intro: string;
+  foodHead: string;
+  food: string[];
+  prayerHead: string;
+  prayerBefore: string;
+  mosqueLabel: string;
+  prayerMid: string;
+  bazaarLabel: string;
+  prayerAfter: string;
+  prayerMore: string[];
+  moneyHead: string;
+  money: string[];
+}
+interface VisitSource {
+  label: string;
+  url?: string;
+}
+interface VisitCopy {
+  eyebrow: string;
+  lede: string;
+  essentialsTitle: string;
+  essentials: Fact[];
+  essentialsNote: string;
+  gettingTitle: string;
+  gettingIntro: string;
+  routes: Route[];
+  arrivalNote: string;
+  whenTitle: string;
+  whenIntro: string;
+  climateLead: string;
+  seasonPickLabel: string;
+  seasons: Season[];
+  stayTitle: string;
+  stayIntro: string;
+  stays: Stay[];
+  stayNote: string;
+  halalTitle: string;
+  halal: Halal;
+  mosquesTitle: string;
+  mosquesIntro: string;
+  mosquesNote: string;
+  figures: {
+    qyl: { alt: string; caption: string };
+    gate: { alt: string; caption: string };
+    mosque: { alt: string; caption: string };
+    window: { alt: string; caption: string };
+    courtyard: { alt: string; caption: string };
+    portico: { alt: string; caption: string };
+  };
+  sources: VisitSource[];
+}
+
+// English is the source of truth; the Albanian Visit page is the next i18n job,
+// at which point an `sq` block joins this and the view stops falling back to en.
+const enCopy: VisitCopy = {
+  eyebrow: 'Plan your visit',
+  lede: 'How to reach Gjakova, where to stay in the old town, when to come, and the halal and prayer practicalities — a calm, practical guide for an Ottoman-heritage trip.',
+
+  essentialsTitle: 'Good to know',
+  essentials: [
+    { term: 'Currency', value: 'Euro (€) — cash-first; carry small notes' },
+    { term: 'Language', value: 'Albanian; Turkish and some English in the old town' },
+    { term: 'Getting around', value: 'Compact and walkable — no car needed in town' },
+    { term: 'Visa', value: 'Visa-free for EU/Schengen, UK and many others (incl. Swedish passports)' },
+    { term: 'Time zone', value: 'Central European Time (UTC+1; +2 in summer)' },
+    { term: 'Power', value: 'Type C/F sockets, 230 V — standard EU plugs' },
+    { term: 'Emergency', value: '112 — police, ambulance and fire' },
+  ],
+  essentialsNote:
+    'Kosovo uses the euro despite being outside the eurozone. Details can change — check official sources before you travel.',
+
+  gettingTitle: 'Getting there',
+  gettingIntro:
+    'Gjakova has no airport of its own; most travellers arrive by bus from Prishtina or fly into Tirana. The city sits on the Dukagjin plain in western Kosovo — an easy hop from Prizren and Peja, too.',
+  routes: [
+    {
+      origin: 'Prishtina',
+      badge: 'PRN airport',
+      meta: 'Bus via Fushë Kosovë · ~1.5 h · ~€6',
+      note: 'Kosovo’s main hub; buses run roughly every half hour. From the airport you transfer near Fushë Kosovë.',
+    },
+    {
+      origin: 'Tirana',
+      badge: 'TIA airport',
+      meta: 'Direct bus · ~2 h 40 · ~€18–20',
+      note: 'A daily Tirana-airport → Gjakova bus, run by several operators. Often the cheapest flights from Europe.',
+    },
+    {
+      origin: 'Prizren',
+      meta: 'Bus · ~1 h · ~€3',
+      note: 'Frequent service; an easy add-on if you’re touring the south-west.',
+    },
+    {
+      origin: 'Peja (Pejë)',
+      meta: 'Bus · ~40 min · ~€3',
+      note: 'Roughly every 15 minutes; the gateway to the Rugova gorge and the Accursed Mountains.',
+    },
+  ],
+  arrivalNote:
+    'On arrival the centre is walkable — you won’t need a car. Pay in euro cash; small notes are handy for the bazaar, buses and guesthouses.',
+
+  whenTitle: 'When to visit',
+  whenIntro:
+    'Gjakova has warm, dry-ish summers and cold, snowy winters. The graph shows the shape of the year — temperature as a band, monthly rainfall as bars.',
+  climateLead:
+    'Late May–June and September are the sweet spots: warm, comfortable for walking, and easy to book. July–August is hottest (30 °C+) and busiest — partly the diaspora-return season, when foreign-plated cars fill the town — so reserve well ahead. Winter is cold and snowy: fine for a short, atmospheric stay.',
+  seasonPickLabel: 'Sweet spot',
+  seasons: [
+    {
+      name: 'Spring · Apr–Jun',
+      pick: true,
+      note: 'Green, mild and in blossom; late spring is ideal for walking the bazaar.',
+    },
+    {
+      name: 'Summer · Jul–Aug',
+      pick: false,
+      note: 'Hot and lively but the busiest — book accommodation well ahead.',
+    },
+    {
+      name: 'Autumn · Sep–Oct',
+      pick: true,
+      note: 'Warm, calm and golden; September is arguably the best month of all.',
+    },
+    {
+      name: 'Winter · Nov–Mar',
+      pick: false,
+      note: 'Cold and snowy, with short days — but quiet, atmospheric streets.',
+    },
+  ],
+
+  stayTitle: 'Where to stay',
+  stayIntro:
+    'The most fitting choice for an Ottoman-heritage trip is to stay inside the living history — a restored kulla (the traditional stone tower house) or a family-run bujtina, clustered around the old town and the Grand Bazaar, walkable to the Hadum Mosque. All of those below are family-run and alcohol-free.',
+  stays: [
+    {
+      name: 'Kulla Dula Guesthouse',
+      type: 'Historic kulla',
+      best: 'Best for an authentic Ottoman-era stay',
+      note: 'A genuine centuries-old kulla, warmly run by its family; self-catering kitchen, about five minutes’ walk from the bazaar.',
+    },
+    {
+      name: 'Hotel Kulla e Sahatit',
+      type: 'Old-town hotel',
+      best: 'Best old-town hotel',
+      note: 'Steps from the Clock Tower in the historic core — quiet and spotless, hotel comfort with bazaar immersion.',
+    },
+    {
+      name: 'Bujtina Zhaveli',
+      type: 'Family bujtina',
+      best: 'Best value guesthouse',
+      note: 'Hosted like staying with your grandparents; simple, clean, on a quiet street under ten minutes from the bazaar.',
+    },
+    {
+      name: 'Premium Apartments · Garden GuestHouse',
+      type: 'Self-catering',
+      best: 'Best for cooking your own halal meals',
+      note: 'Central apartments with kitchens and private parking — full control over what you eat.',
+    },
+    {
+      name: 'Hotel Driada',
+      type: 'Near the bus station',
+      best: 'Most convenient on arrival',
+      note: 'Modern and comfortable, ~15 minutes’ walk to the old town but close to the bus station — easy if you arrive late.',
+    },
+  ],
+  stayNote:
+    'Ratings, prices and details change — verify before booking. One honest heads-up: the much-photographed Hotel Çarshia e Jupave is striking, but it runs a wine bar and restaurant, so it is left off this list; you could stay and simply skip the bar, but the kulla guesthouses are cleaner fits.',
+
+  halalTitle: 'Halal & prayer',
+  halal: {
+    intro:
+      'This is the easy part. Gjakova is a Muslim-majority city in a country that is about 96% Muslim, so the defaults work in your favour.',
+    foodHead: 'Food',
+    food: [
+      'Meat is overwhelmingly halal by default and pork is rare, confined to a few non-Muslim-oriented spots. The thing to watch is not the meat — it is that Kosovo’s café culture means alcohol is served in many restaurants and cafés.',
+      'Stick to the bazaar’s traditional grills (qebaptore), bakeries (furra) and family restaurants and you are on safe ground. Self-catering removes all doubt.',
+    ],
+    prayerHead: 'Prayer',
+    prayerBefore: 'The ',
+    mosqueLabel: 'Hadum Mosque',
+    prayerMid: ' in the ',
+    bazaarLabel: 'Grand Bazaar',
+    prayerAfter:
+      ' is the central congregational mosque and your natural spot for Jumu‘ah and the daily jama‘ah. Mosques are plentiful across the old town, ablution facilities are standard, and the adhan is publicly audible, so you won’t need to hunt for prayer times.',
+    prayerMore: [
+      'At about 42° N the summer schedule means an early Fajr and a late Isha — but nothing like the extreme high-latitude timings of northern Europe.',
+    ],
+    moneyHead: 'Money',
+    money: [
+      'The euro is used everywhere, cash-first. Carry small notes for the bazaar, buses and guesthouses; card acceptance is patchy in the old town.',
+    ],
+  },
+
+  mosquesTitle: 'Mosques of Gjakova',
+  mosquesIntro:
+    'The old town is dense with mosques, the Hadum at its heart — and newer ones rise in the quarters beyond it. Tap any marker for its name; the Hadum is shown in terracotta, the rest in brass.',
+  mosquesNote:
+    'An interactive map — scroll or pinch to zoom, drag to pan. Newer mosques such as the Xhamia e Qylit sit north of the historic core.',
+
+  figures: {
+    qyl: {
+      alt: 'The slender minaret of the Xhamia e Qylit against a dramatic sky, mountains beyond.',
+      caption: 'The Xhamia e Qylit, north of the old town.',
+    },
+    gate: {
+      alt: "The Hadum Mosque's courtyard seen through the heavy bazaar gate, a cypress beyond.",
+      caption: 'The Hadum, through the gate.',
+    },
+    mosque: {
+      alt: 'A slender mosque minaret rising against a dramatic evening sky.',
+      caption: 'A minaret at dusk.',
+    },
+    window: {
+      alt: 'A painted window niche inside the Hadum Mosque, framed by calligraphy and floral motifs.',
+      caption: 'A painted window niche.',
+    },
+    courtyard: {
+      alt: "The Hadum Mosque's arcaded courtyard — striped stone arches, a cypress and a cobbled path under a dramatic sky.",
+      caption: 'The arcaded courtyard.',
+    },
+    portico: {
+      alt: "The Hadum Mosque's decorated portico — striped arches, carved ornament and calligraphy framing the entrance.",
+      caption: 'The decorated portico.',
+    },
+  },
+
+  sources: [
+    { label: 'Gjakova — Wikivoyage', url: 'https://en.wikivoyage.org/wiki/Gjakova' },
+    { label: 'Kosovo (getting around) — Wikivoyage', url: 'https://en.wikivoyage.org/wiki/Kosovo' },
+    { label: 'Tirana → Gjakova — Rome2Rio', url: 'https://www.rome2rio.com/s/Tirana/Gjakova' },
+    {
+      label: 'Climate normals — climate-data.org',
+      url: 'https://en.climate-data.org/europe/republic-of-kosovo/gjakove/gjakove-6159/',
+    },
+  ],
+};
+
+const sqCopy: VisitCopy = {
+  eyebrow: 'Planifiko vizitën',
+  lede: 'Si të arrini në Gjakovë, ku të rrini në qytetin e vjetër, kur të vini, dhe çështjet praktike të ushqimit hallall e të faljes — një udhërrëfyes i qetë e praktik për një udhëtim me trashëgimi osmane.',
+
+  essentialsTitle: 'Mirë të dihet',
+  essentials: [
+    { term: 'Monedha', value: 'Euro (€) — kryesisht me para në dorë; mbani kartmonedha të vogla' },
+    { term: 'Gjuha', value: 'Shqip; turqisht dhe pak anglisht në qytetin e vjetër' },
+    { term: 'Lëvizja', value: 'Kompakte dhe e ecshme — s’ka nevojë për veturë në qytet' },
+    {
+      term: 'Viza',
+      value: 'Pa vizë për BE/Shengen, MB e shumë të tjerë (përfshirë pasaportat suedeze)',
+    },
+    { term: 'Zona orare', value: 'Ora e Evropës Qendrore (UTC+1; +2 në verë)' },
+    { term: 'Rryma', value: 'Priza tipi C/F, 230 V — priza standarde të BE-së' },
+    { term: 'Urgjenca', value: '112 — polici, ambulancë e zjarrfikës' },
+  ],
+  essentialsNote:
+    'Kosova përdor euron edhe pse është jashtë eurozonës. Detajet mund të ndryshojnë — kontrolloni burimet zyrtare para se të udhëtoni.',
+
+  gettingTitle: 'Si të arrini',
+  gettingIntro:
+    'Gjakova s’ka aeroport të vetin; shumica e udhëtarëve vijnë me autobus nga Prishtina ose fluturojnë në Tiranë. Qyteti shtrihet në Rrafshin e Dukagjinit në perëndim të Kosovës — fare afër edhe nga Prizreni e Peja.',
+  routes: [
+    {
+      origin: 'Prishtina',
+      badge: 'Aeroporti PRN',
+      meta: 'Autobus përmes Fushë Kosovës · ~1.5 orë · ~6 €',
+      note: 'Qendra kryesore e Kosovës; autobusët nisen afërsisht çdo gjysmë ore. Nga aeroporti bëhet transferi pranë Fushë Kosovës.',
+    },
+    {
+      origin: 'Tirana',
+      badge: 'Aeroporti TIA',
+      meta: 'Autobus direkt · ~2 orë 40 · ~18–20 €',
+      note: 'Një autobus i përditshëm Aeroporti i Tiranës → Gjakovë, me disa operatorë. Shpesh fluturimet më të lira nga Evropa.',
+    },
+    {
+      origin: 'Prizreni',
+      meta: 'Autobus · ~1 orë · ~3 €',
+      note: 'Shërbim i shpeshtë; shtesë e lehtë po qe se po shëtitni jugperëndimin.',
+    },
+    {
+      origin: 'Peja (Pejë)',
+      meta: 'Autobus · ~40 min · ~3 €',
+      note: 'Afërsisht çdo 15 minuta; porta drejt Grykës së Rugovës dhe Bjeshkëve të Nemuna.',
+    },
+  ],
+  arrivalNote:
+    'Sapo të arrini, qendra ecet në këmbë — s’ju duhet veturë. Paguani me euro në dorë; kartmonedhat e vogla hyjnë në punë për çarshinë, autobusët dhe bujtinat.',
+
+  whenTitle: 'Kur të vizitoni',
+  whenIntro:
+    'Gjakova ka verë të ngrohtë e paksa të thatë dhe dimër të ftohtë e me borë. Grafiku tregon trajtën e vitit — temperatura si brez, reshjet mujore si shtylla.',
+  climateLead:
+    'Fundi i majit–qershori dhe shtatori janë koha më e mirë: e ngrohtë, e këndshme për të ecur dhe e lehtë për të rezervuar. Korriku–gushti janë më të nxehtët (mbi 30 °C) dhe më të ngarkuarit — pjesërisht koha e kthimit të diasporës, kur veturat me targa të huaja mbushin qytetin — ndaj rezervoni herët. Dimri është i ftohtë e me borë: i mirë për një qëndrim të shkurtër e atmosferik.',
+  seasonPickLabel: 'Koha ideale',
+  seasons: [
+    {
+      name: 'Pranverë · Pri–Qer',
+      pick: true,
+      note: 'E gjelbër, e butë dhe në lulëzim; fundi i pranverës është ideal për të ecur çarshinë.',
+    },
+    {
+      name: 'Verë · Kor–Gush',
+      pick: false,
+      note: 'E nxehtë e plot gjallëri, por më e ngarkuara — rezervoni strehimin herët.',
+    },
+    {
+      name: 'Vjeshtë · Shta–Tet',
+      pick: true,
+      note: 'E ngrohtë, e qetë dhe e artë; shtatori ndoshta muaji më i mirë i të gjithëve.',
+    },
+    {
+      name: 'Dimër · Nën–Mar',
+      pick: false,
+      note: 'I ftohtë e me borë, me ditë të shkurtra — por rrugë të qeta e atmosferike.',
+    },
+  ],
+
+  stayTitle: 'Ku të rrini',
+  stayIntro:
+    'Zgjedhja më e përshtatshme për një udhëtim me trashëgimi osmane është të rrini brenda historisë së gjallë — një kullë e restauruar (shtëpia tradicionale gurore me kullë) ose një bujtinë familjare, të grumbulluara rreth qytetit të vjetër e Çarshisë së Madhe, në këmbë deri te Xhamia e Hadumit. Të gjitha më poshtë janë familjare dhe pa alkool.',
+  stays: [
+    {
+      name: 'Bujtina Kulla Dula',
+      type: 'Kullë historike',
+      best: 'Më e mira për një qëndrim autentik të epokës osmane',
+      note: 'Një kullë e vërtetë shekullore, e mbajtur me ngrohtësi nga familja; kuzhinë vetëshërbimi, rreth pesë minuta në këmbë nga çarshia.',
+    },
+    {
+      name: 'Hotel Kulla e Sahatit',
+      type: 'Hotel në qytetin e vjetër',
+      best: 'Hoteli më i mirë në qytetin e vjetër',
+      note: 'Disa hapa nga Kulla e Sahatit në bërthamën historike — i qetë e i pastër, rehati hoteli me zhytje në çarshi.',
+    },
+    {
+      name: 'Bujtina Zhaveli',
+      type: 'Bujtinë familjare',
+      best: 'Bujtina me vlerën më të mirë',
+      note: 'E pritur sikur të rrish te gjyshërit; e thjeshtë, e pastër, në një rrugë të qetë nën dhjetë minuta nga çarshia.',
+    },
+    {
+      name: 'Premium Apartments · Garden GuestHouse',
+      type: 'Vetëshërbim',
+      best: 'Më e mira për të gatuar vetë ushqimet hallall',
+      note: 'Apartamente qendrore me kuzhina e parking privat — kontroll i plotë mbi atë që hani.',
+    },
+    {
+      name: 'Hotel Driada',
+      type: 'Pranë stacionit të autobusëve',
+      best: 'Më i përshtatshmi sapo të arrini',
+      note: 'Modern e komod, ~15 minuta në këmbë nga qyteti i vjetër por afër stacionit të autobusëve — i lehtë po të arrini vonë.',
+    },
+  ],
+  stayNote:
+    'Vlerësimet, çmimet dhe detajet ndryshojnë — verifikoni para se të rezervoni. Një paralajmërim i ndershëm: Hotel Çarshia e Jupave, shumë i fotografuar, është mbresëlënës, por mban një bar verërash e restorant, ndaj nuk është në këtë listë; mund të rrini e thjesht ta shmangni barin, por bujtinat-kulla janë përshtatje më të pastra.',
+
+  halalTitle: 'Hallalli & falja',
+  halal: {
+    intro:
+      'Kjo është pjesa e lehtë. Gjakova është qytet me shumicë myslimane në një vend rreth 96% mysliman, ndaj parazgjedhjet punojnë në favorin tuaj.',
+    foodHead: 'Ushqimi',
+    food: [
+      'Mishi është dërrmuese hallall si parazgjedhje dhe mishi i derrit është i rrallë, i kufizuar në pak vende jo-myslimane. Ajo që duhet pasur kujdes nuk është mishi — është se kultura e kafeneve në Kosovë do të thotë se alkooli shërbehet në shumë restorante e kafene.',
+      'Mbahuni te zgarat tradicionale të çarshisë (qebaptore), furrat (furra) dhe restorantet familjare e jeni në tokë të sigurt. Vetëgatimi e heq çdo dyshim.',
+    ],
+    prayerHead: 'Falja',
+    prayerBefore: '',
+    mosqueLabel: 'Xhamia e Hadumit',
+    prayerMid: ' në ',
+    bazaarLabel: 'Çarshinë e Madhe',
+    prayerAfter:
+      ' është xhamia qendrore e xhumasë dhe vendi juaj i natyrshëm për xhumanë dhe xhematin e përditshëm. Xhamitë janë të shumta në tërë qytetin e vjetër, vendet e abdesit janë standarde dhe ezani dëgjohet publikisht, ndaj s’do t’ju duhet të kërkoni kohët e namazit.',
+    prayerMore: [
+      'Në rreth 42° gjerësi veriore, orari i verës do të thotë sabah herët e jaci vonë — por aspak si oraret ekstreme të gjerësive të larta të Evropës veriore.',
+    ],
+    moneyHead: 'Paratë',
+    money: [
+      'Euroja përdoret kudo, kryesisht në dorë. Mbani kartmonedha të vogla për çarshinë, autobusët dhe bujtinat; pranimi i kartelave është i çrregullt në qytetin e vjetër.',
+    ],
+  },
+
+  mosquesTitle: 'Xhamitë e Gjakovës',
+  mosquesIntro:
+    'Qyteti i vjetër është i dendur me xhami, me Hadumin në zemër — dhe të reja ngrihen në lagjet përtej tij. Prekni çdo shenjë për emrin e saj; Hadumi shfaqet me ngjyrë terrakota, të tjerat me tunxh.',
+  mosquesNote:
+    'Një hartë interaktive — rrëshqitni ose mblidhni gishtat për të zmadhuar, tërhiqni për të lëvizur. Xhami më të reja si Xhamia e Qylit ndodhen në veri të bërthamës historike.',
+
+  figures: {
+    qyl: {
+      alt: 'Minarja e hollë e Xhamisë së Qylit përballë një qielli dramatik, me male në sfond.',
+      caption: 'Xhamia e Qylit, në veri të qytetit të vjetër.',
+    },
+    gate: {
+      alt: 'Oborri i Xhamisë së Hadumit parë përmes portës së rëndë të çarshisë, një selvi përtej.',
+      caption: 'Hadumi, përmes portës.',
+    },
+    mosque: {
+      alt: 'Një minare e hollë xhamie që ngrihet përballë një qielli dramatik mbrëmjeje.',
+      caption: 'Një minare në muzg.',
+    },
+    window: {
+      alt: 'Një kamare e pikturuar dritareje brenda Xhamisë së Hadumit, e kornizuar me kaligrafi e motive lulesh.',
+      caption: 'Një kamare e pikturuar dritareje.',
+    },
+    courtyard: {
+      alt: 'Oborri me arkada i Xhamisë së Hadumit — harqe guri me vija, një selvi dhe një shteg me kalldrëm nën një qiell dramatik.',
+      caption: 'Oborri me arkada.',
+    },
+    portico: {
+      alt: 'Portiku i zbukuruar i Xhamisë së Hadumit — harqe me vija, gdhendje dhe kaligrafi që kornizojnë hyrjen.',
+      caption: 'Portiku i zbukuruar.',
+    },
+  },
+
+  sources: [
+    { label: 'Gjakova — Wikivoyage', url: 'https://en.wikivoyage.org/wiki/Gjakova' },
+    { label: 'Kosova (si të lëvizni) — Wikivoyage', url: 'https://en.wikivoyage.org/wiki/Kosovo' },
+    { label: 'Tiranë → Gjakovë — Rome2Rio', url: 'https://www.rome2rio.com/s/Tirana/Gjakova' },
+    {
+      label: 'Normalet klimatike — climate-data.org',
+      url: 'https://en.climate-data.org/europe/republic-of-kosovo/gjakove/gjakove-6159/',
+    },
+  ],
+};
+
+const deCopy: VisitCopy = {
+  eyebrow: 'Planen Sie Ihren Besuch',
+  lede: 'Wie Sie Gjakova erreichen, wo Sie in der Altstadt übernachten, wann Sie kommen sollten und das Praktische zu Halal und Gebet — ein ruhiger, praktischer Führer für eine Reise zum osmanischen Erbe.',
+
+  essentialsTitle: 'Gut zu wissen',
+  essentials: [
+    { term: 'Währung', value: 'Euro (€) — vor allem Bargeld; kleine Scheine mitnehmen' },
+    { term: 'Sprache', value: 'Albanisch; Türkisch und etwas Englisch in der Altstadt' },
+    { term: 'Fortbewegung', value: 'Kompakt und zu Fuß machbar — kein Auto in der Stadt nötig' },
+    {
+      term: 'Visum',
+      value: 'Visumfrei für EU/Schengen, UK und viele andere (auch schwedische Pässe)',
+    },
+    { term: 'Zeitzone', value: 'Mitteleuropäische Zeit (UTC+1; +2 im Sommer)' },
+    { term: 'Strom', value: 'Steckdosen Typ C/F, 230 V — übliche EU-Stecker' },
+    { term: 'Notruf', value: '112 — Polizei, Rettung und Feuerwehr' },
+  ],
+  essentialsNote:
+    'Das Kosovo verwendet den Euro, obwohl es nicht zur Eurozone gehört. Angaben können sich ändern — prüfen Sie vor der Reise offizielle Quellen.',
+
+  gettingTitle: 'Anreise',
+  gettingIntro:
+    'Gjakova hat keinen eigenen Flughafen; die meisten Reisenden kommen mit dem Bus aus Prishtina oder fliegen nach Tirana. Die Stadt liegt in der Dukagjin-Ebene im Westen des Kosovo — auch von Prizren und Peja aus leicht zu erreichen.',
+  routes: [
+    {
+      origin: 'Prishtina',
+      badge: 'Flughafen PRN',
+      meta: 'Bus über Fushë Kosovë · ~1,5 Std. · ~6 €',
+      note: 'Das wichtigste Drehkreuz des Kosovo; Busse fahren etwa alle halbe Stunde. Vom Flughafen steigt man bei Fushë Kosovë um.',
+    },
+    {
+      origin: 'Tirana',
+      badge: 'Flughafen TIA',
+      meta: 'Direktbus · ~2 Std. 40 · ~18–20 €',
+      note: 'Ein täglicher Bus vom Flughafen Tirana → Gjakova, von mehreren Anbietern betrieben. Oft die günstigsten Flüge aus Europa.',
+    },
+    {
+      origin: 'Prizren',
+      meta: 'Bus · ~1 Std. · ~3 €',
+      note: 'Häufige Verbindungen; ein leichter Abstecher, wenn Sie den Südwesten bereisen.',
+    },
+    {
+      origin: 'Peja (Pejë)',
+      meta: 'Bus · ~40 Min. · ~3 €',
+      note: 'Etwa alle 15 Minuten; das Tor zur Rugova-Schlucht und den Verwunschenen Bergen.',
+    },
+  ],
+  arrivalNote:
+    'Vor Ort ist das Zentrum zu Fuß erkundbar — Sie brauchen kein Auto. Zahlen Sie bar in Euro; kleine Scheine sind praktisch für Basar, Busse und Pensionen.',
+
+  whenTitle: 'Wann besuchen',
+  whenIntro:
+    'Gjakova hat warme, eher trockene Sommer und kalte, schneereiche Winter. Das Diagramm zeigt den Verlauf des Jahres — die Temperatur als Band, den monatlichen Niederschlag als Balken.',
+  climateLead:
+    'Ende Mai–Juni und der September sind ideal: warm, angenehm zum Gehen und leicht zu buchen. Juli–August sind am heißesten (über 30 °C) und am vollsten — auch die Zeit der Diaspora-Rückkehr, wenn Autos mit ausländischen Kennzeichen die Stadt füllen — buchen Sie also frühzeitig. Der Winter ist kalt und schneereich: gut für einen kurzen, stimmungsvollen Aufenthalt.',
+  seasonPickLabel: 'Ideale Zeit',
+  seasons: [
+    {
+      name: 'Frühling · Apr–Jun',
+      pick: true,
+      note: 'Grün, mild und in Blüte; der späte Frühling ist ideal für einen Gang durch den Basar.',
+    },
+    {
+      name: 'Sommer · Jul–Aug',
+      pick: false,
+      note: 'Heiß und lebhaft, aber am vollsten — buchen Sie die Unterkunft frühzeitig.',
+    },
+    {
+      name: 'Herbst · Sep–Okt',
+      pick: true,
+      note: 'Warm, ruhig und golden; der September ist wohl der schönste Monat überhaupt.',
+    },
+    {
+      name: 'Winter · Nov–Mär',
+      pick: false,
+      note: 'Kalt und schneereich, mit kurzen Tagen — aber ruhige, stimmungsvolle Straßen.',
+    },
+  ],
+
+  stayTitle: 'Wo übernachten',
+  stayIntro:
+    'Die passendste Wahl für eine Reise zum osmanischen Erbe ist es, in der lebendigen Geschichte selbst zu wohnen — in einer restaurierten Kulla (dem traditionellen steinernen Turmhaus) oder einer familiengeführten Bujtina, rund um die Altstadt und den Großen Basar gelegen, zu Fuß zur Hadum-Moschee. Alle folgenden sind familiengeführt und alkoholfrei.',
+  stays: [
+    {
+      name: 'Kulla Dula Guesthouse',
+      type: 'Historische Kulla',
+      best: 'Am besten für einen authentischen Aufenthalt aus osmanischer Zeit',
+      note: 'Eine echte, jahrhundertealte Kulla, herzlich von der Familie geführt; Küche zur Selbstversorgung, etwa fünf Gehminuten vom Basar.',
+    },
+    {
+      name: 'Hotel Kulla e Sahatit',
+      type: 'Hotel in der Altstadt',
+      best: 'Bestes Hotel in der Altstadt',
+      note: 'Wenige Schritte vom Uhrturm im historischen Kern — ruhig und makellos, Hotelkomfort mitten im Basar.',
+    },
+    {
+      name: 'Bujtina Zhaveli',
+      type: 'Familien-Bujtina',
+      best: 'Bestes Preis-Leistungs-Verhältnis',
+      note: 'Bewirtet, als wäre man bei den Großeltern; einfach, sauber, in einer ruhigen Straße unter zehn Minuten vom Basar.',
+    },
+    {
+      name: 'Premium Apartments · Garden GuestHouse',
+      type: 'Selbstversorgung',
+      best: 'Am besten, um selbst halal zu kochen',
+      note: 'Zentrale Apartments mit Küche und privatem Parkplatz — volle Kontrolle über das, was Sie essen.',
+    },
+    {
+      name: 'Hotel Driada',
+      type: 'Nahe dem Busbahnhof',
+      best: 'Am bequemsten bei der Ankunft',
+      note: 'Modern und komfortabel, ~15 Gehminuten zur Altstadt, aber nahe am Busbahnhof — praktisch, wenn Sie spät ankommen.',
+    },
+  ],
+  stayNote:
+    'Bewertungen, Preise und Angaben ändern sich — prüfen Sie sie vor der Buchung. Ein ehrlicher Hinweis: Das vielfotografierte Hotel Çarshia e Jupave ist eindrucksvoll, betreibt aber eine Weinbar und ein Restaurant und fehlt daher in dieser Liste; man könnte dort übernachten und die Bar einfach meiden, doch die Kulla-Pensionen passen besser.',
+
+  halalTitle: 'Halal & Gebet',
+  halal: {
+    intro:
+      'Das ist der einfache Teil. Gjakova ist eine mehrheitlich muslimische Stadt in einem Land, das zu etwa 96 % muslimisch ist — die Voraussetzungen sprechen also für Sie.',
+    foodHead: 'Essen',
+    food: [
+      'Fleisch ist standardmäßig ganz überwiegend halal, und Schweinefleisch ist selten und auf einige wenige, nicht muslimisch ausgerichtete Lokale beschränkt. Worauf zu achten ist, ist nicht das Fleisch — sondern dass die Cafékultur des Kosovo bedeutet, dass in vielen Restaurants und Cafés Alkohol ausgeschenkt wird.',
+      'Halten Sie sich an die traditionellen Grills des Basars (qebaptore), die Bäckereien (furra) und die Familienrestaurants, dann sind Sie auf der sicheren Seite. Selbstversorgung räumt jeden Zweifel aus.',
+    ],
+    prayerHead: 'Gebet',
+    prayerBefore: 'Die ',
+    mosqueLabel: 'Hadum-Moschee',
+    prayerMid: ' im ',
+    bazaarLabel: 'Großen Basar',
+    prayerAfter:
+      ' ist die zentrale Freitagsmoschee und Ihr natürlicher Ort für das Freitagsgebet (Dschumua) und das tägliche Gemeinschaftsgebet (Dschamaa). Moscheen gibt es zahlreich in der ganzen Altstadt, Waschmöglichkeiten sind selbstverständlich, und der Gebetsruf ist öffentlich zu hören — Sie müssen also nicht nach den Gebetszeiten suchen.',
+    prayerMore: [
+      'Auf etwa 42° N bedeutet der Sommerplan ein frühes Fadschr und ein spätes Ischa — aber nichts wie die extremen Zeiten der hohen Breiten Nordeuropas.',
+    ],
+    moneyHead: 'Geld',
+    money: [
+      'Der Euro wird überall verwendet, vor allem in bar. Führen Sie kleine Scheine für Basar, Busse und Pensionen mit; Kartenzahlung ist in der Altstadt unzuverlässig.',
+    ],
+  },
+
+  mosquesTitle: 'Die Moscheen von Gjakova',
+  mosquesIntro:
+    'Die Altstadt ist dicht an Moscheen, die Hadum in ihrem Herzen — und neuere erheben sich in den Vierteln darüber hinaus. Tippen Sie auf eine Markierung für ihren Namen; die Hadum erscheint in Terrakotta, die übrigen in Messing.',
+  mosquesNote:
+    'Eine interaktive Karte — scrollen oder mit zwei Fingern zoomen, ziehen zum Verschieben. Neuere Moscheen wie die Xhamia e Qylit liegen nördlich des historischen Kerns.',
+
+  figures: {
+    qyl: {
+      alt: 'Das schlanke Minarett der Xhamia e Qylit vor einem dramatischen Himmel, dahinter Berge.',
+      caption: 'Die Xhamia e Qylit, nördlich der Altstadt.',
+    },
+    gate: {
+      alt: 'Der Hof der Hadum-Moschee, gesehen durch das schwere Basartor, dahinter eine Zypresse.',
+      caption: 'Die Hadum, durch das Tor.',
+    },
+    mosque: {
+      alt: 'Ein schlankes Moscheeminarett, das sich vor einem dramatischen Abendhimmel erhebt.',
+      caption: 'Ein Minarett in der Dämmerung.',
+    },
+    window: {
+      alt: 'Eine bemalte Fensternische in der Hadum-Moschee, umrahmt von Kalligrafie und floralen Motiven.',
+      caption: 'Eine bemalte Fensternische.',
+    },
+    courtyard: {
+      alt: 'Der Arkadenhof der Hadum-Moschee — gestreifte Steinbögen, eine Zypresse und ein gepflasterter Weg unter dramatischem Himmel.',
+      caption: 'Der Arkadenhof.',
+    },
+    portico: {
+      alt: 'Der verzierte Portikus der Hadum-Moschee — gestreifte Bögen, geschnitztes Ornament und Kalligrafie rahmen den Eingang.',
+      caption: 'Der verzierte Portikus.',
+    },
+  },
+
+  sources: [
+    { label: 'Gjakova — Wikivoyage', url: 'https://en.wikivoyage.org/wiki/Gjakova' },
+    { label: 'Kosovo (Fortbewegung) — Wikivoyage', url: 'https://en.wikivoyage.org/wiki/Kosovo' },
+    { label: 'Tirana → Gjakova — Rome2Rio', url: 'https://www.rome2rio.com/s/Tirana/Gjakova' },
+    {
+      label: 'Klimanormalen — climate-data.org',
+      url: 'https://en.climate-data.org/europe/republic-of-kosovo/gjakove/gjakove-6159/',
+    },
+  ],
+};
+
+const trCopy: VisitCopy = {
+  eyebrow: 'Ziyaretinizi planlayın',
+  lede: 'Gjakova’ya nasıl ulaşılır, eski şehirde nerede kalınır, ne zaman gelinir ve helal ile namaz pratikleri — Osmanlı mirası bir gezi için sakin, pratik bir rehber.',
+
+  essentialsTitle: 'Bilinmesi iyi olanlar',
+  essentials: [
+    { term: 'Para birimi', value: 'Euro (€) — ağırlıklı olarak nakit; küçük banknotlar bulundurun' },
+    { term: 'Dil', value: 'Arnavutça; eski şehirde Türkçe ve biraz İngilizce' },
+    { term: 'Ulaşım', value: 'Derli toplu ve yürünebilir — şehirde araba gerekmez' },
+    {
+      term: 'Vize',
+      value: 'AB/Schengen, BK ve birçok ülke için vizesiz (İsveç pasaportları dâhil)',
+    },
+    { term: 'Saat dilimi', value: 'Orta Avrupa Saati (UTC+1; yazın +2)' },
+    { term: 'Elektrik', value: 'C/F tipi prizler, 230 V — standart AB fişleri' },
+    { term: 'Acil', value: '112 — polis, ambulans ve itfaiye' },
+  ],
+  essentialsNote:
+    'Kosova, euro bölgesi dışında olmasına rağmen euro kullanır. Ayrıntılar değişebilir — seyahatten önce resmî kaynakları kontrol edin.',
+
+  gettingTitle: 'Ulaşım',
+  gettingIntro:
+    'Gjakova’nın kendi havalimanı yoktur; çoğu yolcu Priştine’den otobüsle gelir ya da Tiran’a uçar. Şehir, batı Kosova’da Dukagjin Ovası’nda yer alır — Prizren ve Peja’dan da kolayca ulaşılır.',
+  routes: [
+    {
+      origin: 'Priştine',
+      badge: 'PRN havalimanı',
+      meta: 'Fushë Kosovë üzerinden otobüs · ~1,5 sa · ~6 €',
+      note: 'Kosova’nın ana merkezi; otobüsler kabaca her yarım saatte bir kalkar. Havalimanından Fushë Kosovë yakınında aktarma yaparsınız.',
+    },
+    {
+      origin: 'Tiran',
+      badge: 'TIA havalimanı',
+      meta: 'Direkt otobüs · ~2 sa 40 · ~18–20 €',
+      note: 'Tiran havalimanı → Gjakova arası günlük bir otobüs, birkaç firma işletir. Avrupa’dan çoğu zaman en ucuz uçuşlar.',
+    },
+    {
+      origin: 'Prizren',
+      meta: 'Otobüs · ~1 sa · ~3 €',
+      note: 'Sık sefer; güneybatıyı geziyorsanız kolay bir ek durak.',
+    },
+    {
+      origin: 'Peja (Pejë)',
+      meta: 'Otobüs · ~40 dk · ~3 €',
+      note: 'Kabaca her 15 dakikada bir; Rugova Vadisi’ne ve Lanetli Dağlar’a açılan kapı.',
+    },
+  ],
+  arrivalNote:
+    'Vardığınızda merkez yürünebilir — arabaya ihtiyacınız olmaz. Euro nakit ödeyin; küçük banknotlar çarşı, otobüsler ve misafirhaneler için işe yarar.',
+
+  whenTitle: 'Ne zaman ziyaret etmeli',
+  whenIntro:
+    'Gjakova’da sıcak, görece kurak yazlar ve soğuk, karlı kışlar görülür. Grafik yılın biçimini gösterir — sıcaklık bir bant, aylık yağış çubuklar olarak.',
+  climateLead:
+    'Mayıs sonu–haziran ve eylül en ideal dönemlerdir: sıcak, yürümek için keyifli ve rezervasyon kolay. Temmuz–ağustos en sıcak (30 °C’nin üzeri) ve en yoğun aylardır — kısmen diasporanın döndüğü, yabancı plakalı arabaların şehri doldurduğu mevsim — bu yüzden çok önceden yer ayırtın. Kış soğuk ve karlıdır: kısa, atmosferik bir konaklama için iyidir.',
+  seasonPickLabel: 'İdeal dönem',
+  seasons: [
+    {
+      name: 'İlkbahar · Nis–Haz',
+      pick: true,
+      note: 'Yeşil, ılıman ve çiçek açmış; geç ilkbahar çarşıda yürümek için idealdir.',
+    },
+    {
+      name: 'Yaz · Tem–Ağu',
+      pick: false,
+      note: 'Sıcak ve canlı ama en yoğun dönem — konaklamayı çok önceden ayırtın.',
+    },
+    {
+      name: 'Sonbahar · Eyl–Eki',
+      pick: true,
+      note: 'Sıcak, sakin ve altın renginde; eylül belki de hepsinin en güzel ayıdır.',
+    },
+    {
+      name: 'Kış · Kas–Mar',
+      pick: false,
+      note: 'Soğuk ve karlı, günler kısa — ama sakin, atmosferik sokaklar.',
+    },
+  ],
+
+  stayTitle: 'Nerede kalınır',
+  stayIntro:
+    'Osmanlı mirası bir gezi için en uygun seçim, yaşayan tarihin içinde kalmaktır — restore edilmiş bir kulla (geleneksel taş kule ev) ya da aile işletmesi bir bujtina; eski şehir ve Büyük Çarşı çevresinde, Hadım Camii’ne yürüme mesafesinde. Aşağıdakilerin hepsi aile işletmesi ve alkolsüzdür.',
+  stays: [
+    {
+      name: 'Kulla Dula Guesthouse',
+      type: 'Tarihî kulla',
+      best: 'Otantik bir Osmanlı dönemi konaklaması için en iyisi',
+      note: 'Gerçek, asırlık bir kulla, ailesi tarafından sıcak bir şekilde işletiliyor; kendin pişir mutfağı, çarşıya yaklaşık beş dakika yürüme.',
+    },
+    {
+      name: 'Hotel Kulla e Sahatit',
+      type: 'Eski şehir oteli',
+      best: 'En iyi eski şehir oteli',
+      note: 'Tarihî çekirdekte Saat Kulesi’nin birkaç adım ötesinde — sessiz ve tertemiz, çarşıya gömülmüş otel konforu.',
+    },
+    {
+      name: 'Bujtina Zhaveli',
+      type: 'Aile bujtinası',
+      best: 'En iyi fiyat/performans misafirhanesi',
+      note: 'Büyükanne-büyükbabanızda kalır gibi ağırlanırsınız; sade, temiz, çarşıdan on dakikadan az uzaklıkta sessiz bir sokakta.',
+    },
+    {
+      name: 'Premium Apartments · Garden GuestHouse',
+      type: 'Kendin pişir',
+      best: 'Kendi helal yemeğinizi pişirmek için en iyisi',
+      note: 'Mutfaklı ve özel otoparklı merkezî daireler — ne yediğiniz üzerinde tam kontrol.',
+    },
+    {
+      name: 'Hotel Driada',
+      type: 'Otogara yakın',
+      best: 'Varışta en kullanışlısı',
+      note: 'Modern ve konforlu, eski şehre ~15 dakika yürüme ama otogara yakın — geç varırsanız kolay.',
+    },
+  ],
+  stayNote:
+    'Puanlar, fiyatlar ve ayrıntılar değişir — rezervasyondan önce doğrulayın. Dürüst bir uyarı: çokça fotoğraflanan Hotel Çarshia e Jupave etkileyicidir ama bir şarap barı ve restoran işletir, bu yüzden bu listeye alınmadı; kalıp barı atlayabilirsiniz, ama kulla misafirhaneleri daha uygun seçimlerdir.',
+
+  halalTitle: 'Helal ve namaz',
+  halal: {
+    intro:
+      'Bu kolay kısım. Gjakova, yaklaşık %96’sı Müslüman olan bir ülkede çoğunluğu Müslüman bir şehir, bu yüzden varsayılanlar sizin lehinize işler.',
+    foodHead: 'Yemek',
+    food: [
+      'Et büyük ölçüde varsayılan olarak helaldir ve domuz eti nadirdir, Müslümanlara yönelik olmayan birkaç yerle sınırlıdır. Dikkat edilecek şey et değil — Kosova’nın kafe kültürü nedeniyle birçok restoran ve kafede alkol servis edilmesidir.',
+      'Çarşının geleneksel ızgaracılarına (qebaptore), fırınlarına (furra) ve aile restoranlarına bağlı kalın, güvende olursunuz. Kendin pişir her şüpheyi ortadan kaldırır.',
+    ],
+    prayerHead: 'Namaz',
+    prayerBefore: '',
+    mosqueLabel: 'Hadım Camii',
+    prayerMid: ', ',
+    bazaarLabel: 'Büyük Çarşı',
+    prayerAfter:
+      ' içinde yer alan merkezî cuma camisidir ve Cuma namazı ile günlük cemaat için doğal noktanızdır. Eski şehrin her yerinde cami boldur, abdest imkânları standarttır ve ezan açıkça duyulur, bu yüzden namaz vakitlerini aramanıza gerek kalmaz.',
+    prayerMore: [
+      'Yaklaşık 42° kuzey enleminde yaz takvimi erken bir sabah namazı ve geç bir yatsı demektir — ama kuzey Avrupa’nın yüksek enlemlerdeki uç vakitleri gibi değil.',
+    ],
+    moneyHead: 'Para',
+    money: [
+      'Euro her yerde, ağırlıklı olarak nakit kullanılır. Çarşı, otobüsler ve misafirhaneler için küçük banknotlar taşıyın; eski şehirde kart kabulü düzensizdir.',
+    ],
+  },
+
+  mosquesTitle: 'Gjakova’nın camileri',
+  mosquesIntro:
+    'Eski şehir camilerle yoğundur, kalbinde Hadım — ve onun ötesindeki mahallelerde yenileri yükselir. Adını görmek için herhangi bir işarete dokunun; Hadım terrakota renginde, diğerleri pirinç renginde gösterilir.',
+  mosquesNote:
+    'Etkileşimli bir harita — yakınlaştırmak için kaydırın veya iki parmakla sıkıştırın, kaydırmak için sürükleyin. Xhamia e Qylit gibi daha yeni camiler tarihî çekirdeğin kuzeyinde yer alır.',
+
+  figures: {
+    qyl: {
+      alt: 'Dramatik bir gökyüzüne karşı Xhamia e Qylit’in ince minaresi, arkada dağlar.',
+      caption: 'Xhamia e Qylit, eski şehrin kuzeyinde.',
+    },
+    gate: {
+      alt: 'Hadım Camii’nin avlusu, ağır çarşı kapısından görülüyor, arkada bir servi.',
+      caption: 'Hadım, kapıdan.',
+    },
+    mosque: {
+      alt: 'Dramatik bir akşam gökyüzüne karşı yükselen ince bir cami minaresi.',
+      caption: 'Alacakaranlıkta bir minare.',
+    },
+    window: {
+      alt: 'Hadım Camii’nin içinde, hat ve çiçek motifleriyle çerçevelenmiş boyalı bir pencere nişi.',
+      caption: 'Boyalı bir pencere nişi.',
+    },
+    courtyard: {
+      alt: 'Hadım Camii’nin revaklı avlusu — çizgili taş kemerler, bir servi ve dramatik bir gökyüzü altında taş döşeli bir yol.',
+      caption: 'Revaklı avlu.',
+    },
+    portico: {
+      alt: 'Hadım Camii’nin bezeli giriş revakı — girişi çerçeveleyen çizgili kemerler, oyma süsleme ve hat.',
+      caption: 'Bezeli giriş revakı.',
+    },
+  },
+
+  sources: [
+    { label: 'Gjakova — Wikivoyage', url: 'https://en.wikivoyage.org/wiki/Gjakova' },
+    { label: 'Kosova (ulaşım) — Wikivoyage', url: 'https://en.wikivoyage.org/wiki/Kosovo' },
+    { label: 'Tiran → Gjakova — Rome2Rio', url: 'https://www.rome2rio.com/s/Tirana/Gjakova' },
+    {
+      label: 'İklim normalleri — climate-data.org',
+      url: 'https://en.climate-data.org/europe/republic-of-kosovo/gjakove/gjakove-6159/',
+    },
+  ],
+};
+
+const copy: Partial<Record<Locale, VisitCopy>> = { en: enCopy, sq: sqCopy, de: deCopy, tr: trCopy };
+const c = copy[lang] ?? enCopy;
+
+// The Hadum anchors the mosque map (terracotta centre marker); the rest render
+// as brass markers with a name popup on tap.
+const primaryMosque = mosques.find((m) => m.primary) ?? mosques[0];
+const mosqueMarkers = mosques
+  .filter((m) => m !== primaryMosque)
+  .map((m) => ({ lat: m.lat, lng: m.lng, label: m.name }));
+
+// The site's own photography credit (matches the timeline / place-gallery byline).
+const ownCredit = {
+  author: 'Yunus Andreasson',
+  source: '@andreasson.photo',
+  url: 'https://www.instagram.com/andreasson.photo/',
+};
+---
+
+<PageHeader eyebrow={c.eyebrow} title={t('visit.title')} lede={c.lede} />
+
+<div class="wrap visit">
+  <div class="visit__essentials" data-reveal>
+    <FactsPanel title={c.essentialsTitle} facts={c.essentials} note={c.essentialsNote} />
+  </div>
+
+  <section class="visit__section" data-reveal aria-labelledby="visit-getting">
+    <h2 class="visit__h" id="visit-getting">{c.gettingTitle}</h2>
+    <div class="getting">
+      <p class="visit__lead">{c.gettingIntro}</p>
+      <div class="visit__locator"><KosovoLocator lang={lang} /></div>
+    </div>
+    <div class="routes card-grid">
+      {
+        c.routes.map((r) => (
+          <article class="route">
+            <div class="route__top">
+              <h3 class="route__from">{r.origin}</h3>
+              {r.badge && <span class="route__badge">{r.badge}</span>}
+            </div>
+            <p class="route__meta">{r.meta}</p>
+            <p class="route__note">{r.note}</p>
+          </article>
+        ))
+      }
+    </div>
+    <p class="visit__note">{c.arrivalNote}</p>
+  </section>
+
+  <section class="visit__section" data-reveal aria-labelledby="visit-when">
+    <h2 class="visit__h" id="visit-when">{c.whenTitle}</h2>
+    <p class="visit__lead">{c.whenIntro}</p>
+    <ClimateChart lang={lang} />
+    <p class="visit__lead">{c.climateLead}</p>
+    <div class="seasons">
+      {
+        c.seasons.map((s) => (
+          <div class="season" data-pick={s.pick ? 'true' : 'false'}>
+            <h3 class="season__name">{s.name}</h3>
+            <p class="season__note">{s.note}</p>
+            {s.pick && <span class="season__tag">✓ {c.seasonPickLabel}</span>}
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <div class="visit__rule"><Ornament variant="divider" tone="line" /></div>
+
+  <section class="visit__section" data-reveal aria-labelledby="visit-stay">
+    <h2 class="visit__h" id="visit-stay">{c.stayTitle}</h2>
+    <p class="visit__lead">{c.stayIntro}</p>
+    <div class="stays card-grid">
+      {
+        c.stays.map((s) => (
+          <article class="stay">
+            <div class="stay__top">
+              <h3 class="stay__name">{s.name}</h3>
+              <span class="stay__type">{s.type}</span>
+            </div>
+            <p class="stay__best">{s.best}</p>
+            <p class="stay__note">{s.note}</p>
+          </article>
+        ))
+      }
+    </div>
+    <p class="visit__note">{c.stayNote}</p>
+  </section>
+
+  <section class="visit__section" data-reveal aria-labelledby="visit-halal">
+    <h2 class="visit__h" id="visit-halal">{c.halalTitle}</h2>
+    <div class="prose visit__halal">
+      <p>{c.halal.intro}</p>
+      <h3>{c.halal.foodHead}</h3>
+      {c.halal.food.map((p) => <p>{p}</p>)}
+      <h3>{c.halal.prayerHead}</h3>
+      <p>
+        {c.halal.prayerBefore}<a href={localizedPath(lang, '/places/hadum-mosque')}
+          >{c.halal.mosqueLabel}</a
+        >{c.halal.prayerMid}<a href={localizedPath(lang, '/places/grand-bazaar')}
+          >{c.halal.bazaarLabel}</a
+        >{c.halal.prayerAfter}
+      </p>
+      {c.halal.prayerMore.map((p) => <p>{p}</p>)}
+      <h3>{c.halal.moneyHead}</h3>
+      {c.halal.money.map((p) => <p>{p}</p>)}
+    </div>
+  </section>
+
+  <section class="visit__section" data-reveal aria-labelledby="visit-mosques">
+    <h2 class="visit__h" id="visit-mosques">{c.mosquesTitle}</h2>
+    <p class="visit__lead">{c.mosquesIntro}</p>
+    <PlaceMap
+      lat={primaryMosque.lat}
+      lng={primaryMosque.lng}
+      label={primaryMosque.name}
+      zoom={13.5}
+      markers={mosqueMarkers}
+      lang={lang}
+      tall
+    />
+    <p class="visit__note">{c.mosquesNote}</p>
+    <div class="mosque-strip">
+      {[
+        { src: hadumCourt, fig: c.figures.courtyard },
+        { src: mosquePhoto, fig: c.figures.mosque },
+        { src: hadumPortico, fig: c.figures.portico },
+        { src: hadumWindow, fig: c.figures.window },
+        { src: hadumGate, fig: c.figures.gate },
+        { src: qylitPhoto, fig: c.figures.qyl },
+      ].map((p) => (
+        <Figure
+          src={p.src}
+          alt={p.fig.alt}
+          caption={p.fig.caption}
+          credit={ownCredit}
+          widths={[300, 450, 600]}
+          sizes="(min-width: 46rem) 20rem, 88vw"
+        />
+      ))}
+    </div>
+  </section>
+
+  <Sources sources={c.sources} lang={lang} variant="block" />
+</div>
+
+<style>
+  .visit {
+    padding-block-end: var(--space-2xl);
+  }
+  /* Section rhythm — the AboutView idiom. */
+  .visit > * + * {
+    margin-block-start: var(--space-section);
+  }
+  .visit__section > * + * {
+    margin-block-start: var(--space-lg);
+  }
+
+  .visit__h {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.3rem);
+    line-height: 1.1;
+    letter-spacing: var(--text-display--letter-spacing);
+    color: var(--color-ink);
+    margin: 0;
+  }
+  .visit__lead {
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--color-sand-800);
+    max-inline-size: var(--measure);
+    margin: 0;
+  }
+  .visit__note {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--color-sand-600);
+    max-inline-size: var(--measure);
+    margin: 0;
+  }
+
+  /* Getting there — intro beside a small Kosovo locator, routes below. */
+  .getting {
+    display: grid;
+    gap: var(--gap-layout);
+    align-items: center;
+  }
+  @media (min-width: 48rem) {
+    .getting {
+      grid-template-columns: 1fr minmax(11rem, 15rem);
+    }
+  }
+  .visit__locator {
+    inline-size: 100%;
+    max-inline-size: 15rem;
+    margin-inline: auto;
+  }
+
+  .route {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-soft);
+  }
+  .route__top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+  .route__from {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--color-ink);
+    margin: 0;
+  }
+  .route__badge {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-terracotta-700);
+    background: var(--color-terracotta-50);
+    border-radius: var(--radius-xs);
+    padding: 0.2em 0.6em;
+  }
+  .route__meta {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--color-sand-800);
+    margin: 0;
+  }
+  .route__note {
+    font-family: var(--font-serif);
+    font-size: 0.98rem;
+    line-height: 1.55;
+    color: var(--color-sand-700);
+    margin: 0;
+  }
+
+  /* Seasons — four compact blocks; the two recommended ones carry a brass tag. */
+  .seasons {
+    display: grid;
+    gap: var(--space-md);
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 52rem) {
+    .seasons {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .season {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+  }
+  .season[data-pick='true'] {
+    border-color: var(--color-brass-400);
+  }
+  .season__name {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    color: var(--color-ink);
+    margin: 0;
+  }
+  .season__note {
+    font-family: var(--font-serif);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--color-sand-700);
+    margin: 0;
+  }
+  .season__tag {
+    margin-block-start: auto;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-brass-700);
+  }
+
+  /* Where to stay */
+  .stay {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-soft);
+  }
+  .stay__top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+  .stay__name {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    color: var(--color-ink);
+    margin: 0;
+  }
+  .stay__type {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-sand-600);
+  }
+  .stay__best {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--color-terracotta-600);
+    margin: 0;
+  }
+  .stay__note {
+    font-family: var(--font-serif);
+    font-size: 0.98rem;
+    line-height: 1.55;
+    color: var(--color-sand-700);
+    margin: 0;
+  }
+
+  /* Star rule between the climate half and the stay/practical half. */
+  /* Full-width section divider — matches the About and Home dividers so the
+     ornament's star lands at the page centre on every page. (It was capped to
+     the reading measure and left-aligned here, which put its star off-centre
+     from the others.) */
+  .visit__rule {
+    inline-size: 100%;
+  }
+
+  .visit__halal {
+    max-inline-size: var(--measure);
+  }
+
+  /* Mosque gallery — a tidy, uniform-height row of the old town's mosque scenes
+     below the map. Full frames (no crop): on wider screens the photos share a
+     fixed height and wrap, left-aligned; on small screens they stack full-width. */
+  .mosque-strip {
+    display: grid;
+    gap: var(--gap-card);
+  }
+  .mosque-strip :global(.figure__img) {
+    inline-size: 100%;
+  }
+  @media (min-width: 46rem) {
+    .mosque-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .mosque-strip :global(.figure__img) {
+      block-size: 15rem;
+      inline-size: auto;
+      max-block-size: none;
+      margin-inline: 0;
+    }
+  }
+</style>

@@ -1,19 +1,46 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
-import { useTranslations, localizedPath } from '~/i18n/utils';
-
-const lang = 'en' as const;
-const t = useTranslations(lang);
+import { ui } from '~/i18n/ui';
 ---
 
-<BaseLayout title={t('notFound.title')} noindex>
+<BaseLayout title={ui.en['notFound.title']} noindex>
   <section class="wrap notfound">
     <p class="notfound__code" aria-hidden="true">404</p>
-    <h1 class="notfound__title">{t('notFound.title')}</h1>
-    <p class="notfound__lede">{t('notFound.lede')}</p>
-    <a class="btn btn--primary" href={localizedPath(lang, '/')}>{t('notFound.cta')}</a>
+    <div class="notfound__msg" data-nf-lang="en">
+      <h1 class="notfound__title">{ui.en['notFound.title']}</h1>
+      <p class="notfound__lede">{ui.en['notFound.lede']}</p>
+      <a class="btn btn--primary" href="/">{ui.en['notFound.cta']}</a>
+    </div>
+    <div class="notfound__msg" data-nf-lang="sq" hidden>
+      <h1 class="notfound__title">{ui.sq['notFound.title']}</h1>
+      <p class="notfound__lede">{ui.sq['notFound.lede']}</p>
+      <a class="btn btn--primary" href="/sq/">{ui.sq['notFound.cta']}</a>
+    </div>
+    <div class="notfound__msg" data-nf-lang="de" hidden>
+      <h1 class="notfound__title">{ui.de['notFound.title']}</h1>
+      <p class="notfound__lede">{ui.de['notFound.lede']}</p>
+      <a class="btn btn--primary" href="/de/">{ui.de['notFound.cta']}</a>
+    </div>
+    <div class="notfound__msg" data-nf-lang="tr" hidden>
+      <h1 class="notfound__title">{ui.tr['notFound.title']}</h1>
+      <p class="notfound__lede">{ui.tr['notFound.lede']}</p>
+      <a class="btn btn--primary" href="/tr/">{ui.tr['notFound.cta']}</a>
+    </div>
   </section>
 </BaseLayout>
+
+<script>
+  // The single static 404 is served for every unmatched route, including /sq/*.
+  // Static output can't know the locale at build time, so detect it from the path
+  // and swap to the Albanian copy when the missing page was under /sq/.
+  const p = location.pathname;
+  const seg = p.split('/')[1];
+  if (seg === 'sq' || seg === 'de' || seg === 'tr') {
+    document.documentElement.lang = seg;
+    document.querySelector('[data-nf-lang="en"]')?.setAttribute('hidden', '');
+    document.querySelector(`[data-nf-lang="${seg}"]`)?.removeAttribute('hidden');
+  }
+</script>
 
 <style>
   .notfound {
@@ -22,6 +49,14 @@ const t = useTranslations(lang);
     display: grid;
     justify-items: center;
     gap: 1rem;
+  }
+  .notfound__msg {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+  }
+  .notfound__msg[hidden] {
+    display: none;
   }
   .notfound__code {
     font-family: var(--font-display);

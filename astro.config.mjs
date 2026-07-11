@@ -5,7 +5,7 @@ import mdx from '@astrojs/mdx';
 import tailwindcss from '@tailwindcss/vite';
 
 // Final deployed origin. Update when a custom domain is connected in Cloudflare.
-const site = 'https://gjakova.pages.dev';
+const site = 'https://mygjakova.com';
 
 // Locales. Arabic ('ar') is intentionally deferred but the whole stack is
 // RTL-ready (see src/i18n/utils.ts → getDirection). Adding it later is config,
@@ -15,9 +15,19 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'ignore',
 
+  // Emit all styles as external same-origin <link> stylesheets, never inline
+  // <style> blocks. Required for the built-in CSP (security.csp) to coexist
+  // with <ClientRouter /> view transitions: inline styles are allow-listed by
+  // per-page sha256 hashes, but a soft navigation keeps the *first* page's
+  // <meta> CSP active while swapping in the next page's differently-hashed
+  // inline styles — so the browser blocks them and the CSS appears broken until
+  // a full reload. External stylesheets are covered by `style-src 'self'` on
+  // every page (no per-page hashes), and ClientRouter awaits them before swap.
+  build: { inlineStylesheets: 'never' },
+
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'sq'],
+    locales: ['en', 'sq', 'de', 'tr'],
     routing: {
       // English at "/", Albanian at "/sq/". No prefix for the default locale.
       prefixDefaultLocale: false,
@@ -101,7 +111,25 @@ export default defineConfig({
     sitemap({
       i18n: {
         defaultLocale: 'en',
-        locales: { en: 'en', sq: 'sq' },
+        locales: { en: 'en', sq: 'sq', de: 'de', tr: 'tr' },
+      },
+      // Freshness + importance hints. lastmod is the build time (a per-page
+      // lastmod would require reading content mtimes — a future refinement).
+      // Priority: home > places (the core content) > everything else.
+      serialize(item) {
+        const bare = new URL(item.url).pathname.replace(/^\/(sq|de|tr)(?=\/|$)/, '') || '/';
+        // Match the page canonicals (directory-style, trailing slash) so every
+        // sitemap URL returns 200 directly instead of 308-redirecting on
+        // Cloudflare Pages. Applies to the entry and its hreflang alternates.
+        const slash = (/** @type {string} */ u) => (u.endsWith('/') ? u : `${u}/`);
+        item.url = slash(item.url);
+        if (item.links) item.links = item.links.map((l) => ({ ...l, url: slash(l.url) }));
+        item.lastmod = new Date().toISOString();
+        item.priority = bare === '/' ? 1.0 : bare.startsWith('/places') ? 0.8 : 0.6;
+        // changefreq is typed as the `sitemap` package's EnumChangefreq; the
+        // string value is correct, so cast the literal to satisfy the checker.
+        item.changefreq = /** @type {any} */ ('monthly');
+        return item;
       },
     }),
     mdx(),

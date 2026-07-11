@@ -1,5 +1,5 @@
 ---
-title: Qyteti i xhamive dhe i teqeve
+title: Qyteti i xhamive
 year: 1942
 displayDate: "1942"
 era: Shekulli XX
@@ -11,15 +11,13 @@ sources:
     url: https://www.tyb.org.tr/camiler-ve-tekkeler-sehri-yakova-13135h.htm
   - label: 'Bektashism in Albania — Wikipedia'
     url: https://en.wikipedia.org/wiki/Bektashism_in_Albania
-image: ../../../assets/photos/tekkeShejhEmin.jpg
-imageAlt: "Teqja e zbardhur e Shejh Eminit, një teqe dervishe e shekullit XVIII në Gjakovë."
-imageCaption: "Teqja e Shejh Eminit (saadive), e vitit 1730 — një nga teqet e numëruara në 1942."
+image: ../../../assets/photos/ownMosque.jpg
+imageAlt: "Një minare e hollë e gjatë xhamie që ngrihet përballë një qielli dramatik mbrëmjeje, me male në sfond."
+imageCaption: "Një minare mbi qytetin e vjetër — xhamitë e shumta të Gjakovës, të numëruara në 1942."
 imageCredit:
-  author: "Nentor Oseku"
-  source: "Wikimedia Commons"
-  license: "CC BY-SA 3.0"
-  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
-  url: "https://commons.wikimedia.org/wiki/File%3AShejh_Emin_Tekke_of_the_XVIII_ct._-_Gjakov%C3%AB.JPG"
+  author: "Yunus Andreasson"
+  source: "@andreasson.photo"
+  url: "https://www.instagram.com/andreasson.photo/"
 ---
 
 Me gjithë trazirat e veta, Gjakova e bart karakterin e vet të vjetër thellë në shekullin e njëzetë: qytet besimi. Një regjistrim i vitit **1942** shënon rreth **tridhjetë e nëntë xhami** dhe **katërmbëdhjetë *teqe*** — vendlutje dervishësh — që u përkasin gjashtë urdhrave të ndryshëm mistikë, në një qytet me ndonjë tridhjetë e pesë mijë banorë. Ndër to janë shtëpi të urdhrave **saadi**, **rifai** dhe **bektashi**; **Teqja e Madhe**, një teqe saadije, është më e njohura prej të gjithave. Pak vende në Ballkan ishin aq dendur të endura me faltore e teqe; për shekuj thirrja e namazit kishte vënë ritmin e çarshisë poshtë.

@@ -28,15 +28,17 @@ interface Props {
   zoom?: number;
   markers?: MarkerData[];
   lang: Locale;
+  /** Taller canvas — for overview maps with many markers (e.g. the mosque map). */
+  tall?: boolean;
 }
 
-const { lat, lng, label, zoom = 15, markers = [], lang } = Astro.props;
+const { lat, lng, label, zoom = 15, markers = [], lang, tall = false } = Astro.props;
 const t = useTranslations(lang);
 const markersJson = JSON.stringify(markers);
 ---
 
 <figure
-  class="placemap"
+  class:list={['placemap', tall && 'placemap--tall']}
   data-placemap
   data-lat={lat}
   data-lng={lng}
@@ -84,6 +86,22 @@ const markersJson = JSON.stringify(markers);
 
       if (!protocolRegistered) {
         const protocol = new pmtilesMod.Protocol();
+        // The self-hosted archive is small (~2.5 MB), and some static hosts —
+        // Cloudflare Pages among them — don't serve HTTP Range requests for it:
+        // a `Range:` comes back as a full `200`, which the pmtiles:// protocol
+        // can't read tile-by-tile, so the basemap silently fails in production
+        // (it works in dev because Vite honours ranges). Fetch the whole archive
+        // once and serve byte ranges from memory, so the map never depends on
+        // server-side Range support. getKey() must match the style's archive URL
+        // ('pmtiles:///map/gjakova.pmtiles') for the protocol to use this source.
+        const buf = await fetch('/map/gjakova.pmtiles').then((r) => r.arrayBuffer());
+        const memSource = {
+          getKey: () => '/map/gjakova.pmtiles',
+          getBytes: async (offset: number, length: number) => ({
+            data: buf.slice(offset, offset + length),
+          }),
+        };
+        protocol.add(new pmtilesMod.PMTiles(memSource));
         maplibregl.addProtocol('pmtiles', protocol.tile);
         protocolRegistered = true;
       }
@@ -188,6 +206,10 @@ const markersJson = JSON.stringify(markers);
     overflow: hidden;
     border: 1px solid var(--color-line);
     background: var(--color-sand-200);
+  }
+  /* Overview variant — a taller map so a spread of markers has room to breathe. */
+  .placemap--tall .placemap__canvas {
+    block-size: clamp(24rem, 20rem + 12vw, 34rem);
   }
   /* MapLibre injects its own controls/popups — tune them to the palette. */
   .placemap :global(.maplibregl-ctrl-group) {

@@ -35,6 +35,26 @@ function img(id, file, author, license) {
   };
 }
 
+/**
+ * id → a record for the site's OWN photography: a local file already placed under
+ * src/assets/photos (not fetched from Commons), credited to the photographer.
+ * `local: true` tells fetch-images to skip it and gen-credits to leave it out of
+ * the Wikimedia ledger; the in-site byline still renders from these fields.
+ */
+function own(id) {
+  return {
+    id,
+    file: null,
+    local: true,
+    dest: `src/assets/photos/${id}.jpg`,
+    author: 'Yunus Andreasson',
+    license: '',
+    licenseUrl: '',
+    source: '@andreasson.photo',
+    page: 'https://www.instagram.com/andreasson.photo/',
+  };
+}
+
 export const images = {
   hadumExt: img('hadumExt', 'File:Gjakova Hadum Aga Mosque (WPWTR17).jpg', 'Albinfo', 'CC BY 4.0'),
   hadumInt: img(
@@ -49,6 +69,8 @@ export const images = {
     'Shkëlzen Rexha',
     'CC BY-SA 3.0',
   ),
+  // Documentary photograph of the Old Bazaar in ruins, 1999 (watermarked "Shkëlzen Rexha '99").
+  bazaarWar99: img('bazaarWar99', 'File:Gjakova 1999.jpg', 'Shkëlzen Rexha', 'CC BY-SA 3.0'),
   hadumSchool: img(
     'hadumSchool',
     'File:Xhamia e Hadumit – minaret and school (OSCAL19 trip).jpg',
@@ -175,6 +197,21 @@ export const images = {
     'Nentor Oseku',
     'CC BY-SA 3.0',
   ),
+
+  // The site's own black-and-white photography (local files; credited @andreasson.photo).
+  ownHadum: own('ownHadum'),
+  ownHadumInt: own('ownHadumInt'),
+  ownHadumPortico: own('ownHadumPortico'),
+  ownBazaar: own('ownBazaar'),
+  ownBazaar2: own('ownBazaar2'),
+  ownAccursed: own('ownAccursed'),
+  ownAccursed2: own('ownAccursed2'),
+  ownClock: own('ownClock'),
+  ownLibrary: own('ownLibrary'),
+  ownQylit: own('ownQylit'),
+  ownCityCenter: own('ownCityCenter'),
+  ownDestroyedBazaar: own('ownDestroyedBazaar'),
+  ownMosque: own('ownMosque'),
 };
 
 /** timeline slug → one supporting figure */
@@ -191,21 +228,21 @@ export const timeline = {
     },
   },
   '1594-hadum-mosque': {
-    image: 'bazaarPano',
+    image: 'ownHadum',
     alt: {
-      en: "Panorama of Gjakova's Grand Bazaar with the domed Hadum Mosque rising at its centre.",
-      sq: 'Panoramë e Çarshisë së Madhe të Gjakovës me Xhaminë me kube të Hadumit në qendër.',
+      en: 'The arched, painted portico of the Hadum Mosque at dusk, a cypress beside it.',
+      sq: 'Portiku me harqe i pikturuar i Xhamisë së Hadumit në muzg, me një selvi pranë.',
     },
     caption: {
-      en: "The bazaar grew around Süleyman Aga's endowment, the Hadum Mosque at its head.",
-      sq: 'Çarshia u rrit rreth vakëfit të Sylejman Agës, me Xhaminë e Hadumit në krye.',
+      en: "Süleyman Aga's endowment — the Hadum Mosque the bazaar grew around.",
+      sq: 'Vakëfi i Sylejman Agës — Xhamia e Hadumit rreth së cilës u rrit çarshia.',
     },
   },
   '1597-clock-tower': {
-    image: 'clock1',
+    image: 'ownClock',
     alt: {
-      en: 'The stone clock tower of Gjakova against a clear sky.',
-      sq: 'Kulla e gurtë e Sahatit në Gjakovë përballë një qielli të kthjellët.',
+      en: 'The stone clock tower above the river embankment at dusk.',
+      sq: 'Kulla e gurtë e Sahatit mbi argjinaturën e lumit në muzg.',
     },
     caption: {
       en: 'The clock tower (Sahat Kulla), rebuilt after 1999 on its 1597 site.',
@@ -235,14 +272,14 @@ export const timeline = {
     },
   },
   '18th-century-trade': {
-    image: 'bazaarCarpenter',
+    image: 'ownBazaar2',
     alt: {
-      en: 'A craftsman at work among cradles and timber in a bazaar workshop.',
-      sq: 'Një mjeshtër duke punuar mes djepave dhe drurit në një punishte të çarshisë.',
+      en: 'A bazaar lane of timber-fronted shops, a man resting outside one under a dramatic sky.',
+      sq: 'Një rrugicë e çarshisë me dyqane me fasada druri, një burrë i ulur para njërit nën një qiell dramatik.',
     },
     caption: {
-      en: "A carpenter's workshop — the crafts that made Gjakova's wealth.",
-      sq: 'Një punishte zdrukthtari — zanatet që e bënë pasurinë e Gjakovës.',
+      en: "The Grand Bazaar — the crafts and trade that made Gjakova's wealth.",
+      sq: 'Çarshia e Madhe — zanatet dhe tregtia që e bënë pasurinë e Gjakovës.',
     },
   },
   '1912-end-of-ottoman-rule': {
@@ -257,43 +294,43 @@ export const timeline = {
     },
   },
   '1942-mosques-and-tekkes': {
-    image: 'tekkeShejhEmin',
+    image: 'ownMosque',
     alt: {
-      en: 'The whitewashed Shejh Emin tekke, an 18th-century dervish lodge in Gjakova.',
-      sq: 'Teqja e zbardhur e Shejh Eminit, një teqe dervishe e shekullit XVIII në Gjakovë.',
+      en: 'A tall, slender mosque minaret rising against a dramatic evening sky, mountains behind.',
+      sq: 'Një minare e hollë e gjatë xhamie që ngrihet përballë një qielli dramatik mbrëmjeje, me male në sfond.',
     },
     caption: {
-      en: 'The Shejh Emin (Saadi) tekke of 1730 — one of the lodges counted in 1942.',
-      sq: 'Teqja e Shejh Eminit (saadive), e vitit 1730 — një nga teqet e numëruara në 1942.',
+      en: "A minaret over the old town — Gjakova's many mosques, counted in 1942.",
+      sq: 'Një minare mbi qytetin e vjetër — xhamitë e shumta të Gjakovës, të numëruara në 1942.',
     },
   },
   '1999-fire': {
-    image: 'hadumWar',
+    image: 'ownDestroyedBazaar',
     alt: {
-      en: "A fire-gutted street in Gjakova's old town, photographed soon after the 1999 war.",
-      sq: 'Një rrugë e shkrumbuar nga zjarri në qytetin e vjetër të Gjakovës, fotografuar pak pas luftës së vitit 1999.',
+      en: 'A gutted, roofless shell of a bazaar building beside the river, still standing in ruins.',
+      sq: 'Një ndërtesë e çarshisë e shkrumbuar e pa çati pranë lumit, ende në këmbë në rrënoja.',
     },
     caption: {
-      en: "Gjakova's burned old town soon after the war, 1999.",
-      sq: 'Qyteti i vjetër i djegur i Gjakovës pak pas luftës, 1999.',
+      en: 'A stretch of the bazaar by the river — gutted in 1999 and still unrestored in 2026.',
+      sq: 'Një pjesë e çarshisë buzë lumit — e shkrumbuar më 1999 dhe ende e parestauruar në vitin 2026.',
     },
   },
   '2000s-rebuilding': {
-    image: 'rebuilt2015',
+    image: 'ownBazaar',
     alt: {
-      en: "A restored cobbled street of shops in Gjakova's old town in 2015.",
-      sq: 'Një rrugë me kalldrëm dhe dyqane e restauruar në qytetin e vjetër të Gjakovës, 2015.',
+      en: "A rebuilt cobbled lane of timber-fronted shops in Gjakova's old bazaar at dusk.",
+      sq: 'Një rrugicë e rindërtuar me kalldrëm e dyqane me fasada druri në çarshinë e vjetër të Gjakovës, në muzg.',
     },
     caption: {
-      en: 'A renovated lane in the rebuilt old town, 2015.',
-      sq: 'Një rrugicë e rinovuar në qytetin e vjetër të rindërtuar, 2015.',
+      en: 'The rebuilt Çarshia, raised again shop by shop.',
+      sq: 'Çarshia e rindërtuar, e ringritur dyqan pas dyqani.',
     },
   },
   '2005-hadum-restored': {
-    image: 'hadumInt',
+    image: 'ownHadumInt',
     alt: {
-      en: 'The painted interior of the Hadum Mosque, walls covered in floral and cypress motifs.',
-      sq: 'Brendia e pikturuar e Xhamisë së Hadumit, me mure të mbuluara me motive lulesh e selvish.',
+      en: 'The painted interior of the Hadum Mosque — its carved wooden minber and walls of calligraphy.',
+      sq: 'Brendia e pikturuar e Xhamisë së Hadumit — minberi i gdhendur prej druri dhe muret me kaligrafi.',
     },
     caption: {
       en: 'Inside the restored Hadum Mosque, its painted decoration brought back.',
@@ -301,14 +338,14 @@ export const timeline = {
     },
   },
   '2016-library-rebuilt': {
-    image: 'hadumSchool',
+    image: 'ownLibrary',
     alt: {
-      en: "The reconstructed school and library building behind the Hadum Mosque's minaret.",
-      sq: 'Ndërtesa e rindërtuar e shkollës dhe bibliotekës pas minares së Xhamisë së Hadumit.',
+      en: 'The rebuilt octagonal Hadum library building among trees, its tiled roof and stone base.',
+      sq: 'Ndërtesa tetëkëndëshe e rindërtuar e bibliotekës së Hadumit mes pemëve, me çati tjegullash e bazament guri.',
     },
     caption: {
-      en: 'The rebuilt Hadum-complex school and library beside the mosque.',
-      sq: 'Shkolla dhe biblioteka e rindërtuar e kompleksit të Hadumit, pranë xhamisë.',
+      en: 'The rebuilt Hadum library beside the mosque.',
+      sq: 'Biblioteka e rindërtuar e Hadumit, pranë xhamisë.',
     },
   },
 };
@@ -317,74 +354,52 @@ export const timeline = {
 export const places = {
   'hadum-mosque': [
     {
-      image: 'hadumExt',
+      image: 'ownHadum',
       alt: {
-        en: 'The Hadum Mosque today, its dome and minaret above the bazaar.',
-        sq: 'Xhamia e Hadumit sot, me kube e minare mbi çarshi.',
+        en: "The Hadum Mosque's arched, painted portico at dusk, a cypress beside it.",
+        sq: 'Portiku me harqe i pikturuar i Xhamisë së Hadumit në muzg, me një selvi pranë.',
       },
-      caption: { en: 'The Hadum Mosque today.', sq: 'Xhamia e Hadumit sot.' },
+      caption: { en: 'The Hadum Mosque at dusk.', sq: 'Xhamia e Hadumit në muzg.' },
     },
     {
-      image: 'hadumInt',
+      image: 'ownHadumInt',
       alt: {
-        en: "The mosque's painted interior — cypresses, vases and flowers across the walls.",
-        sq: 'Brendia e pikturuar e xhamisë — selvi, vazo e lule nëpër mure.',
+        en: 'The painted interior — the carved wooden minber and walls of calligraphy.',
+        sq: 'Brendia e pikturuar — minberi i gdhendur prej druri dhe muret me kaligrafi.',
       },
       caption: {
-        en: 'The painted interior — cypresses, vases and flowers.',
-        sq: 'Brendia e pikturuar — selvi, vazo e lule.',
+        en: 'The painted interior and carved minber.',
+        sq: 'Brendia e pikturuar dhe minberi i gdhendur.',
       },
     },
     {
-      image: 'hadumWar',
+      image: 'ownHadumPortico',
       alt: {
-        en: "A ruined, fire-blackened street in Gjakova's old town after the 1999 war.",
-        sq: 'Një rrugë e rrënuar e nxirë nga zjarri në qytetin e vjetër të Gjakovës pas luftës së vitit 1999.',
+        en: "A wide view of the mosque's painted porch and courtyard under a dark sky.",
+        sq: 'Pamje e gjerë e portikut të pikturuar dhe oborrit të xhamisë nën një qiell të errët.',
       },
       caption: {
-        en: "Gjakova's old town in ruins after the 1999 war.",
-        sq: 'Qyteti i vjetër i Gjakovës në rrënoja pas luftës së vitit 1999.',
+        en: 'The painted porch and courtyard.',
+        sq: 'Portiku i pikturuar dhe oborri.',
       },
     },
   ],
   'grand-bazaar': [
     {
-      image: 'bazaarPano',
+      image: 'ownBazaar',
       alt: {
-        en: 'Wide view of the Grand Bazaar with the Hadum Mosque at its head.',
-        sq: 'Pamje e gjerë e Çarshisë së Madhe me Xhaminë e Hadumit në krye.',
+        en: 'The Çarshia bazaar street at dusk — timber-fronted shops along the cobbles.',
+        sq: 'Rruga e Çarshisë në muzg — dyqane me fasada druri përgjatë kalldrëmit.',
       },
-      caption: {
-        en: 'The bazaar with the Hadum Mosque at its head.',
-        sq: 'Çarshia me Xhaminë e Hadumit në krye.',
-      },
+      caption: { en: 'The bazaar street at dusk.', sq: 'Rruga e çarshisë në muzg.' },
     },
     {
-      image: 'bazaarStreet',
+      image: 'ownBazaar2',
       alt: {
-        en: 'A rebuilt lane of low timber-fronted shops in the bazaar.',
-        sq: 'Një rrugicë e rindërtuar me dyqane të ulëta me fasada druri në çarshi.',
+        en: 'A bazaar lane with a man resting outside a shop under a dramatic sky.',
+        sq: 'Një rrugicë e çarshisë me një burrë të ulur para një dyqani nën një qiell dramatik.',
       },
-      caption: { en: 'A rebuilt lane of shops.', sq: 'Një rrugicë e rindërtuar dyqanesh.' },
-    },
-    {
-      image: 'bazaarCobbles',
-      alt: {
-        en: 'The cobbled paving of the old bazaar between rows of shops.',
-        sq: 'Kalldrëmi i çarshisë së vjetër mes radhëve të dyqaneve.',
-      },
-      caption: { en: 'The cobbled lanes of the Çarshia.', sq: 'Rrugicat me kalldrëm të Çarshisë.' },
-    },
-    {
-      image: 'bazaarCarpenter',
-      alt: {
-        en: 'A carpenter at work among cradles in his bazaar workshop.',
-        sq: 'Një zdrukthtar duke punuar mes djepave në punishten e tij në çarshi.',
-      },
-      caption: {
-        en: "A carpenter's workshop — the old crafts endure.",
-        sq: 'Një punishte zdrukthtari — zanatet e vjetra vazhdojnë.',
-      },
+      caption: { en: 'A quiet hour in the bazaar.', sq: 'Një orë e qetë në çarshi.' },
     },
     {
       image: 'devojka',
@@ -397,28 +412,28 @@ export const places = {
         sq: 'Një grua e Gjakovës me veshje tradicionale dhe filigran, 1913 — puna e mjeshtërve të çarshisë, e veshur.',
       },
     },
+    {
+      image: 'bazaarWar99',
+      alt: {
+        en: "Gjakova's Old Bazaar in ruins in 1999 — gutted, roofless shops along the cobbled street, a few people returning.",
+        sq: 'Çarshia e Gjakovës në rrënoja më 1999 — dyqane të shkrumbuara e pa çati përgjatë rrugës me kalldrëm, ca njerëz që kthehen.',
+      },
+      caption: {
+        en: 'The bazaar in ruins soon after the 1999 fire.',
+        sq: 'Çarshia në rrënoja pak pas zjarrit të vitit 1999.',
+      },
+    },
   ],
   'clock-tower': [
     {
-      image: 'clock1',
+      image: 'ownClock',
       alt: {
-        en: 'The clock tower of Gjakova rising above the rooftops.',
-        sq: 'Kulla e Sahatit e Gjakovës që ngrihet mbi çatitë.',
+        en: 'The clock tower rising above the river embankment at dusk.',
+        sq: 'Kulla e Sahatit që ngrihet mbi argjinaturën e lumit në muzg.',
       },
       caption: {
-        en: 'The clock tower on the Field of the Clock.',
-        sq: 'Kulla e Sahatit në Fushën e Sahatit.',
-      },
-    },
-    {
-      image: 'clock2',
-      alt: {
-        en: 'The reconstructed stone clock tower with its belfry.',
-        sq: 'Kulla e gurtë e Sahatit e rindërtuar, me kambanore.',
-      },
-      caption: {
-        en: 'The reconstructed stone tower and belfry.',
-        sq: 'Kulla e gurtë e rindërtuar dhe kambanorja.',
+        en: 'The Clock Tower above the river.',
+        sq: 'Kulla e Sahatit mbi lumë.',
       },
     },
   ],
@@ -503,25 +518,25 @@ export const places = {
   ],
   'accursed-mountains': [
     {
-      image: 'mtnGjeravica',
+      image: 'ownAccursed',
       alt: {
-        en: 'Snow-streaked peaks of Gjeravica and Maja e Strellcit.',
-        sq: 'Majat me brazda bore të Gjeravicës dhe Majës së Strellcit.',
+        en: 'A craggy peak of the Accursed Mountains under heavy storm cloud.',
+        sq: 'Një majë shkëmbore e Bjeshkëve të Nemuna nën re të rënda stuhie.',
       },
       caption: {
-        en: "Gjeravica, Kosovo's highest peak, with Maja e Strellcit.",
-        sq: 'Gjeravica, maja më e lartë e Kosovës, me Majën e Strellcit.',
+        en: 'A peak of the Accursed Mountains under storm light.',
+        sq: 'Një majë e Bjeshkëve të Nemuna nën dritën e stuhisë.',
       },
     },
     {
-      image: 'mtnProkletije',
+      image: 'ownAccursed2',
       alt: {
-        en: 'The Accursed Mountains seen across fields from the edge of Gjakova.',
-        sq: 'Bjeshkët e Nemuna parë përtej arave nga skaji i Gjakovës.',
+        en: 'Shafts of light falling through cloud over the ridged valleys of the Accursed Mountains.',
+        sq: 'Rreze drite që bien përmes reve mbi luginat me kreshta të Bjeshkëve të Nemuna.',
       },
       caption: {
-        en: 'The Accursed Mountains seen from the edge of Gjakova.',
-        sq: 'Bjeshkët e Nemuna parë nga skaji i Gjakovës.',
+        en: 'Light over the highland valleys.',
+        sq: 'Dritë mbi luginat malore.',
       },
     },
     {
@@ -538,14 +553,14 @@ export const places = {
   ],
   'hadum-library': [
     {
-      image: 'hadumSchool',
+      image: 'ownLibrary',
       alt: {
-        en: 'The rebuilt school and library building of the Hadum complex.',
-        sq: 'Ndërtesa e rindërtuar e shkollës dhe bibliotekës së kompleksit të Hadumit.',
+        en: 'The rebuilt octagonal Hadum library building among trees, its tiled roof and stone base.',
+        sq: 'Ndërtesa tetëkëndëshe e rindërtuar e bibliotekës së Hadumit mes pemëve, me çati tjegullash e bazament guri.',
       },
       caption: {
-        en: 'The rebuilt library and school of the Hadum complex.',
-        sq: 'Biblioteka dhe shkolla e rindërtuar e kompleksit të Hadumit.',
+        en: 'The rebuilt Hadum library building.',
+        sq: 'Ndërtesa e rindërtuar e bibliotekës së Hadumit.',
       },
     },
     {

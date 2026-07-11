@@ -109,9 +109,16 @@ const href = localizedPath(lang, `/places/${entrySlug(place.id)}`);
     flex-direction: column;
     gap: var(--gap-body);
     padding: var(--space-lg);
+    /* Fill the card's height (cards in a row stretch to equal height) so the CTA
+       below can pin to the bottom edge. */
+    flex: 1;
   }
   .card__title {
     font-size: 1.5rem;
+    line-height: 1.15;
+    /* Reserve two lines so the era, summary and CTA rows align across the cards
+       in a row whether the place name runs to one line or two. */
+    min-block-size: 2.3em;
   }
   .card__era {
     font-family: var(--font-sans);
@@ -128,10 +135,27 @@ const href = localizedPath(lang, `/places/${entrySlug(place.id)}`);
     margin: 0;
   }
   .card__cta {
-    margin-block-start: var(--space-xs);
+    /* Pin to the bottom of the body so the "Read the guide" links line up across
+       a row regardless of summary length. */
+    margin-block-start: auto;
+    padding-block-start: var(--space-xs);
     font-family: var(--font-sans);
     font-weight: 600;
     font-size: 0.9rem;
     color: var(--color-terracotta-600);
+  }
+  /* Touch devices: the hover lift would "stick" after a tap, so swap it for an
+     instant press that feels like a native list cell being pressed. */
+  @media (hover: none) {
+    .card:hover {
+      transform: none;
+      box-shadow: var(--shadow-soft);
+    }
+    .card:hover .card__media :global(img) {
+      transform: none;
+    }
+    .card:active {
+      transform: scale(0.985);
+    }
   }
 </style>

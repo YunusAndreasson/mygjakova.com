@@ -18,24 +18,13 @@ order: 5
 featured: false
 draft: false
 gallery:
-  - src: ../../../assets/photos/clock1.jpg
-    alt: "Kulla e Sahatit e Gjakovës që ngrihet mbi çatitë."
-    caption: "Kulla e Sahatit në Fushën e Sahatit."
+  - src: ../../../assets/photos/ownClock.jpg
+    alt: "Kulla e Sahatit që ngrihet mbi argjinaturën e lumit në muzg."
+    caption: "Kulla e Sahatit mbi lumë."
     credit:
-      author: "Irvi Hyka"
-      source: "Wikimedia Commons"
-      license: "CC BY-SA 3.0"
-      licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AClock_Tower_of_Gjakova.jpg"
-  - src: ../../../assets/photos/clock2.jpg
-    alt: "Kulla e gurtë e Sahatit e rindërtuar, me kambanore."
-    caption: "Kulla e gurtë e rindërtuar dhe kambanorja."
-    credit:
-      author: "Aljabakphoto"
-      source: "Wikimedia Commons"
-      license: "CC BY-SA 4.0"
-      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AClock_tower%2C_Gjakova.JPG"
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
 ---
 
 <!-- VENDMBAJTËS — fillim hulumtimi. Zëvendëso këtë trup me tekst të mirëfilltë, pastaj vendos `draft: false`, shto `coordinates` dhe verifiko `sources`. -->

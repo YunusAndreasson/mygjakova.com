@@ -11,15 +11,13 @@ sources:
     url: https://en.wikipedia.org/wiki/Culture_of_Gjakova
   - label: 'Komuna e Gjakovës — Historiku'
     url: https://kk.rks-gov.net/gjakove/qyteti-2/historiku-2/
-image: ../../../assets/photos/bazaarCarpenter.jpg
-imageAlt: "A craftsman at work among cradles and timber in a bazaar workshop."
-imageCaption: "A carpenter's workshop — the crafts that made Gjakova's wealth."
+image: ../../../assets/photos/ownBazaar2.jpg
+imageAlt: "A bazaar lane of timber-fronted shops, a man resting outside one under a dramatic sky."
+imageCaption: "The Grand Bazaar — the crafts and trade that made Gjakova's wealth."
 imageCredit:
-  author: "Edakaja"
-  source: "Wikimedia Commons"
-  license: "CC BY-SA 3.0"
-  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
-  url: "https://commons.wikimedia.org/wiki/File%3AGjakovar_carpenter.JPG"
+  author: "Yunus Andreasson"
+  source: "@andreasson.photo"
+  url: "https://www.instagram.com/andreasson.photo/"
 ---
 
 Through the eighteenth century the *çarshia* reaches its height: nearly a kilometre of cobbled lanes and some **five hundred shops**, loosely sorted by trade. Gjakova sits on the caravan road between Shkodër and Istanbul, and its *esnaf* — the craft guilds — make its name.

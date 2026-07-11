@@ -60,8 +60,22 @@ const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
     flex-direction: column;
     gap: var(--space-2xs);
   }
+  .toc__item {
+    position: relative;
+  }
   .toc__item--sub {
     padding-inline-start: var(--space-sm);
+  }
+  /* Active-section marker: a terracotta segment laid over the rail next to the
+     current item. Offset back over the nav's padding + border so it sits on the
+     rail for both top-level and sub items. Driven by the scroll-spy script. */
+  .toc__item:has(.toc__link--active)::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: calc(-1 * var(--space-md) - 2px);
+    inline-size: 2px;
+    background: var(--color-terracotta-600);
   }
   .toc__link {
     font-family: var(--font-sans);
@@ -73,4 +87,65 @@ const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
   .toc__link:hover {
     color: var(--color-terracotta-600);
   }
+  .toc__link--active {
+    color: var(--color-terracotta-600);
+    font-weight: 600;
+  }
 </style>
+
+<script>
+  /**
+   * Scroll-spy: highlight the TOC link for the section currently being read.
+   * Listeners are attached once; the target list is rebuilt on every
+   * `astro:page-load` so it survives client-side (view-transition) navigation.
+   */
+  interface Target {
+    link: HTMLAnchorElement;
+    el: HTMLElement;
+  }
+  const targets: Target[] = [];
+  let ticking = false;
+
+  function update() {
+    ticking = false;
+    if (!targets.length) return;
+    // The active section is the last whose heading has passed the offset line
+    // (just below the sticky header); default to the first before any has.
+    const line = 140;
+    let current = targets[0];
+    for (const t of targets) {
+      if (t.el.getBoundingClientRect().top <= line) current = t;
+      else break;
+    }
+    for (const t of targets) {
+      const on = t === current;
+      t.link.classList.toggle('toc__link--active', on);
+      if (on) t.link.setAttribute('aria-current', 'true');
+      else t.link.removeAttribute('aria-current');
+    }
+  }
+
+  function onScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  }
+
+  function rebuild() {
+    targets.length = 0;
+    const toc = document.querySelector('.toc');
+    if (toc) {
+      toc.querySelectorAll<HTMLAnchorElement>('.toc__link').forEach((link) => {
+        const id = decodeURIComponent(link.hash.slice(1));
+        const el = id ? document.getElementById(id) : null;
+        if (el) targets.push({ link, el });
+      });
+    }
+    update();
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  document.addEventListener('astro:page-load', rebuild);
+</script>

@@ -3,7 +3,9 @@ import PageHeader from '~/components/PageHeader.astro';
 import KosovoLocator from '~/components/KosovoLocator.astro';
 import Ornament from '~/components/Ornament.astro';
 import Figure from '~/components/Figure.astro';
+import FactsPanel from '~/components/FactsPanel.astro';
 import manuscript from '~/assets/photos/evliyaMs.jpg';
+import cityCenter from '~/assets/photos/ownCityCenter.jpg';
 import { useTranslations, localizedPath, type Locale } from '~/i18n/utils';
 
 // The Seyahatnâme title page that illustrates the 1662 pull-quote. Public-domain
@@ -13,6 +15,13 @@ const manuscriptCredit = {
   source: 'Wikimedia Commons',
   license: 'Public domain',
   url: 'https://commons.wikimedia.org/wiki/File:Seyahatname_C6_Evliya_%C3%87elebi.jpg',
+};
+
+// The site's own photography credit (matches the timeline / gallery byline).
+const ownCredit = {
+  author: 'Yunus Andreasson',
+  source: '@andreasson.photo',
+  url: 'https://www.instagram.com/andreasson.photo/',
 };
 
 interface Props {
@@ -63,6 +72,8 @@ interface AboutCopy {
   colophonLeadBefore: string;
   colophonLeadAfter: string;
   colophonRest: string[];
+  closingPhotoAlt: string;
+  closingPhotoCaption: string;
 }
 
 // About copy lives here for now. When the site grows, this becomes a "pages"
@@ -111,6 +122,9 @@ const copy: Record<Locale, AboutCopy> = {
       "So read it as one traveller's notes rather than a definitive account. Where it can, it leans on published sources and local scholarship — but any mistakes are mine, and corrections are welcome.",
       'The site is a work in progress. Places, photography and stories will keep arriving.',
     ],
+    closingPhotoAlt:
+      'A stone stairway climbing through dense foliage in the old town, lit by a shaft of light.',
+    closingPhotoCaption: 'Steps in the old town.',
   },
   sq: {
     eyebrow: 'Një udhërrëfyes joizyrtar',
@@ -155,6 +169,109 @@ const copy: Record<Locale, AboutCopy> = {
       'Pra, lexoje si shënimet e një udhëtari, jo si një rrëfim përfundimtar. Aty ku mundet, mbështetet te burimet e botuara dhe te studiuesit vendorë — por çdo gabim është imi, dhe ndreqjet janë të mirëpritura.',
       'Faqja është në punë e sipër. Vende, fotografi dhe tregime do të vazhdojnë të vijnë.',
     ],
+    closingPhotoAlt:
+      'Një shkallë guri që ngjitet përmes gjelbërimit të dendur në qytetin e vjetër, e ndriçuar nga një rreze drite.',
+    closingPhotoCaption: 'Shkallë në qytetin e vjetër.',
+  },
+  de: {
+    eyebrow: 'Ein inoffizieller Führer',
+    lede: 'Ein persönlicher, inoffizieller Führer durch die Altstadt von Gjakova — ihren Basar, ihre Moscheen und die osmanische und islamische Vergangenheit, die sie geprägt hat.',
+    intro: [
+      'Dies ist ein langsamer Führer durch Gjakova, eine Stadt im Westen des Kosovo, deren alte Kultur noch immer in ihrem Basar, ihren Moscheen und den Steinhäusern ihres bergigen Umlands lebt. Er verweilt besonders bei der Altstadt und bei dem osmanischen und islamischen Erbe, das der Stadt ihre Gestalt gab.',
+      'Statt jeder Sehenswürdigkeit nachzujagen, geht der Führer behutsam vor: wenige Orte, gut erzählt, vor dem Hintergrund eines einzigen Fadens der Geschichte. Das Ziel ist, Ihnen zu helfen, die alte Stadt so zu lesen, wie es ihre Handwerker taten — mit Geduld und mit Respekt vor dem, was Bestand hatte.',
+    ],
+    hook: {
+      eyebrow: 'Warum Gjakova',
+      title: 'Eine Stadt, die sich an sich selbst erinnert hat',
+      quote:
+        'Eine blühende und ansehnliche Stadt aus 2.000 Häusern, alle aus Stein mit Dächern und Gärten … zwei reich geschmückte Freitagsmoscheen, mehrere Gebetshäuser, einige Hane mit Bleidächern, ein reizendes Badehaus und etwa 300 Läden wie Nachtigallennester.',
+      attribution: 'Evliya Çelebi, Seyahatnâme · 1662',
+      leadIn: 'Diese 300 Läden sind der ',
+      bazaarLabel: 'Große Basar',
+      midText:
+        ' — schon ein Jahrhundert alt, als der Reisende sie zählte, voller „tausenderlei Handwerk“. In einer einzigen Woche des Jahres 1999 brannte das meiste davon nieder; er wurde wieder aufgebaut, Laden für Laden, in denselben Gassen, die man noch heute begehen kann. Daneben stand die ',
+      libraryLabel: 'Hadum-Bibliothek',
+      tailText:
+        ', deren Regale eine Literatur bewahrten, von deren Existenz die meisten Besucher nie erfahren — Albanisch in arabischer Schrift —, bis ihre Handschriften in eben jenem Feuer verloren gingen. Gjakova ist eine Stadt, die sich mehr als einmal bewusst an sich selbst erinnern musste — und genau das lässt einen Gang durch sie wie einen Akt der Wiedergewinnung wirken.',
+    },
+    quoteImageAlt: 'Die Titelseite von Evliya Çelebis Seyahatnâme, dem Reisebericht von 1662.',
+    quoteImageCaption: 'Evliya Çelebis Seyahatnâme (1662), der hier zitierte Bericht.',
+    factsTitle: 'Gjakova in Kürze',
+    facts: [
+      { term: 'Region', value: 'Dukagjin-Ebene, Westkosovo' },
+      { term: 'Einwohner', value: '~41.800 in der Stadt; ~78.700 in der gesamten Gemeinde' },
+      {
+        term: 'Glaube',
+        value: 'Überwiegend muslimisch, mit der größten katholischen Gemeinschaft des Kosovo (~17 %)',
+      },
+      { term: 'Erste Erwähnung', value: '1485, als Dorf mit Markt; Stadt seit den 1590er-Jahren' },
+      { term: 'Höhe', value: '375 m (1.230 ft)' },
+      { term: 'Flüsse', value: 'Krena und Erenik, die zum Weißen Drin entwässern' },
+      { term: 'Alter Basar', value: 'Çarshia e Madhe, einer der ältesten der Region' },
+    ],
+    factsNote:
+      'Die Einwohnerzahl stammt aus der Volkszählung 2024 im Kosovo; die religiöse Aufteilung aus der Volkszählung 2011; Daten und Geschichte stützen sich auf die im Führer durchgehend genannten Quellen.',
+    colophonTitle: 'Wer dahintersteht',
+    colophonLeadBefore: `Der Führer wird zusammengestellt von ${authorName} — einem Fotografen (`,
+    colophonLeadAfter:
+      '), keinem Historiker und keiner örtlichen Behörde. Er entstand aus wiederholten Besuchen im Laufe des vergangenen Jahrzehnts: langen Spaziergängen durch das alte Viertel, der Herzlichkeit der Menschen, die dort leben, und dem, was sie einem neugierigen Besucher großzügig über die Vergangenheit ihrer Stadt beibrachten.',
+    colophonRest: [
+      'Lesen Sie ihn daher eher als die Notizen eines Reisenden denn als endgültige Darstellung. Wo möglich, stützt er sich auf veröffentlichte Quellen und örtliche Forschung — doch alle Fehler sind meine, und Korrekturen sind willkommen.',
+      'Die Seite ist in Arbeit. Orte, Fotografien und Geschichten kommen nach und nach hinzu.',
+    ],
+    closingPhotoAlt:
+      'Eine Steintreppe, die durch dichtes Laub in der Altstadt hinaufführt, von einem Lichtstrahl erhellt.',
+    closingPhotoCaption: 'Treppen in der Altstadt.',
+  },
+  tr: {
+    eyebrow: 'Gayriresmî bir rehber',
+    lede: 'Gjakova’nın eski şehrine kişisel, gayriresmî bir rehber — çarşısı, camileri ve onları biçimlendiren Osmanlı ve İslam geçmişi.',
+    intro: [
+      'Bu, batı Kosova’da, eski kültürü hâlâ çarşısında, camilerinde ve dağlık çevresinin taş evlerinde yaşayan bir şehir olan Gjakova’ya yavaş bir rehberdir. Özellikle eski şehir üzerinde ve şehre biçimini veren Osmanlı ve İslam mirası üzerinde durur.',
+      'Her cazibe noktasının peşinden koşmak yerine rehber dikkatle ilerler: az sayıda yer, iyi anlatılmış, tek bir tarih ipliği üzerine kurulmuş. Amaç, eski şehri zanaatkârlarının okuduğu gibi okumanıza yardımcı olmaktır — sabırla ve kalıcı olana saygıyla.',
+    ],
+    hook: {
+      eyebrow: 'Neden Gjakova',
+      title: 'Kendini hatırlamış bir şehir',
+      quote:
+        'Hepsi taştan, çatılı ve bahçeli 2.000 evden oluşan, bayındır ve hoş bir kasaba … zengin biçimde bezenmiş iki ulu cami, birkaç mescit, kurşun çatılı birkaç han, hoş bir hamam ve bülbül yuvası gibi yaklaşık 300 dükkân.',
+      attribution: 'Evliya Çelebi, Seyahatnâme · 1662',
+      leadIn: 'O 300 dükkân, işte ',
+      bazaarLabel: 'Büyük Çarşı',
+      midText:
+        ' — gezgin onları saydığında çoktan bir asırlıktı ve “binbir çeşit zanaatla” doluydu. 1999’da tek bir hafta içinde büyük bölümü yandı; hâlâ yürüyebileceğiniz o sokaklarda, dükkân dükkân yeniden inşa edildi. Yanında ',
+      libraryLabel: 'Hadım Kütüphanesi',
+      tailText:
+        ' yer alıyordu; rafları, çoğu ziyaretçinin var olduğunu bile bilmediği bir edebiyatı barındırıyordu — Arap harfleriyle yazılmış Arnavutça — ta ki elyazmaları aynı yangında kaybolana dek. Gjakova, kendini birden çok kez, bilinçli olarak hatırlamak zorunda kalmış bir şehirdir — ve onu yürümeyi bir tür yeniden kazanım gibi hissettiren de tam budur.',
+    },
+    quoteImageAlt: 'Evliya Çelebi’nin Seyahatnâme’sinin başlık sayfası; 1662 tarihli gezgin anlatısı.',
+    quoteImageCaption: 'Evliya Çelebi’nin Seyahatnâme’si (1662), burada alıntılanan anlatı.',
+    factsTitle: 'Kısaca Gjakova',
+    facts: [
+      { term: 'Bölge', value: 'Dukagjin Ovası, batı Kosova' },
+      { term: 'Nüfus', value: 'Şehirde ~41.800; belediye genelinde ~78.700' },
+      {
+        term: 'İnanç',
+        value: 'Çoğunlukla Müslüman, Kosova’nın en büyük Katolik topluluğuyla (~%17)',
+      },
+      { term: 'İlk kayıt', value: '1485, pazarı olan bir köy olarak; 1590’larda kasaba' },
+      { term: 'Yükseklik', value: '375 m' },
+      { term: 'Nehirler', value: 'Beyaz Drin’e dökülen Krena ve Erenik' },
+      { term: 'Eski çarşı', value: 'Çarshia e Madhe, bölgenin en eskilerinden' },
+    ],
+    factsNote:
+      'Nüfus, 2024 Kosova nüfus sayımından; dinî dağılım 2011 sayımından; tarihler ve geçmiş, rehber boyunca anılan kaynaklara dayanır.',
+    colophonTitle: 'Arkasındaki kişi',
+    colophonLeadBefore: `Rehberi ${authorName} hazırlıyor — bir fotoğrafçı (`,
+    colophonLeadAfter:
+      '), tarihçi ya da yerel bir otorite değil. Son on yılda tekrarlanan ziyaretlerden doğdu: eski mahallede uzun yürüyüşler, orada yaşayan insanların sıcaklığı ve meraklı bir ziyaretçiye şehirlerinin geçmişi hakkında cömertçe öğrettikleri.',
+    colophonRest: [
+      'Bu yüzden onu kesin bir anlatı değil, bir gezginin notları olarak okuyun. Mümkün olan yerde yayımlanmış kaynaklara ve yerel araştırmalara dayanır — ama tüm hatalar bana aittir ve düzeltmeler memnuniyetle karşılanır.',
+      'Site yapım aşamasında. Yerler, fotoğraflar ve hikâyeler gelmeye devam edecek.',
+    ],
+    closingPhotoAlt:
+      'Eski şehirde, bir ışık huzmesiyle aydınlanan, sık yapraklar arasından yükselen taş bir merdiven.',
+    closingPhotoCaption: 'Eski şehirde merdivenler.',
   },
 };
 
@@ -201,34 +318,34 @@ const authorLinkText = authorUrl.replace(/^https?:\/\//, '');
     <div class="brief__map">
       <KosovoLocator lang={lang} />
     </div>
-    <aside class="facts" aria-labelledby="facts-title">
-      <h2 class="facts__title" id="facts-title">{c.factsTitle}</h2>
-      <dl class="facts__grid">
-        {
-          c.facts.map((fact) => (
-            <div class="fact">
-              <dt class="fact__term">{fact.term}</dt>
-              <dd class="fact__value">{fact.value}</dd>
-            </div>
-          ))
-        }
-      </dl>
-      <p class="facts__note">{c.factsNote}</p>
-    </aside>
+    <FactsPanel title={c.factsTitle} facts={c.facts} note={c.factsNote} />
   </div>
 
   <div class="about__rule">
     <Ornament variant="divider" tone="line" />
   </div>
 
-  <div class="prose about__colophon">
-    <h2 class="about__colophon-title">{c.colophonTitle}</h2>
-    <p>
-      {c.colophonLeadBefore}<a href={authorUrl} rel="author noopener">{authorLinkText}</a>{
-        c.colophonLeadAfter
-      }
-    </p>
-    {c.colophonRest.map((p) => <p>{p}</p>)}
+  <div class="colophon">
+    <div class="prose about__colophon">
+      <h2 class="about__colophon-title">{c.colophonTitle}</h2>
+      <p>
+        {c.colophonLeadBefore}<a href={authorUrl} rel="author noopener">{authorLinkText}</a>{
+          c.colophonLeadAfter
+        }
+      </p>
+      {c.colophonRest.map((p) => <p>{p}</p>)}
+    </div>
+
+    <div class="about__photo">
+      <Figure
+        src={cityCenter}
+        alt={c.closingPhotoAlt}
+        caption={c.closingPhotoCaption}
+        credit={ownCredit}
+        widths={[360, 540, 720]}
+        sizes="(min-width: 60rem) 20rem, 100vw"
+      />
+    </div>
   </div>
 </section>
 
@@ -259,9 +376,11 @@ const authorLinkText = authorUrl.replace(/^https?:\/\//, '');
   }
   @media (min-width: 60rem) {
     .hook__media {
-      /* Drop the plate down so it aligns to the quote rather than the eyebrow. */
-      margin-block-start: var(--space-3xl);
+      /* Sit the plate near the top of the text column so the right side fills
+         from the title down, rather than floating low with an empty top. */
+      margin-block-start: var(--space-md);
       margin-inline: 0;
+      max-inline-size: none;
     }
   }
   .hook__title {
@@ -311,96 +430,66 @@ const authorLinkText = authorUrl.replace(/^https?:\/\//, '');
     text-underline-offset: 0.12em;
   }
 
-  /* Gjakova in brief — a Kosovo locator map paired with a quiet facts plate.
-     Stacks on narrow screens; map beside facts once there's room. */
+  /* Gjakova in brief — a Kosovo locator map paired with the facts plate. Both
+     sit in matching cards of equal height so the two columns balance, rather
+     than a small map floating on the bare ground beside a tinted panel. */
   .brief {
     display: grid;
     gap: var(--gap-layout);
-    align-items: center;
+    align-items: stretch;
   }
   @media (min-width: 50rem) {
     .brief {
-      grid-template-columns: minmax(13rem, 0.85fr) 1.15fr;
+      grid-template-columns: minmax(13rem, 0.9fr) 1.1fr;
     }
   }
   .brief__map {
-    inline-size: 100%;
-    max-inline-size: 21rem;
-    margin-inline: auto;
-  }
-  .facts {
-    position: relative;
-    isolation: isolate;
+    display: grid;
+    place-items: center;
     background: var(--color-sand-200);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-lg);
-    padding: var(--space-pad-card);
     box-shadow: var(--shadow-soft);
+    padding: var(--space-pad-card);
   }
-  /* Faint star lattice inside the panel — clipped to the rounded corners and
-     sitting under the text (the calmest of the three motif surfaces). */
-  .facts::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    border-radius: inherit;
-    overflow: hidden;
-    background-image: var(--motif-star);
-    background-size: 64px 64px;
-    opacity: 0.045;
-    mix-blend-mode: multiply;
+  .brief__map :global(.locator) {
+    inline-size: 100%;
+    max-inline-size: 20rem;
   }
-  .facts__title {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    color: var(--color-ink);
-    margin: 0 0 var(--space-lg);
-  }
-  .facts__grid {
-    margin: 0;
-    display: grid;
-    gap: var(--space-md) var(--space-xl);
-  }
-  @media (min-width: 34rem) {
-    .facts__grid {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  .fact {
-    display: grid;
-    gap: var(--space-3xs);
-    padding-block-start: var(--space-sm);
-    border-block-start: 1px solid var(--color-line);
-  }
-  .fact__term {
-    font-family: var(--font-sans);
-    font-size: var(--text-eyebrow);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-weight: 600;
-    color: var(--color-terracotta-600);
-  }
-  .fact__value {
-    margin: 0;
-    font-family: var(--font-serif);
-    font-size: 1.05rem;
-    line-height: 1.5;
-    color: var(--color-sand-800);
-  }
-  .facts__note {
-    margin: var(--space-lg) 0 0;
-    font-family: var(--font-sans);
-    font-size: 0.85rem;
-    line-height: 1.5;
-    color: var(--color-sand-600);
+  /* The locator's land fill is sand-200 — the same as this card — so lighten it
+     to read against the matching tint. */
+  .brief__map :global(.locator__land) {
+    fill: var(--color-surface);
   }
 
-  /* Colophon — a signed note set apart from the body by the star rule above
-     (which replaces the former hairline border). */
+  /* Colophon — the signed note set beside a closing photograph: text left, the
+     author's own photo right on wide screens, so the page ends balanced rather
+     than with a lone left-aligned image and an empty right. Set apart from the
+     body by the star rule above. */
+  .colophon {
+    display: grid;
+    gap: var(--gap-layout);
+  }
+  @media (min-width: 60rem) {
+    .colophon {
+      grid-template-columns: minmax(0, 1fr) minmax(14rem, 20rem);
+      align-items: start;
+    }
+  }
   .about__colophon-title {
     font-size: 1.5rem;
     margin-block: 0 var(--space-sm);
+  }
+  .about__photo {
+    max-inline-size: 34rem;
+    margin-inline: 0;
+  }
+  @media (min-width: 60rem) {
+    .about__photo {
+      /* Drop the photo to sit beside the body, aligned with the colophon prose
+         rather than its heading. */
+      margin-block-start: var(--space-2xl);
+      max-inline-size: none;
+    }
   }
 </style>

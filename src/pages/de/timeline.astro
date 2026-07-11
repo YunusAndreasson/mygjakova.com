@@ -1,0 +1,23 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import TimelineView from '~/components/views/TimelineView.astro';
+import { getTimeline } from '~/lib/collections';
+import { buildTimelineItemList } from '~/lib/jsonLd';
+import { useTranslations } from '~/i18n/utils';
+
+const lang = 'de' as const;
+const t = useTranslations(lang);
+
+const origin = Astro.site ?? new URL(Astro.url.origin);
+const events = await getTimeline(lang);
+const itemList = buildTimelineItemList({
+  events,
+  origin: origin.href,
+  url: new URL(Astro.url.pathname, origin).href,
+  name: t('timeline.title'),
+});
+---
+
+<BaseLayout title={t('timeline.title')} description={t('timeline.lede')} jsonLd={itemList}>
+  <TimelineView lang={lang} />
+</BaseLayout>

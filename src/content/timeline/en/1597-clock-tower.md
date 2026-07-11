@@ -9,15 +9,13 @@ sources:
     url: https://monumentetkulturore.com/gjakove/kulla-e-sahatit/
   - label: 'Old Bazaar, Gjakova — Wikipedia'
     url: https://en.wikipedia.org/wiki/Old_Bazaar,_Gjakova
-image: ../../../assets/photos/clock1.jpg
-imageAlt: "The stone clock tower of Gjakova against a clear sky."
+image: ../../../assets/photos/ownClock.jpg
+imageAlt: "The stone clock tower above the river embankment at dusk."
 imageCaption: "The clock tower (Sahat Kulla), rebuilt after 1999 on its 1597 site."
 imageCredit:
-  author: "Irvi Hyka"
-  source: "Wikimedia Commons"
-  license: "CC BY-SA 3.0"
-  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
-  url: "https://commons.wikimedia.org/wiki/File%3AClock_Tower_of_Gjakova.jpg"
+  author: "Yunus Andreasson"
+  source: "@andreasson.photo"
+  url: "https://www.instagram.com/andreasson.photo/"
 ---
 
 Barely two years after the mosque, in **1597**, a stone **clock tower** — *Kulla e Sahatit* — rises beside the bazaar on the open ground still known as *Fusha e Sahatit*, the Field of the Clock. Some thirty metres tall, with a wooden belfry and a lead-covered roof, it is raised to call the five daily prayers and to keep the market's time.

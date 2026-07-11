@@ -24,42 +24,20 @@ sources:
 order: 1
 featured: true
 gallery:
-  - src: ../../../assets/photos/bazaarPano.jpg
-    alt: "Wide view of the Grand Bazaar with the Hadum Mosque at its head."
-    caption: "The bazaar with the Hadum Mosque at its head."
+  - src: ../../../assets/photos/ownBazaar.jpg
+    alt: "The Çarshia bazaar street at dusk — timber-fronted shops along the cobbles."
+    caption: "The bazaar street at dusk."
     credit:
-      author: "Shkëlzen Rexha (Valed Promotion)"
-      source: "Wikimedia Commons"
-      license: "CC BY-SA 3.0"
-      licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AGjakova_-_%C3%87arshia_e_Madhe_-_Big_Baazar_Panorama.JPG"
-  - src: ../../../assets/photos/bazaarStreet.jpg
-    alt: "A rebuilt lane of low timber-fronted shops in the bazaar."
-    caption: "A rebuilt lane of shops."
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
+  - src: ../../../assets/photos/ownBazaar2.jpg
+    alt: "A bazaar lane with a man resting outside a shop under a dramatic sky."
+    caption: "A quiet hour in the bazaar."
     credit:
-      author: "Bdx"
-      source: "Wikimedia Commons"
-      license: "CC0"
-      licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/"
-      url: "https://commons.wikimedia.org/wiki/File%3AStreet_in_the_Old_Bazaar_of_Gjakova%2C_2025.jpg"
-  - src: ../../../assets/photos/bazaarCobbles.jpg
-    alt: "The cobbled paving of the old bazaar between rows of shops."
-    caption: "The cobbled lanes of the Çarshia."
-    credit:
-      author: "OrgenKelmendi"
-      source: "Wikimedia Commons"
-      license: "CC BY-SA 4.0"
-      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AKalldr%C3%ABmi_i_Qarshis%C3%AB.jpg"
-  - src: ../../../assets/photos/bazaarCarpenter.jpg
-    alt: "A carpenter at work among cradles in his bazaar workshop."
-    caption: "A carpenter's workshop — the old crafts endure."
-    credit:
-      author: "Edakaja"
-      source: "Wikimedia Commons"
-      license: "CC BY-SA 3.0"
-      licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AGjakovar_carpenter.JPG"
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
   - src: ../../../assets/photos/devojka.jpg
     alt: "A 1913 studio portrait of a young woman of Gjakova in elaborate traditional costume and coin jewellery."
     caption: "A woman of Gjakova in traditional dress and filigree, 1913 — the bazaar craftsmen's work, worn."
@@ -68,6 +46,15 @@ gallery:
       source: "Wikimedia Commons"
       license: "Public domain"
       url: "https://commons.wikimedia.org/wiki/File%3ADevojka_iz_%C4%90akovice.jpg"
+  - src: ../../../assets/photos/bazaarWar99.jpg
+    alt: "Gjakova's Old Bazaar in ruins in 1999 — gutted, roofless shops along the cobbled street, a few people returning."
+    caption: "The bazaar in ruins soon after the 1999 fire."
+    credit:
+      author: "Shkëlzen Rexha"
+      source: "Wikimedia Commons"
+      license: "CC BY-SA 3.0"
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
+      url: "https://commons.wikimedia.org/wiki/File%3AGjakova_1999.jpg"
 ---
 
 Gjakova did not grow around a bazaar so much as grow *out* of one. The **Grand Bazaar** — *Çarshia e Madhe* — is the city's oldest institution and still its loudest: a kilometre of cobbled lanes where the day is measured in the ring of a coppersmith's hammer, the resin smell of cut timber, and the slow patter of bargaining. To walk its length is to walk the floor plan of the old town itself.

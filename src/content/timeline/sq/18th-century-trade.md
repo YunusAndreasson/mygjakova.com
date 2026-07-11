@@ -11,15 +11,13 @@ sources:
     url: https://monumentetkulturore.com/gjakove/teresia-urbanistike-carshia-e-madhe/
   - label: 'Komuna e Gjakovës — Historiku'
     url: https://kk.rks-gov.net/gjakove/qyteti-2/historiku-2/
-image: ../../../assets/photos/bazaarCarpenter.jpg
-imageAlt: "Një mjeshtër duke punuar mes djepave dhe drurit në një punishte të çarshisë."
-imageCaption: "Një punishte zdrukthtari — zanatet që e bënë pasurinë e Gjakovës."
+image: ../../../assets/photos/ownBazaar2.jpg
+imageAlt: "Një rrugicë e çarshisë me dyqane me fasada druri, një burrë i ulur para njërit nën një qiell dramatik."
+imageCaption: "Çarshia e Madhe — zanatet dhe tregtia që e bënë pasurinë e Gjakovës."
 imageCredit:
-  author: "Edakaja"
-  source: "Wikimedia Commons"
-  license: "CC BY-SA 3.0"
-  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
-  url: "https://commons.wikimedia.org/wiki/File%3AGjakovar_carpenter.JPG"
+  author: "Yunus Andreasson"
+  source: "@andreasson.photo"
+  url: "https://www.instagram.com/andreasson.photo/"
 ---
 
 Përgjatë shekullit të tetëmbëdhjetë *çarshia* arrin kulmin: gati një kilometër rrugicash me kalldrëm dhe ndonjë **pesëqind dyqane**, të renditura lirshëm sipas zanatit. Gjakova shtrihet në rrugën e karvanëve mes Shkodrës dhe Stambollit, dhe *esnafët* e saj — zejet e organizuara — ia bëjnë emrin.

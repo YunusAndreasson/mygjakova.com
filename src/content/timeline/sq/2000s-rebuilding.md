@@ -11,15 +11,13 @@ sources:
     url: https://monumentetkulturore.com/gjakove/teresia-urbanistike-carshia-e-madhe/
   - label: 'Kulla e orës në Gjakovë — Wikipedia (sq)'
     url: https://sq.wikipedia.org/wiki/Kulla_e_or%C3%ABs_n%C3%AB_Gjakov%C3%AB
-image: ../../../assets/photos/rebuilt2015.jpg
-imageAlt: "Një rrugë me kalldrëm dhe dyqane e restauruar në qytetin e vjetër të Gjakovës, 2015."
-imageCaption: "Një rrugicë e rinovuar në qytetin e vjetër të rindërtuar, 2015."
+image: ../../../assets/photos/ownBazaar.jpg
+imageAlt: "Një rrugicë e rindërtuar me kalldrëm e dyqane me fasada druri në çarshinë e vjetër të Gjakovës, në muzg."
+imageCaption: "Çarshia e rindërtuar, e ringritur dyqan pas dyqani."
 imageCredit:
-  author: "Bdx"
-  source: "Wikimedia Commons"
-  license: "CC BY-SA 4.0"
-  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
-  url: "https://commons.wikimedia.org/wiki/File%3AGjakova_renovated_old_town_2015.JPG"
+  author: "Yunus Andreasson"
+  source: "@andreasson.photo"
+  url: "https://www.instagram.com/andreasson.photo/"
 ---
 
 Përgjatë viteve 2000 **Çarshia e Madhe** rindërtohet — dyqan pas dyqani, mbi planin e saj origjinal të rrugëve, nga familjet që kthehen dhe nga organizma të trashëgimisë si Cultural Heritage without Borders. Materialet e vjetra — guri, druri dhe plumbi — përdoren sërish; më **2009** kulla e sahatit ngrihet edhe një herë mbi truallin e vet të vjetër.

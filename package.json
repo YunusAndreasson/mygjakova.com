@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "node scripts/gen-og.mjs && astro build",
+    "build": "node scripts/gen-icons.mjs && node scripts/gen-og.mjs && astro build",
     "check": "astro check",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
@@ -16,6 +16,7 @@
     "test:watch": "vitest",
     "preview": "astro preview",
     "og": "node scripts/gen-og.mjs",
+    "icons": "node scripts/gen-icons.mjs",
     "map:style": "node scripts/gen-map-style.mjs",
     "map:locator": "node scripts/gen-locator.mjs",
     "deploy": "astro check && pnpm build && wrangler pages deploy --branch main",

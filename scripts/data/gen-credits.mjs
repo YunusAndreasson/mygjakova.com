@@ -21,18 +21,23 @@ for (const [slug, gal] of Object.entries(places))
   for (const item of gal) add(item.image, `place · ${slug}`);
 add(about.image, 'about page');
 
-const rows = Object.values(images).map((img) => {
-  const lic = img.licenseUrl ? `[${img.license}](${img.licenseUrl})` : img.license;
-  const where = (usedIn[img.id] ?? ['(unused)']).join('; ');
-  return `| [${img.file.replace(/^File:/, '')}](${img.page}) | ${img.author} | ${lic} | ${where} |`;
-});
+const rows = Object.values(images)
+  .filter((img) => !img.local) // the site's own photography isn't a Wikimedia source
+  .map((img) => {
+    const lic = img.licenseUrl ? `[${img.license}](${img.licenseUrl})` : img.license;
+    const where = (usedIn[img.id] ?? ['(unused)']).join('; ');
+    return `| [${img.file.replace(/^File:/, '')}](${img.page}) | ${img.author} | ${lic} | ${where} |`;
+  });
 
 const md = `# Image credits & provenance
 
-Every photograph and scan on the site is a freely-licensed work from **Wikimedia
-Commons** (public-domain or Creative Commons), reused with attribution. This file
-is **generated** from \`scripts/data/image-manifest.mjs\` — do not edit by hand; run
-\`node scripts/data/gen-credits.mjs\` after changing the manifest.
+Many photographs, and all the scans, on the site are freely-licensed works from
+**Wikimedia Commons** (public-domain or Creative Commons), reused with attribution
+and listed below. The site's **own black-and-white photography** — by Yunus
+Andreasson, [@andreasson.photo](https://www.instagram.com/andreasson.photo/) — is
+credited in-site beside each figure and gallery, and is not part of this Wikimedia
+ledger. This file is **generated** from \`scripts/data/image-manifest.mjs\` — do not
+edit by hand; run \`node scripts/data/gen-credits.mjs\` after changing the manifest.
 
 Attribution also renders **in the site itself**: under each timeline/About figure,
 and in the "Image credits" panel beneath every place gallery (and in its lightbox).

@@ -25,24 +25,20 @@ order: 9
 featured: false
 draft: false
 gallery:
-  - src: ../../../assets/photos/mtnGjeravica.jpg
-    alt: "Snow-streaked peaks of Gjeravica and Maja e Strellcit."
-    caption: "Gjeravica, Kosovo's highest peak, with Maja e Strellcit."
+  - src: ../../../assets/photos/ownAccursed.jpg
+    alt: "A craggy peak of the Accursed Mountains under heavy storm cloud."
+    caption: "A peak of the Accursed Mountains under storm light."
     credit:
-      author: "Albinfo"
-      source: "Wikimedia Commons"
-      license: "CC BY 4.0"
-      licenseUrl: "https://creativecommons.org/licenses/by/4.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AGjeravica_and_Maja_e_Strellcit_(WPWTR17).jpg"
-  - src: ../../../assets/photos/mtnProkletije.jpg
-    alt: "The Accursed Mountains seen across fields from the edge of Gjakova."
-    caption: "The Accursed Mountains seen from the edge of Gjakova."
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
+  - src: ../../../assets/photos/ownAccursed2.jpg
+    alt: "Shafts of light falling through cloud over the ridged valleys of the Accursed Mountains."
+    caption: "Light over the highland valleys."
     credit:
-      author: "Albinfo"
-      source: "Wikimedia Commons"
-      license: "CC BY 4.0"
-      licenseUrl: "https://creativecommons.org/licenses/by/4.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AProkletije_seen_from_Gjakova_outskirts_(WPWTR17).jpg"
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
   - src: ../../../assets/photos/nopcsaPass.jpg
     alt: "A 1903 photograph of a packhorse and a rifleman crossing a snowy mountain pass between Prizren and Gjakova."
     caption: "Crossing the Prizren–Gjakova highlands, 1903 — photographed by Franz Nopcsa."

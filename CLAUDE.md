@@ -26,7 +26,8 @@ culture. Static Astro site deployed to Cloudflare Pages.
 | `pnpm build` | Static build into `dist/`. |
 | `pnpm cf:preview` | Build + serve through `wrangler pages dev dist` (local CF runtime). |
 | `pnpm deploy` | `astro check && astro build && wrangler pages deploy --branch main`. |
-| `node scripts/gen-og.mjs` | Regenerate the default OG share image. |
+| `pnpm og` | Regenerate OG share cards (default + per-place) — brand clock-tower + `myGjakova` lockup. |
+| `pnpm icons` | Regenerate the favicon PNG / PWA icon set + Organization `logo.png` from `favicon.svg`. |
 
 ## i18n (RTL-ready)
 
@@ -100,6 +101,18 @@ a rewritten About page with a "Gjakova in brief" facts block; a self-hosted, til
 site-wide footer credit (`footer.credit`). CSP moved to the object form in `astro.config.mjs`
 to permit the map (all same-origin).
 
+**Visit page (`/visit`):** a plan-your-trip guide — an essentials "Good to know" strip,
+transport route cards, a hand-built temperature/rainfall **climatograph**
+(`ClimateChart.astro`, drawing real monthly normals from `src/lib/visitData.ts` as pure
+inline SVG — the `KosovoLocator` pattern, no chart library), a softened where-to-stay list
+and halal/prayer logistics. Building it extracted the tinted facts plate into a reusable
+`FactsPanel.astro` (now shared with the About page). The page is **fully bilingual** —
+`VisitView` carries `en` + `sq` copy blocks (and its figures), `ClimateChart` is localised
+(legend, source, screen-reader summary; month labels come from `Intl`), `/sq/visit` mirrors
+it, and the nav link shows in both locales. The static `404.astro` is locale-aware too: it
+ships both languages and a tiny script swaps to Albanian for `/sq/*` misses (one `404.html`
+serves every unmatched route).
+
 **Sourced imagery (Wikimedia Commons):** the timeline, place galleries and the About
 page are illustrated with freely-licensed photographs, scans and manuscripts (public
 domain / CC) — including rare archival material (the *Seyahatnâme* title page, an 1877
@@ -114,3 +127,18 @@ source of truth — files + verified attribution + placements), `fetch-images.mj
 `src/assets/photos/`, `apply-images.mjs` (writes front-matter; overwrite-safe), and
 `gen-credits.mjs` → [`docs/IMAGES.md`](docs/IMAGES.md) (the provenance ledger). Hero
 plates on place pages remain original illustrated artwork, not sourced photos.
+
+**SEO & structured data:** the technical baseline (per-locale `<title>`, self-referential
+canonical, `hreflang` for all 4 locales + `x-default`, OG/Twitter, locale-specific OG cards)
+lives in `BaseLayout.astro`. Structured data is a single JSON-LD `@graph` per page: a
+site-wide `WebSite` + `Organization` (publisher), an auto-computed `BreadcrumbList` (derived
+in `BaseLayout` from the path + page title — no per-route wiring), `TouristAttraction` on
+place guides (`src/lib/placeJsonLd.ts`), and `CollectionPage`+`ItemList` on the places index
+and timeline. Shared node builders are in [`src/lib/jsonLd.ts`](src/lib/jsonLd.ts). Brand
+assets all derive from `public/favicon.svg` (the Clock Tower): `pnpm icons` emits the
+favicon-PNG/PWA/`apple-touch-icon` set + `logo.png` (Organization logo + manifest), and OG
+cards use the same clock-tower + `myGjakova` lockup. Also: per-locale RSS feeds
+(`src/pages/**/rss.xml.ts`), sitemap `priority`/`changefreq`/`lastmod` (`astro.config.mjs`
+`serialize`), `public/site.webmanifest`, and `public/_headers` (immutable asset caching +
+security headers; `X-Frame-Options` there is the real clickjacking guard, since the Astro CSP
+ships as `<meta>` where `frame-ancestors` is ignored). Full map: [`docs/SEO.md`](docs/SEO.md).

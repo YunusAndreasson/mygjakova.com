@@ -11,15 +11,13 @@ sources:
     url: https://en.wikipedia.org/wiki/Old_Bazaar,_Gjakova
   - label: 'Kulla e orës në Gjakovë — Wikipedia (sq)'
     url: https://sq.wikipedia.org/wiki/Kulla_e_or%C3%ABs_n%C3%AB_Gjakov%C3%AB
-image: ../../../assets/photos/rebuilt2015.jpg
-imageAlt: "A restored cobbled street of shops in Gjakova's old town in 2015."
-imageCaption: "A renovated lane in the rebuilt old town, 2015."
+image: ../../../assets/photos/ownBazaar.jpg
+imageAlt: "A rebuilt cobbled lane of timber-fronted shops in Gjakova's old bazaar at dusk."
+imageCaption: "The rebuilt Çarshia, raised again shop by shop."
 imageCredit:
-  author: "Bdx"
-  source: "Wikimedia Commons"
-  license: "CC BY-SA 4.0"
-  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0"
-  url: "https://commons.wikimedia.org/wiki/File%3AGjakova_renovated_old_town_2015.JPG"
+  author: "Yunus Andreasson"
+  source: "@andreasson.photo"
+  url: "https://www.instagram.com/andreasson.photo/"
 ---
 
 Through the 2000s the **Çarshia e Madhe** is rebuilt — shop by shop, on its original street plan, by returning families and heritage bodies such as Cultural Heritage without Borders. The old materials of stone, timber and lead are used again; in **2009** the clock tower is raised once more on its old ground.

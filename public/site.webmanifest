@@ -1,0 +1,16 @@
+{
+  "name": "myGjakova — a cultural guide to the old city",
+  "short_name": "myGjakova",
+  "description": "An elegant guide to the old culture of Gjakova, Kosovo — its bazaar, mosques, stone houses and the people who shaped them.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f1e7",
+  "theme_color": "#f6f1e7",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

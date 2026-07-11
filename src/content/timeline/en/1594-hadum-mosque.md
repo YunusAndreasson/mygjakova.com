@@ -11,15 +11,13 @@ sources:
     url: https://en.wikipedia.org/wiki/Old_Bazaar,_Gjakova
   - label: 'Hadum Mosque — Wikipedia'
     url: https://en.wikipedia.org/wiki/Hadum_Mosque
-image: ../../../assets/photos/bazaarPano.jpg
-imageAlt: "Panorama of Gjakova's Grand Bazaar with the domed Hadum Mosque rising at its centre."
-imageCaption: "The bazaar grew around Süleyman Aga's endowment, the Hadum Mosque at its head."
+image: ../../../assets/photos/ownHadum.jpg
+imageAlt: "The arched, painted portico of the Hadum Mosque at dusk, a cypress beside it."
+imageCaption: "Süleyman Aga's endowment — the Hadum Mosque the bazaar grew around."
 imageCredit:
-  author: "Shkëlzen Rexha (Valed Promotion)"
-  source: "Wikimedia Commons"
-  license: "CC BY-SA 3.0"
-  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
-  url: "https://commons.wikimedia.org/wiki/File%3AGjakova_-_%C3%87arshia_e_Madhe_-_Big_Baazar_Panorama.JPG"
+  author: "Yunus Andreasson"
+  source: "@andreasson.photo"
+  url: "https://www.instagram.com/andreasson.photo/"
 ---
 
 In **1003 AH — 1594–95 —** Gjakova is raised to the rank of *kasaba*, a market town. The man who makes it one is **Hadum Sylejman Aga** (Hadım Süleyman Ağa *Bizebân*, "the mute"), a court official born a Christian boy in the nearby village of Guska, taken into the *devshirme*, and risen to the household of Sultan Murad III. He endows a *vakëf* — a charitable foundation — that plants a mosque, a college, a library, a school, a timekeeper's room, a bathhouse, an inn and a row of shops on the open plain in a single stroke. The bazaar grows up around them; the town follows.

@@ -256,9 +256,44 @@ const hasCredits = images.some((img) => img.caption || creditText(img.credit));
     background: transparent;
     max-inline-size: min(92vw, 64rem);
     max-block-size: 92vh;
+    /* Modern open/close animation for the native <dialog>: a fade + small lift,
+       with the backdrop fading alongside. `allow-discrete` lets `display` and
+       `overlay` animate so the dialog stays visible through its exit; the
+       @starting-style block supplies the entry "from" state. Progressive: where
+       unsupported it simply opens instantly, and prefers-reduced-motion collapses
+       the duration via the global override. */
+    opacity: 0;
+    transform: scale(0.97) translateY(0.5rem);
+    transition:
+      opacity var(--dur) var(--ease),
+      transform var(--dur) var(--ease),
+      overlay var(--dur) var(--ease) allow-discrete,
+      display var(--dur) var(--ease) allow-discrete;
+  }
+  .lightbox[open] {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  @starting-style {
+    .lightbox[open] {
+      opacity: 0;
+      transform: scale(0.97) translateY(0.5rem);
+    }
   }
   .lightbox::backdrop {
+    background: rgb(28 25 21 / 0);
+    transition:
+      background var(--dur) var(--ease),
+      overlay var(--dur) var(--ease) allow-discrete,
+      display var(--dur) var(--ease) allow-discrete;
+  }
+  .lightbox[open]::backdrop {
     background: rgb(28 25 21 / 0.86);
+  }
+  @starting-style {
+    .lightbox[open]::backdrop {
+      background: rgb(28 25 21 / 0);
+    }
   }
   .lightbox__fig {
     margin: 0;

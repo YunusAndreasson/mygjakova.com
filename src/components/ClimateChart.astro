@@ -1,0 +1,287 @@
+---
+/**
+ * Gjakova climate graph — a climatograph drawn as a single inline SVG, the way
+ * KosovoLocator.astro draws the locator: build-time numbers (src/lib/visitData.ts)
+ * → hand-rolled SVG, no charting library, no client JS, nothing for the CSP to
+ * allow. Average daily high/low temperature reads as a filled band with two
+ * lines; monthly rainfall reads as faint bars behind it. Month labels come from
+ * Intl so the axis localises itself.
+ */
+import { climate, climateSource } from '~/lib/visitData';
+import { type Locale } from '~/i18n/utils';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+
+// Component chrome strings (en + sq); falls back to en for any other locale.
+const copy = {
+  en: {
+    tempLegend: 'Daily high–low (°C)',
+    rainLegend: 'Rainfall (mm)',
+    source: 'Source',
+  },
+  sq: {
+    tempLegend: 'Maksimum–minimum ditor (°C)',
+    rainLegend: 'Reshjet (mm)',
+    source: 'Burimi',
+  },
+  de: {
+    tempLegend: 'Höchst- und Tiefstwerte (°C)',
+    rainLegend: 'Niederschlag (mm)',
+    source: 'Quelle',
+  },
+  tr: {
+    tempLegend: 'Günlük en yüksek–en düşük (°C)',
+    rainLegend: 'Yağış (mm)',
+    source: 'Kaynak',
+  },
+};
+const c = copy[lang as keyof typeof copy] ?? copy.en;
+
+// --- Geometry (logical units; the SVG scales to its container) --------------
+const W = 720;
+const H = 300;
+const PADL = 44; // room for the °C axis
+const PADR = 20;
+const PADT = 16;
+const PADB = 44; // room for the month axis
+const plotL = PADL;
+const plotR = W - PADR;
+const plotT = PADT;
+const plotB = H - PADB;
+const plotW = plotR - plotL;
+const plotH = plotB - plotT;
+
+const n = climate.length;
+const step = plotW / n;
+const xAt = (i: number) => plotL + step * (i + 0.5);
+
+// Temperature axis: a little headroom past the observed −3…30 °C range.
+const T_MIN = -5;
+const T_MAX = 35;
+const yTemp = (t: number) => plotB - ((t - T_MIN) / (T_MAX - T_MIN)) * plotH;
+const tempGuides = [0, 10, 20, 30];
+
+// Rainfall axis (independent of temperature, as climatographs are). Bars use
+// ~0.6 of the plot height so a wet December stays clearly behind the band.
+const P_MAX = 100;
+const barH = (p: number) => (p / P_MAX) * plotH * 0.6;
+const barW = step * 0.5;
+
+const r1 = (v: number) => Math.round(v * 10) / 10;
+const highPts = climate.map((m, i) => `${r1(xAt(i))},${r1(yTemp(m.high))}`);
+const lowPts = climate.map((m, i) => `${r1(xAt(i))},${r1(yTemp(m.low))}`);
+// Band: down the highs, back along the lows.
+const bandPts = [...highPts, ...[...lowPts].reverse()].join(' ');
+
+// --- Derived facts for the accessible description ---------------------------
+const longName = (i: number) =>
+  new Intl.DateTimeFormat(lang, { month: 'long' }).format(new Date(2024, i, 1));
+const narrowName = (i: number) =>
+  new Intl.DateTimeFormat(lang, { month: 'narrow' }).format(new Date(2024, i, 1));
+
+const warmest = climate.reduce((a, b) => (b.high > a.high ? b : a));
+const coolest = climate.reduce((a, b) => (b.high < a.high ? b : a));
+const coldestNight = climate.reduce((a, b) => (b.low < a.low ? b : a));
+const wettest = climate.reduce((a, b) => (b.precip > a.precip ? b : a));
+const driest = climate.reduce((a, b) => (b.precip < a.precip ? b : a));
+
+// The screen-reader summary, per locale; month names localise via Intl.
+const ariaLabel =
+  lang === 'sq'
+    ? `Grafik klimatik për Gjakovën. Temperaturat mesatare maksimale ngjiten nga rreth ${coolest.high}°C ` +
+      `në ${longName(coolest.month)} deri në ${warmest.high}°C në ${longName(warmest.month)}, me net ` +
+      `rreth ${coldestNight.low}°C në ${longName(coldestNight.month)}. Reshjet kulmojnë rreth ` +
+      `${wettest.precip} mm në ${longName(wettest.month)} dhe janë më të pakta, rreth ${driest.precip} mm, ` +
+      `në ${longName(driest.month)}.`
+    : lang === 'de'
+    ? `Klimadiagramm für Gjakova. Die durchschnittlichen Tageshöchstwerte steigen von etwa ${coolest.high} °C ` +
+      `im ${longName(coolest.month)} auf ${warmest.high} °C im ${longName(warmest.month)}, mit Nächten ` +
+      `um ${coldestNight.low} °C im ${longName(coldestNight.month)}. Der Niederschlag erreicht seinen ` +
+      `Höhepunkt bei rund ${wettest.precip} mm im ${longName(wettest.month)} und ist am geringsten, etwa ` +
+      `${driest.precip} mm, im ${longName(driest.month)}.`
+    : lang === 'tr'
+    ? `Gjakova için iklim grafiği. Ortalama günlük en yüksek sıcaklıklar ${longName(coolest.month)} ayında ` +
+      `yaklaşık ${coolest.high} °C iken ${longName(warmest.month)} ayında ${warmest.high} °C değerine yükselir; ` +
+      `geceler ${longName(coldestNight.month)} ayında ${coldestNight.low} °C dolayındadır. Yağış ` +
+      `${longName(wettest.month)} ayında yaklaşık ${wettest.precip} mm ile en yüksek, ${longName(driest.month)} ` +
+      `ayında ise yaklaşık ${driest.precip} mm ile en düşük düzeydedir.`
+    : `Climate chart for Gjakova. Average daily highs climb from about ${coolest.high}°C in ` +
+      `${longName(coolest.month)} to ${warmest.high}°C in ${longName(warmest.month)}, with nights ` +
+      `near ${coldestNight.low}°C in ${longName(coldestNight.month)}. Rainfall peaks around ` +
+      `${wettest.precip} mm in ${longName(wettest.month)} and is lightest, about ${driest.precip} mm, ` +
+      `in ${longName(driest.month)}.`;
+---
+
+<figure class="climate">
+  <svg
+    class="climate__svg"
+    viewBox={`0 0 ${W} ${H}`}
+    role="img"
+    aria-label={ariaLabel}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* Temperature gridlines + °C labels */}
+    {
+      tempGuides.map((t) => (
+        <g class="climate__guide">
+          <line x1={plotL} y1={r1(yTemp(t))} x2={plotR} y2={r1(yTemp(t))} />
+          <text class="climate__ytick" x={plotL - 8} y={r1(yTemp(t)) + 4} text-anchor="end">
+            {t}
+          </text>
+        </g>
+      ))
+    }
+
+    {/* Rainfall bars (behind the temperature band) */}
+    {
+      climate.map((m, i) => (
+        <rect
+          class="climate__bar"
+          x={r1(xAt(i) - barW / 2)}
+          y={r1(plotB - barH(m.precip))}
+          width={r1(barW)}
+          height={r1(barH(m.precip))}
+          rx="2"
+        />
+      ))
+    }
+
+    {/* Temperature high–low band + the two lines */}
+    <polygon class="climate__band" points={bandPts} />
+    <polyline
+      class="climate__line climate__line--high"
+      points={highPts.join(' ')}
+      vector-effect="non-scaling-stroke"
+    />
+    <polyline
+      class="climate__line climate__line--low"
+      points={lowPts.join(' ')}
+      vector-effect="non-scaling-stroke"
+    />
+
+    {/* Baseline + month labels */}
+    <line class="climate__axis" x1={plotL} y1={plotB} x2={plotR} y2={plotB} />
+    {
+      climate.map((m, i) => (
+        <text class="climate__xtick" x={r1(xAt(i))} y={plotB + 18} text-anchor="middle">
+          {narrowName(m.month)}
+        </text>
+      ))
+    }
+  </svg>
+
+  <div class="climate__legend" aria-hidden="true">
+    <span class="climate__key climate__key--temp">{c.tempLegend}</span>
+    <span class="climate__key climate__key--rain">{c.rainLegend}</span>
+  </div>
+
+  <figcaption class="climate__caption">
+    {c.source}:{' '}
+    <a href={climateSource.url} target="_blank" rel="noopener noreferrer">climate-data.org</a>
+  </figcaption>
+</figure>
+
+<style>
+  .climate {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  .climate__svg {
+    inline-size: 100%;
+    block-size: auto;
+    overflow: visible;
+  }
+
+  /* Temperature gridlines + axis */
+  .climate__guide line {
+    stroke: var(--color-line);
+    stroke-width: 1;
+  }
+  .climate__axis {
+    stroke: var(--color-sand-400);
+    stroke-width: 1.25;
+  }
+  .climate__ytick,
+  .climate__xtick {
+    font-family: var(--font-sans);
+    fill: var(--color-sand-600);
+  }
+  .climate__ytick {
+    font-size: 12px;
+  }
+  .climate__xtick {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* Rainfall — quiet brass bars sitting behind the temperature band */
+  .climate__bar {
+    fill: var(--color-brass-300);
+    opacity: 0.55;
+  }
+
+  /* Temperature — a soft terracotta band with a firm high line and lighter low */
+  .climate__band {
+    fill: var(--color-terracotta-500);
+    opacity: 0.14;
+  }
+  .climate__line {
+    fill: none;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .climate__line--high {
+    stroke: var(--color-terracotta-500);
+    stroke-width: 2.5;
+  }
+  .climate__line--low {
+    stroke: var(--color-terracotta-400);
+    stroke-width: 2;
+    stroke-dasharray: 1 5;
+  }
+
+  /* Legend */
+  .climate__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-lg);
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    color: var(--color-sand-700);
+  }
+  .climate__key {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+  }
+  .climate__key::before {
+    content: '';
+    inline-size: 0.85rem;
+    block-size: 0.85rem;
+    border-radius: 3px;
+  }
+  .climate__key--temp::before {
+    background: color-mix(in oklab, var(--color-terracotta-500) 28%, transparent);
+    border: 2px solid var(--color-terracotta-500);
+  }
+  .climate__key--rain::before {
+    background: var(--color-brass-300);
+  }
+
+  .climate__caption {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--color-sand-600);
+  }
+  .climate__caption a {
+    color: var(--color-terracotta-600);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+</style>

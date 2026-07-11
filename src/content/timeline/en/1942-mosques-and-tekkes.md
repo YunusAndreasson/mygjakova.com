@@ -1,5 +1,5 @@
 ---
-title: A city of mosques and tekkes
+title: A city of mosques
 year: 1942
 displayDate: "1942"
 era: 20th century
@@ -11,15 +11,13 @@ sources:
     url: https://www.tyb.org.tr/camiler-ve-tekkeler-sehri-yakova-13135h.htm
   - label: 'Bektashism in Albania — Wikipedia'
     url: https://en.wikipedia.org/wiki/Bektashism_in_Albania
-image: ../../../assets/photos/tekkeShejhEmin.jpg
-imageAlt: "The whitewashed Shejh Emin tekke, an 18th-century dervish lodge in Gjakova."
-imageCaption: "The Shejh Emin (Saadi) tekke of 1730 — one of the lodges counted in 1942."
+image: ../../../assets/photos/ownMosque.jpg
+imageAlt: "A tall, slender mosque minaret rising against a dramatic evening sky, mountains behind."
+imageCaption: "A minaret over the old town — Gjakova's many mosques, counted in 1942."
 imageCredit:
-  author: "Nentor Oseku"
-  source: "Wikimedia Commons"
-  license: "CC BY-SA 3.0"
-  licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0"
-  url: "https://commons.wikimedia.org/wiki/File%3AShejh_Emin_Tekke_of_the_XVIII_ct._-_Gjakov%C3%AB.JPG"
+  author: "Yunus Andreasson"
+  source: "@andreasson.photo"
+  url: "https://www.instagram.com/andreasson.photo/"
 ---
 
 For all its upheavals, Gjakova carries its old character deep into the twentieth century: a city of faith. A **1942** count records around **thirty-nine mosques** and **fourteen *tekkes*** — dervish lodges — belonging to six different mystical orders, in a town of some thirty-five thousand people. Among them are houses of the **Saadi**, **Rifai** and **Bektashi** orders; the **Great Tekke** (*Teqja e Madhe*), a Saadi lodge, is the best known of all. Few places in the Balkans were so thickly woven with prayer-houses and Sufi lodges; for centuries the call to prayer had set the rhythm of the bazaar below.

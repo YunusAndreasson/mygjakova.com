@@ -1,0 +1,25 @@
+# Cloudflare Pages headers (copied verbatim into dist/). Caching + security
+# headers that complement the Astro-emitted CSP. The CSP itself stays with Astro
+# (delivered as a <meta> with per-build hashes) — but `frame-ancestors` is
+# ignored in <meta> form, so X-Frame-Options below restores clickjacking
+# protection as a real header.
+
+# Fingerprinted, content-hashed assets never change — cache them forever.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Self-hosted map tiles + glyphs (PMTiles range requests): large and stable.
+/map/*
+  Cache-Control: public, max-age=2592000
+
+# Generated share images + icons: stable names, refreshed on rebuild.
+/og/*
+  Cache-Control: public, max-age=604800
+
+# Security headers on every response.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  Permissions-Policy: geolocation=(), camera=(), microphone=()

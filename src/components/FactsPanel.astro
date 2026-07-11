@@ -1,0 +1,115 @@
+---
+/**
+ * A quiet tinted "facts" plate — a labelled <dl> of term/value pairs over the
+ * faint eight-point-star lattice. Used for "Gjakova in brief" on the About page
+ * and the "Good to know" essentials on the Visit page, so the look lives in one
+ * place. (Scoped Astro styles don't reach a child component's root, which is the
+ * reason this is its own component rather than markup styled from a parent.)
+ */
+interface Fact {
+  term: string;
+  value: string;
+}
+
+interface Props {
+  title: string;
+  facts: Fact[];
+  note?: string;
+  /** Optional heading id; defaults to a slug of the title. */
+  id?: string;
+}
+
+const { title, facts, note, id } = Astro.props;
+const headingId =
+  id ?? `facts-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'panel'}`;
+---
+
+<aside class="facts" aria-labelledby={headingId}>
+  <h2 class="facts__title" id={headingId}>{title}</h2>
+  <dl class="facts__grid">
+    {
+      facts.map((fact) => (
+        <div class="fact">
+          <dt class="fact__term">{fact.term}</dt>
+          <dd class="fact__value">{fact.value}</dd>
+        </div>
+      ))
+    }
+  </dl>
+  {note && <p class="facts__note">{note}</p>}
+</aside>
+
+<style>
+  .facts {
+    position: relative;
+    isolation: isolate;
+    /* Query container: the grid below goes two-column based on the panel's own
+       width, not the viewport — so it stays single-column in the narrow About
+       sidebar and splits only when the panel itself is genuinely wide. */
+    container-type: inline-size;
+    background: var(--color-sand-200);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    padding: var(--space-pad-card);
+    box-shadow: var(--shadow-soft);
+  }
+  /* Faint star lattice inside the panel — clipped to the rounded corners and
+     sitting under the text (the calmest of the motif surfaces). */
+  .facts::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: inherit;
+    overflow: hidden;
+    background-image: var(--motif-star);
+    background-size: 64px 64px;
+    opacity: 0.045;
+    mix-blend-mode: multiply;
+  }
+  .facts__title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--color-ink);
+    margin: 0 0 var(--space-lg);
+  }
+  .facts__grid {
+    margin: 0;
+    display: grid;
+    gap: var(--space-md) var(--space-xl);
+  }
+  @container (min-width: 30rem) {
+    .facts__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .fact {
+    display: grid;
+    gap: var(--space-3xs);
+    padding-block-start: var(--space-sm);
+    border-block-start: 1px solid var(--color-line);
+  }
+  .fact__term {
+    font-family: var(--font-sans);
+    font-size: var(--text-eyebrow);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--color-terracotta-600);
+  }
+  .fact__value {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: var(--color-sand-800);
+  }
+  .facts__note {
+    margin: var(--space-lg) 0 0;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--color-sand-600);
+  }
+</style>

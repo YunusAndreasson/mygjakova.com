@@ -1,6 +1,7 @@
 ---
 import LanguageSwitcher from '~/components/LanguageSwitcher.astro';
 import { useTranslations, localizedPath, stripLocale, type Locale } from '~/i18n/utils';
+import type { UIKey } from '~/i18n/ui';
 
 interface Props {
   lang: Locale;
@@ -10,12 +11,13 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const barePath = stripLocale(Astro.url.pathname);
 
-const items = [
+const items: { key: UIKey; path: string }[] = [
   { key: 'nav.home', path: '/' },
   { key: 'nav.places', path: '/places' },
   { key: 'nav.timeline', path: '/timeline' },
+  { key: 'nav.visit', path: '/visit' },
   { key: 'nav.about', path: '/about' },
-] as const;
+];
 
 const isActive = (path: string) =>
   path === '/' ? barePath === '/' : barePath === path || barePath.startsWith(path + '/');
@@ -40,7 +42,7 @@ const isActive = (path: string) =>
           <path class="bm-hand" d="M11 20 L11 16.9 M11 20 L13.1 20.9" />
         </svg>
       </span>
-      <span class="brand__name">{t('site.name')}</span>
+      <span class="brand__name"><span class="brand__name-my">my</span>{t('site.name')}</span>
     </a>
 
     <nav class="nav nav--desktop" aria-label={t('a11y.primaryNav')}>
@@ -152,6 +154,13 @@ const isActive = (path: string) =>
     font-weight: 600;
     font-size: 1.4rem;
     letter-spacing: -0.01em;
+  }
+  /* "my" lead-in: lighter weight + terracotta, tucked tight against the
+     bold city name so the lockup reads as one word — myGjakova. */
+  .brand__name-my {
+    font-weight: 400;
+    color: var(--color-terracotta-500);
+    margin-inline-end: -0.012em;
   }
 
   .nav--desktop ul {

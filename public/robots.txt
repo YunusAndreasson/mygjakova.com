@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://gjakova.pages.dev/sitemap-index.xml
+Sitemap: https://mygjakova.com/sitemap-index.xml

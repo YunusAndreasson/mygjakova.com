@@ -14,24 +14,20 @@ order: 9
 featured: false
 draft: false
 gallery:
-  - src: ../../../assets/photos/mtnGjeravica.jpg
-    alt: "Majat me brazda bore të Gjeravicës dhe Majës së Strellcit."
-    caption: "Gjeravica, maja më e lartë e Kosovës, me Majën e Strellcit."
+  - src: ../../../assets/photos/ownAccursed.jpg
+    alt: "Një majë shkëmbore e Bjeshkëve të Nemuna nën re të rënda stuhie."
+    caption: "Një majë e Bjeshkëve të Nemuna nën dritën e stuhisë."
     credit:
-      author: "Albinfo"
-      source: "Wikimedia Commons"
-      license: "CC BY 4.0"
-      licenseUrl: "https://creativecommons.org/licenses/by/4.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AGjeravica_and_Maja_e_Strellcit_(WPWTR17).jpg"
-  - src: ../../../assets/photos/mtnProkletije.jpg
-    alt: "Bjeshkët e Nemuna parë përtej arave nga skaji i Gjakovës."
-    caption: "Bjeshkët e Nemuna parë nga skaji i Gjakovës."
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
+  - src: ../../../assets/photos/ownAccursed2.jpg
+    alt: "Rreze drite që bien përmes reve mbi luginat me kreshta të Bjeshkëve të Nemuna."
+    caption: "Dritë mbi luginat malore."
     credit:
-      author: "Albinfo"
-      source: "Wikimedia Commons"
-      license: "CC BY 4.0"
-      licenseUrl: "https://creativecommons.org/licenses/by/4.0"
-      url: "https://commons.wikimedia.org/wiki/File%3AProkletije_seen_from_Gjakova_outskirts_(WPWTR17).jpg"
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
   - src: ../../../assets/photos/nopcsaPass.jpg
     alt: "Një fotografi e vitit 1903 me një kalë barre dhe një burrë me pushkë duke kaluar një qafë mali me borë mes Prizrenit dhe Gjakovës."
     caption: "Duke kaluar malësinë Prizren–Gjakovë, 1903 — fotografuar nga Franz Nopcsa."

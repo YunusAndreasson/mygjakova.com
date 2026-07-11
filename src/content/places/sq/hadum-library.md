@@ -18,15 +18,13 @@ order: 3
 featured: false
 draft: false
 gallery:
-  - src: ../../../assets/photos/hadumSchool.jpg
-    alt: "Ndërtesa e rindërtuar e shkollës dhe bibliotekës së kompleksit të Hadumit."
-    caption: "Biblioteka dhe shkolla e rindërtuar e kompleksit të Hadumit."
+  - src: ../../../assets/photos/ownLibrary.jpg
+    alt: "Ndërtesa tetëkëndëshe e rindërtuar e bibliotekës së Hadumit mes pemëve, me çati tjegullash e bazament guri."
+    caption: "Ndërtesa e rindërtuar e bibliotekës së Hadumit."
     credit:
-      author: "albinfo"
-      source: "Wikimedia Commons"
-      license: "CC0"
-      licenseUrl: "https://creativecommons.org/publicdomain/zero/1.0/"
-      url: "https://commons.wikimedia.org/wiki/File%3AXhamia_e_Hadumit_%E2%80%93_minaret_and_school_(OSCAL19_trip).jpg"
+      author: "Yunus Andreasson"
+      source: "@andreasson.photo"
+      url: "https://www.instagram.com/andreasson.photo/"
   - src: ../../../assets/photos/hadumWar.jpg
     alt: "Qyteti i vjetër i Gjakovës në rrënoja pas zjarrit të vitit 1999 që dogji bibliotekën e Hadumit."
     caption: "Qyteti i vjetër pas zjarrit të vitit 1999 që shkatërroi bibliotekën."
