@@ -14,7 +14,7 @@ renders through it, so meta tags and the JSON-LD graph are emitted once, per loc
 | `<title>` | `BaseLayout` | `"{title} — {siteName}"`, or `"{siteName} — {tagline}"` on the home page. |
 | `<meta name="description">` | page `description` prop → `t('site.description')` fallback | Every section sets its own; About uses `about.description`. |
 | Canonical | `BaseLayout` | Self-referential, absolute, per-locale (built from `stripLocale` + `localizedPath`). |
-| `hreflang` | `BaseLayout` | All 4 locales + `x-default` on every page. |
+| `hreflang` | `BaseLayout` | All 5 locales + `x-default` on every page. |
 | Open Graph / Twitter | `BaseLayout` | Full set; `og:image` is the per-place card or `og-default.jpg`; `og:locale` from `ogLocales`. |
 | Icons / manifest | `BaseLayout` `<head>` | SVG + PNG favicon, `apple-touch-icon`, `site.webmanifest`. |
 | RSS autodiscovery | `BaseLayout` `<head>` | `<link rel="alternate" type="application/rss+xml">`, per locale. |

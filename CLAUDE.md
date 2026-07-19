@@ -24,6 +24,7 @@ culture. Static Astro site deployed to Cloudflare Pages.
 | `pnpm lint:fix` | Biome — apply safe lint fixes and format. |
 | `pnpm test` | Vitest unit tests (`tests/**`). |
 | `pnpm build` | Static build into `dist/`. |
+| `pnpm verify` | Full check in one command: lint + check + test + build. Run before finishing. |
 | `pnpm cf:preview` | Build + serve through `wrangler pages dev dist` (local CF runtime). |
 | `pnpm deploy` | `astro check && astro build && wrangler pages deploy --branch main`. |
 | `pnpm og` | Regenerate OG share cards (default + per-place) — brand clock-tower + `myGjakova` lockup. |
@@ -31,7 +32,9 @@ culture. Static Astro site deployed to Cloudflare Pages.
 
 ## i18n (RTL-ready)
 
-- Locales: `en` (default, no prefix) + `sq` (`/sq/...`). **Arabic (`ar`) is planned**;
+- Locales: `en` (default, no prefix) + `sq`, `de`, `tr`, `sv` (`/sq/...`, `/de/...`,
+  `/tr/...`, `/sv/...`). Every locale is fully mirrored — routes, UI dictionary, view
+  copy blocks and content. **Arabic (`ar`) is planned**;
   the stack is RTL-ready — add `ar` to `astro.config.mjs` `i18n.locales`, add an `ar`
   dictionary in `src/i18n/ui.ts`, and add an Arabic-subset font. `getDirection()`
   already returns `rtl` for it and `<html dir>` flips automatically.
@@ -41,6 +44,12 @@ culture. Static Astro site deployed to Cloudflare Pages.
 - UI strings: `src/i18n/ui.ts` (`en` is the source of truth; missing keys fall back to
   `en`). Helpers in `src/i18n/utils.ts` (`useTranslations`, `localizedPath`,
   `getDirection`, `stripLocale`).
+- **Maker byline is locale-aware**: `src/lib/maker.ts` is the single source —
+  `makerName(lang)` gives *Jonas* Andreasson on `sv` and *Yunus* Andreasson everywhere
+  else, `makerCredit(lang)` is the own-photography byline. Used by `<meta name="author">`,
+  the JSON-LD `Person`, the About colophon and the Visit/About figure credits; the sv
+  markdown front-matter `author:` fields say Jonas too. The Person node keeps one `@id`
+  and carries the other form in `alternateName`, so the locales resolve to one identity.
 
 ## Content
 
@@ -69,8 +78,8 @@ sources; cross-check dates; cite endonyms per locale.
 
 ## Structure
 
-- `src/pages/` = EN routes; `src/pages/sq/` = Albanian mirrors. Pages are thin wrappers
-  that render a **view** from `src/components/views/` with an explicit `lang` prop.
+- `src/pages/` = EN routes; `src/pages/sq|de|tr|sv/` = the locale mirrors. Pages are thin
+  wrappers that render a **view** from `src/components/views/` with an explicit `lang` prop.
 - Add a new page once per locale; add new place/timeline content by dropping markdown
   into the locale folders (no code change).
 
@@ -106,12 +115,15 @@ transport route cards, a hand-built temperature/rainfall **climatograph**
 (`ClimateChart.astro`, drawing real monthly normals from `src/lib/visitData.ts` as pure
 inline SVG — the `KosovoLocator` pattern, no chart library), a softened where-to-stay list
 and halal/prayer logistics. Building it extracted the tinted facts plate into a reusable
-`FactsPanel.astro` (now shared with the About page). The page is **fully bilingual** —
-`VisitView` carries `en` + `sq` copy blocks (and its figures), `ClimateChart` is localised
-(legend, source, screen-reader summary; month labels come from `Intl`), `/sq/visit` mirrors
-it, and the nav link shows in both locales. The static `404.astro` is locale-aware too: it
-ships both languages and a tiny script swaps to Albanian for `/sq/*` misses (one `404.html`
-serves every unmatched route).
+`FactsPanel.astro` (now shared with the About page). The page is **translated into every
+locale** — `VisitView` carries one copy block per locale (and its figures), `ClimateChart`
+is localised (legend, source, screen-reader summary; month labels come from `Intl`), each
+`/<locale>/visit` mirrors it, and the nav link shows everywhere. Locale copy blocks may
+**differ in what they include**, not just in wording: `halalTitle`/`halal` are optional and
+the Swedish edition omits that section entirely (its practical cash note moved into the sv
+`arrivalNote`), so the section renders only where the block defines it. The static `404.astro` is
+locale-aware too: it ships all five languages and a tiny script swaps copy based on the
+first path segment (one `404.html` serves every unmatched route).
 
 **Sourced imagery (Wikimedia Commons):** the timeline, place galleries and the About
 page are illustrated with freely-licensed photographs, scans and manuscripts (public
@@ -129,7 +141,7 @@ source of truth — files + verified attribution + placements), `fetch-images.mj
 plates on place pages remain original illustrated artwork, not sourced photos.
 
 **SEO & structured data:** the technical baseline (per-locale `<title>`, self-referential
-canonical, `hreflang` for all 4 locales + `x-default`, OG/Twitter, locale-specific OG cards)
+canonical, `hreflang` for all 5 locales + `x-default`, OG/Twitter, locale-specific OG cards)
 lives in `BaseLayout.astro`. Structured data is a single JSON-LD `@graph` per page: a
 site-wide `WebSite` + `Organization` (publisher), an auto-computed `BreadcrumbList` (derived
 in `BaseLayout` from the path + page title — no per-route wiring), `TouristAttraction` on
