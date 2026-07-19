@@ -16,6 +16,7 @@ export const languages = {
   sq: 'Shqip',
   de: 'Deutsch',
   tr: 'Türkçe',
+  sv: 'Svenska',
   // ar: 'العربية',  // deferred — RTL-ready
 } as const;
 
@@ -33,6 +34,7 @@ export const ogLocales = {
   sq: 'sq_AL',
   de: 'de_DE',
   tr: 'tr_TR',
+  sv: 'sv_SE',
   // ar: 'ar_AR',  // deferred — RTL-ready
 } as const satisfies Record<keyof typeof languages, string>;
 
@@ -351,6 +353,85 @@ export const ui = {
     'notFound.title': 'Bu yol hiçbir yere çıkmıyor',
     'notFound.lede': 'Aradığınız sayfa haritadan kaybolmuş.',
     'notFound.cta': 'Ana sayfaya dön',
+  },
+
+  sv: {
+    'site.name': 'Gjakova',
+    'site.tagline': 'En kulturguide till den gamla staden',
+    'site.description':
+      'En stillsam guide till den gamla kulturen i Gjakova, Kosovo — basaren, moskéerna, stenhusen och människorna som formade dem.',
+
+    'nav.home': 'Hem',
+    'nav.places': 'Platser',
+    'nav.timeline': 'Tidslinje',
+    'nav.about': 'Om guiden',
+    'nav.visit': 'Besök',
+
+    'a11y.skip': 'Hoppa till innehållet',
+    'a11y.menu': 'Meny',
+    'a11y.close': 'Stäng',
+    'a11y.primaryNav': 'Huvudmeny',
+    'a11y.footerNav': 'Sidfot',
+    'a11y.followNav': 'Följ skaparen',
+    'lang.label': 'Språk',
+
+    'footer.rights': 'Alla rättigheter förbehållna.',
+    'footer.tagline': 'Vi håller den gamla stadens berättelser nära.',
+    'footer.credit': 'En inofficiell guide av Jonas Andreasson',
+
+    'home.hero.eyebrow': 'Kosovo · Dukagjin-slätten',
+    'home.hero.title': 'Gjakova, en stad som bevarats av sina hantverkare',
+    'home.hero.lede':
+      'Vandra Balkans längsta gamla basar, följ sekler av sten och timmer och möt den levande kulturen i en av Kosovos mest omskrivna städer.',
+    'home.hero.cta.places': 'Utforska platserna',
+    'home.hero.cta.timeline': 'Följ tidslinjen',
+
+    'home.places.eyebrow': 'Var du börjar',
+    'home.places.title': 'Platser att känna till',
+    'home.places.lede':
+      'Guider till de landmärken som bär stadens minne — från Stora basaren till de gamla kvarterens kullor.',
+
+    'places.title': 'Platser',
+    'places.lede':
+      'Omsorgsfulla guider till gatorna, moskéerna, husen och monumenten i gamla Gjakova.',
+    'places.viewGuide': 'Läs guiden',
+    'places.backToPlaces': 'Alla platser',
+    'places.related': 'Närliggande platser',
+    'sources.title': 'Källor',
+
+    'map.ariaLabel': 'Interaktiv karta',
+    'map.viewOsm': 'Visa på OpenStreetMap',
+    'toc.title': 'På den här sidan',
+    'gallery.title': 'Bildgalleri',
+    'gallery.view': 'Visa bilden',
+    'gallery.prev': 'Föregående bild',
+    'gallery.next': 'Nästa bild',
+    'gallery.close': 'Stäng',
+    'gallery.credits': 'Bildkällor',
+    'actions.share': 'Dela',
+    'actions.directions': 'Vägbeskrivning',
+    'actions.directionsGoogle': 'Google Maps',
+    'actions.directionsApple': 'Apple Maps',
+
+    'timeline.title': 'En tidslinje över Gjakova',
+    'timeline.lede': 'Sekler av handel, tro, eld och återuppbyggnad, berättade som en enda tråd.',
+
+    'about.title': 'Om den här guiden',
+    'about.description':
+      'Vem som gjort den här guiden till Gjakova och varför — källorna bakom den, och basaren, moskéerna och stenkullorna som bär den gamla stadens minne.',
+
+    'visit.title': 'Att besöka Gjakova',
+    'visit.description':
+      'Hur du tar dig till Gjakova, var du bor i gamla staden, när du bör komma och vad som är bra att veta på plats — en handfast guide till västra Kosovos osmanska kulturstad.',
+
+    'locator.title': 'Var Gjakova ligger i Kosovo',
+    'locator.alt':
+      'Karta över Kosovo med Gjakova utmärkt i väster och huvudstaden Pristina i nordost.',
+    'locator.capital': 'Pristina',
+
+    'notFound.title': 'Den här vägen leder ingenstans',
+    'notFound.lede': 'Sidan du letade efter har vandrat bort från kartan.',
+    'notFound.cta': 'Tillbaka till start',
   },
 } as const;
 

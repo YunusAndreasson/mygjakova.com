@@ -15,6 +15,7 @@ import hadumCourt from '~/assets/photos/ownHadum.jpg';
 import hadumPortico from '~/assets/photos/ownHadumPortico.jpg';
 import { mosques } from '~/lib/visitData';
 import { useTranslations, localizedPath, type Locale } from '~/i18n/utils';
+import { makerCredit } from '~/lib/maker';
 
 interface Props {
   lang: Locale;
@@ -82,8 +83,9 @@ interface VisitCopy {
   stayIntro: string;
   stays: Stay[];
   stayNote: string;
-  halalTitle: string;
-  halal: Halal;
+  /** Optional: the Swedish edition leaves the halal/prayer section out entirely. */
+  halalTitle?: string;
+  halal?: Halal;
   mosquesTitle: string;
   mosquesIntro: string;
   mosquesNote: string;
@@ -841,7 +843,180 @@ const trCopy: VisitCopy = {
   ],
 };
 
-const copy: Partial<Record<Locale, VisitCopy>> = { en: enCopy, sq: sqCopy, de: deCopy, tr: trCopy };
+const svCopy: VisitCopy = {
+  eyebrow: 'Planera ditt besök',
+  lede: 'Hur du tar dig till Gjakova, var du bor i gamla staden, när du bör komma och vad som är bra att veta på plats — en lugn, handfast guide för en resa i osmanska kulturspår.',
+
+  essentialsTitle: 'Bra att veta',
+  essentials: [
+    { term: 'Valuta', value: 'Euro (€) — kontanter först; ha småsedlar med dig' },
+    { term: 'Språk', value: 'Albanska; turkiska och viss engelska i gamla staden' },
+    { term: 'Ta sig runt', value: 'Kompakt och gångvänligt — ingen bil behövs i staden' },
+    {
+      term: 'Visum',
+      value: 'Viseringsfritt för EU/Schengen, Storbritannien och många fler (svenskt pass inkluderat)',
+    },
+    { term: 'Tidszon', value: 'Centraleuropeisk tid (UTC+1; +2 på sommaren)' },
+    { term: 'El', value: 'Uttag typ C/F, 230 V — vanlig europeisk stickpropp' },
+    { term: 'Nödnummer', value: '112 — polis, ambulans och räddningstjänst' },
+  ],
+  essentialsNote:
+    'Kosovo använder euro trots att landet står utanför eurosamarbetet. Detaljer kan ändras — kontrollera officiella källor innan du reser.',
+
+  gettingTitle: 'Att ta sig dit',
+  gettingIntro:
+    'Gjakova har ingen egen flygplats; de flesta kommer med buss från Pristina eller flyger till Tirana. Staden ligger på Dukagjin-slätten i västra Kosovo — nära till både Prizren och Peja.',
+  routes: [
+    {
+      origin: 'Pristina',
+      badge: 'Flygplats PRN',
+      meta: 'Buss via Fushë Kosovë · ~1,5 tim · ~6 €',
+      note: 'Kosovos huvudsakliga knutpunkt; bussar går ungefär varje halvtimme. Från flygplatsen byter du nära Fushë Kosovë.',
+    },
+    {
+      origin: 'Tirana',
+      badge: 'Flygplats TIA',
+      meta: 'Direktbuss · ~2 tim 40 · ~18–20 €',
+      note: 'En daglig buss Tiranas flygplats → Gjakova, körd av flera bolag. Ofta de billigaste flygen från Europa.',
+    },
+    {
+      origin: 'Prizren',
+      meta: 'Buss · ~1 tim · ~3 €',
+      note: 'Täta avgångar; ett enkelt tillägg om du ändå reser i sydväst.',
+    },
+    {
+      origin: 'Peja (Pejë)',
+      meta: 'Buss · ~40 min · ~3 €',
+      note: 'Ungefär var femtonde minut; porten till Rugovaravinen och Prokletijebergen.',
+    },
+  ],
+  arrivalNote:
+    'Väl framme är centrum gångavstånd — du behöver ingen bil. Betala kontant i euro; småsedlar är praktiska i basaren, på bussarna och i gästhusen, och kortbetalning fungerar ojämnt i gamla staden.',
+
+  whenTitle: 'När du bör åka',
+  whenIntro:
+    'Gjakova har varma, ganska torra somrar och kalla, snörika vintrar. Diagrammet visar årets form — temperaturen som ett band, månadsnederbörden som staplar.',
+  climateLead:
+    'Slutet av maj–juni och september är de bästa lägena: varmt, behagligt att gå i och lätt att boka. Juli–augusti är hetast (över 30 °C) och mest välbesökt — delvis för att diasporan återvänder och staden fylls av utlandsregistrerade bilar — så boka i god tid. Vintern är kall och snöig: fin för en kort, stämningsfull vistelse.',
+  seasonPickLabel: 'Bästa läget',
+  seasons: [
+    {
+      name: 'Vår · apr–jun',
+      pick: true,
+      note: 'Grönt, milt och i blom; senvåren är idealisk för att vandra basaren.',
+    },
+    {
+      name: 'Sommar · jul–aug',
+      pick: false,
+      note: 'Hett och livligt men mest välbesökt — boka boende i god tid.',
+    },
+    {
+      name: 'Höst · sep–okt',
+      pick: true,
+      note: 'Varmt, stilla och gyllene; september är kanske årets allra bästa månad.',
+    },
+    {
+      name: 'Vinter · nov–mar',
+      pick: false,
+      note: 'Kallt och snörikt, med korta dagar — men stilla, stämningsfulla gator.',
+    },
+  ],
+
+  stayTitle: 'Var du bor',
+  stayIntro:
+    'Det mest passande valet för en resa i osmanska kulturspår är att bo mitt i den levande historien — i en restaurerad kulla (det traditionella tornhuset i sten) eller i en familjedriven bujtina, samlade kring gamla staden och Stora basaren, med gångavstånd till Hadum-moskén. Alla nedan drivs av familjer.',
+  stays: [
+    {
+      name: 'Kulla Dula Guesthouse',
+      type: 'Historisk kulla',
+      best: 'Bäst för en äkta osmansk vistelse',
+      note: 'En genuin, flera hundra år gammal kulla som drivs varmt av sin familj; självhushåll med kök, ungefär fem minuters promenad från basaren.',
+    },
+    {
+      name: 'Hotel Kulla e Sahatit',
+      type: 'Hotell i gamla staden',
+      best: 'Bästa hotellet i gamla staden',
+      note: 'Några steg från Klocktornet i den historiska kärnan — tyst och skinande rent, hotellkomfort mitt i basaren.',
+    },
+    {
+      name: 'Bujtina Zhaveli',
+      type: 'Familjedriven bujtina',
+      best: 'Bästa gästhuset för pengarna',
+      note: 'Man tas emot som hos sina egna far- och morföräldrar; enkelt, rent, på en lugn gata knappt tio minuter från basaren.',
+    },
+    {
+      name: 'Premium Apartments · Garden GuestHouse',
+      type: 'Självhushåll',
+      best: 'Bäst om du vill laga egen mat',
+      note: 'Centrala lägenheter med kök och egen parkering — praktiskt för längre vistelser.',
+    },
+    {
+      name: 'Hotel Driada',
+      type: 'Nära busstationen',
+      best: 'Smidigast vid ankomst',
+      note: 'Modernt och bekvämt, ~15 minuters promenad till gamla staden men nära busstationen — enkelt om du kommer sent.',
+    },
+  ],
+  stayNote:
+    'Omdömen, priser och detaljer ändras — kontrollera innan du bokar. Listan håller sig medvetet till familjedrivna kulla- och bujtinaboenden; det ofta fotograferade Hotel Çarshia e Jupave är slående vackert men hör till en annan kategori.',
+
+  // The Swedish edition leaves out the halal & prayer section the other locales
+  // carry — the practical euro/cash note it also held now sits in `arrivalNote`.
+
+  mosquesTitle: 'Gjakovas moskéer',
+  mosquesIntro:
+    'Gamla staden är tät av moskéer, med Hadum i mitten — och nyare reser sig i kvarteren utanför. Tryck på en markör för att se namnet; Hadum visas i terrakotta, övriga i mässing.',
+  mosquesNote:
+    'En interaktiv karta — skrolla eller nyp för att zooma, dra för att panorera. Nyare moskéer som Xhamia e Qylit ligger norr om den historiska kärnan.',
+
+  figures: {
+    qyl: {
+      alt: 'Xhamia e Qylits smala minaret mot en dramatisk himmel, med berg bortom.',
+      caption: 'Xhamia e Qylit, norr om gamla staden.',
+    },
+    gate: {
+      alt: 'Hadum-moskéns gård sedd genom den tunga basarporten, med en cypress bortom.',
+      caption: 'Hadum, genom porten.',
+    },
+    mosque: {
+      alt: 'En smal moskéminaret som reser sig mot en dramatisk kvällshimmel.',
+      caption: 'En minaret i skymningen.',
+    },
+    window: {
+      alt: 'En målad fönsternisch inne i Hadum-moskén, inramad av kalligrafi och blomstermotiv.',
+      caption: 'En målad fönsternisch.',
+    },
+    courtyard: {
+      alt: 'Hadum-moskéns arkadgård — randiga stenbågar, en cypress och en kullerstensgång under en dramatisk himmel.',
+      caption: 'Arkadgården.',
+    },
+    portico: {
+      alt: 'Hadum-moskéns dekorerade portik — randiga bågar, skuren ornamentik och kalligrafi som ramar in ingången.',
+      caption: 'Den dekorerade portiken.',
+    },
+  },
+
+  sources: [
+    { label: 'Gjakova — Wikivoyage', url: 'https://en.wikivoyage.org/wiki/Gjakova' },
+    {
+      label: 'Kosovo (att ta sig runt) — Wikivoyage',
+      url: 'https://en.wikivoyage.org/wiki/Kosovo',
+    },
+    { label: 'Tirana → Gjakova — Rome2Rio', url: 'https://www.rome2rio.com/s/Tirana/Gjakova' },
+    {
+      label: 'Klimatnormaler — climate-data.org',
+      url: 'https://en.climate-data.org/europe/republic-of-kosovo/gjakove/gjakove-6159/',
+    },
+  ],
+};
+
+const copy: Partial<Record<Locale, VisitCopy>> = {
+  en: enCopy,
+  sq: sqCopy,
+  de: deCopy,
+  tr: trCopy,
+  sv: svCopy,
+};
 const c = copy[lang] ?? enCopy;
 
 // The Hadum anchors the mosque map (terracotta centre marker); the rest render
@@ -852,11 +1027,7 @@ const mosqueMarkers = mosques
   .map((m) => ({ lat: m.lat, lng: m.lng, label: m.name }));
 
 // The site's own photography credit (matches the timeline / place-gallery byline).
-const ownCredit = {
-  author: 'Yunus Andreasson',
-  source: '@andreasson.photo',
-  url: 'https://www.instagram.com/andreasson.photo/',
-};
+const ownCredit = makerCredit(lang);
 ---
 
 <PageHeader eyebrow={c.eyebrow} title={t('visit.title')} lede={c.lede} />
@@ -929,25 +1100,33 @@ const ownCredit = {
     <p class="visit__note">{c.stayNote}</p>
   </section>
 
-  <section class="visit__section" data-reveal aria-labelledby="visit-halal">
-    <h2 class="visit__h" id="visit-halal">{c.halalTitle}</h2>
-    <div class="prose visit__halal">
-      <p>{c.halal.intro}</p>
-      <h3>{c.halal.foodHead}</h3>
-      {c.halal.food.map((p) => <p>{p}</p>)}
-      <h3>{c.halal.prayerHead}</h3>
-      <p>
-        {c.halal.prayerBefore}<a href={localizedPath(lang, '/places/hadum-mosque')}
-          >{c.halal.mosqueLabel}</a
-        >{c.halal.prayerMid}<a href={localizedPath(lang, '/places/grand-bazaar')}
-          >{c.halal.bazaarLabel}</a
-        >{c.halal.prayerAfter}
-      </p>
-      {c.halal.prayerMore.map((p) => <p>{p}</p>)}
-      <h3>{c.halal.moneyHead}</h3>
-      {c.halal.money.map((p) => <p>{p}</p>)}
-    </div>
-  </section>
+  {
+    c.halal && (
+      <section class="visit__section" data-reveal aria-labelledby="visit-halal">
+        <h2 class="visit__h" id="visit-halal">
+          {c.halalTitle}
+        </h2>
+        <div class="prose visit__halal">
+          <p>{c.halal.intro}</p>
+          <h3>{c.halal.foodHead}</h3>
+          {c.halal.food.map((p) => (
+            <p>{p}</p>
+          ))}
+          <h3>{c.halal.prayerHead}</h3>
+          <p>
+            {c.halal.prayerBefore}<a href={localizedPath(lang, '/places/hadum-mosque')}>{c.halal.mosqueLabel}</a>{c.halal.prayerMid}<a href={localizedPath(lang, '/places/grand-bazaar')}>{c.halal.bazaarLabel}</a>{c.halal.prayerAfter}
+          </p>
+          {c.halal.prayerMore.map((p) => (
+            <p>{p}</p>
+          ))}
+          <h3>{c.halal.moneyHead}</h3>
+          {c.halal.money.map((p) => (
+            <p>{p}</p>
+          ))}
+        </div>
+      </section>
+    )
+  }
 
   <section class="visit__section" data-reveal aria-labelledby="visit-mosques">
     <h2 class="visit__h" id="visit-mosques">{c.mosquesTitle}</h2>

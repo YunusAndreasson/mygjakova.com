@@ -38,6 +38,11 @@ const copy = {
     rainLegend: 'Yağış (mm)',
     source: 'Kaynak',
   },
+  sv: {
+    tempLegend: 'Dygnets högsta–lägsta (°C)',
+    rainLegend: 'Nederbörd (mm)',
+    source: 'Källa',
+  },
 };
 const c = copy[lang as keyof typeof copy] ?? copy.en;
 
@@ -109,6 +114,12 @@ const ariaLabel =
       `geceler ${longName(coldestNight.month)} ayında ${coldestNight.low} °C dolayındadır. Yağış ` +
       `${longName(wettest.month)} ayında yaklaşık ${wettest.precip} mm ile en yüksek, ${longName(driest.month)} ` +
       `ayında ise yaklaşık ${driest.precip} mm ile en düşük düzeydedir.`
+    : lang === 'sv'
+    ? `Klimatdiagram för Gjakova. Medeltemperaturens dagshögsta stiger från omkring ${coolest.high} °C ` +
+      `i ${longName(coolest.month)} till ${warmest.high} °C i ${longName(warmest.month)}, med nätter ` +
+      `kring ${coldestNight.low} °C i ${longName(coldestNight.month)}. Nederbörden är som störst kring ` +
+      `${wettest.precip} mm i ${longName(wettest.month)} och som minst, omkring ${driest.precip} mm, ` +
+      `i ${longName(driest.month)}.`
     : `Climate chart for Gjakova. Average daily highs climb from about ${coolest.high}°C in ` +
       `${longName(coolest.month)} to ${warmest.high}°C in ${longName(warmest.month)}, with nights ` +
       `near ${coldestNight.low}°C in ${longName(coldestNight.month)}. Rainfall peaks around ` +

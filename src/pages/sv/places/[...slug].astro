@@ -1,0 +1,32 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import PlaceGuide from '~/components/views/PlaceGuide.astro';
+import { getPlaces, entrySlug } from '~/lib/collections';
+import { buildPlaceJsonLd } from '~/lib/placeJsonLd';
+
+export const getStaticPaths = (async () => {
+  const places = await getPlaces('sv');
+  return places.map((place) => ({
+    params: { slug: entrySlug(place.id) },
+    props: { place },
+  }));
+}) satisfies GetStaticPaths;
+
+const lang = 'sv' as const;
+const { place } = Astro.props;
+
+const origin = Astro.site ?? new URL(Astro.url.origin);
+const image = `/og/places/${lang}-${entrySlug(place.id)}.jpg`;
+const placeLd = buildPlaceJsonLd({
+  place,
+  lang,
+  url: new URL(Astro.url.pathname, origin).href,
+  origin: origin.href,
+  image: new URL(image, origin).href,
+});
+---
+
+<BaseLayout title={place.data.title} description={place.data.summary} image={image} jsonLd={placeLd}>
+  <PlaceGuide place={place} lang={lang} />
+</BaseLayout>

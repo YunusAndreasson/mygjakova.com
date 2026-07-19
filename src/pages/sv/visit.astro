@@ -1,0 +1,12 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import VisitView from '~/components/views/VisitView.astro';
+import { useTranslations } from '~/i18n/utils';
+
+const lang = 'sv' as const;
+const t = useTranslations(lang);
+---
+
+<BaseLayout title={t('visit.title')} description={t('visit.description')}>
+  <VisitView lang={lang} />
+</BaseLayout>

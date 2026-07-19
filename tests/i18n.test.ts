@@ -12,6 +12,7 @@ describe('isLocale', () => {
   it('accepts configured locales', () => {
     expect(isLocale('en')).toBe(true);
     expect(isLocale('sq')).toBe(true);
+    expect(isLocale('sv')).toBe(true);
   });
   it('rejects unknown values and undefined', () => {
     expect(isLocale('xx')).toBe(false);
@@ -66,5 +67,6 @@ describe('useTranslations', () => {
   it('translates a known key per locale', () => {
     expect(useTranslations('en')('nav.places')).toBe('Places');
     expect(useTranslations('sq')('nav.places')).toBe('Vendet');
+    expect(useTranslations('sv')('nav.places')).toBe('Platser');
   });
 });

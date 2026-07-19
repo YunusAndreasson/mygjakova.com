@@ -26,6 +26,11 @@ import { ui } from '~/i18n/ui';
       <p class="notfound__lede">{ui.tr['notFound.lede']}</p>
       <a class="btn btn--primary" href="/tr/">{ui.tr['notFound.cta']}</a>
     </div>
+    <div class="notfound__msg" data-nf-lang="sv" hidden>
+      <h1 class="notfound__title">{ui.sv['notFound.title']}</h1>
+      <p class="notfound__lede">{ui.sv['notFound.lede']}</p>
+      <a class="btn btn--primary" href="/sv/">{ui.sv['notFound.cta']}</a>
+    </div>
   </section>
 </BaseLayout>
 
@@ -35,7 +40,7 @@ import { ui } from '~/i18n/ui';
   // and swap to the Albanian copy when the missing page was under /sq/.
   const p = location.pathname;
   const seg = p.split('/')[1];
-  if (seg === 'sq' || seg === 'de' || seg === 'tr') {
+  if (seg === 'sq' || seg === 'de' || seg === 'tr' || seg === 'sv') {
     document.documentElement.lang = seg;
     document.querySelector('[data-nf-lang="en"]')?.setAttribute('hidden', '');
     document.querySelector(`[data-nf-lang="${seg}"]`)?.removeAttribute('hidden');

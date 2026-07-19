@@ -27,7 +27,7 @@ export default defineConfig({
 
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'sq', 'de', 'tr'],
+    locales: ['en', 'sq', 'de', 'tr', 'sv'],
     routing: {
       // English at "/", Albanian at "/sq/". No prefix for the default locale.
       prefixDefaultLocale: false,
@@ -111,13 +111,13 @@ export default defineConfig({
     sitemap({
       i18n: {
         defaultLocale: 'en',
-        locales: { en: 'en', sq: 'sq', de: 'de', tr: 'tr' },
+        locales: { en: 'en', sq: 'sq', de: 'de', tr: 'tr', sv: 'sv' },
       },
       // Freshness + importance hints. lastmod is the build time (a per-page
       // lastmod would require reading content mtimes — a future refinement).
       // Priority: home > places (the core content) > everything else.
       serialize(item) {
-        const bare = new URL(item.url).pathname.replace(/^\/(sq|de|tr)(?=\/|$)/, '') || '/';
+        const bare = new URL(item.url).pathname.replace(/^\/(sq|de|tr|sv)(?=\/|$)/, '') || '/';
         // Match the page canonicals (directory-style, trailing slash) so every
         // sitemap URL returns 200 directly instead of 308-redirecting on
         // Cloudflare Pages. Applies to the entry and its hreflang alternates.

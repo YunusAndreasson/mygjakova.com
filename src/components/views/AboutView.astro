@@ -7,6 +7,7 @@ import FactsPanel from '~/components/FactsPanel.astro';
 import manuscript from '~/assets/photos/evliyaMs.jpg';
 import cityCenter from '~/assets/photos/ownCityCenter.jpg';
 import { useTranslations, localizedPath, type Locale } from '~/i18n/utils';
+import { MAKER_URL, makerCredit, makerName } from '~/lib/maker';
 
 // The Seyahatnâme title page that illustrates the 1662 pull-quote. Public-domain
 // scan (printed ed.) via Wikimedia Commons — credited beneath the figure.
@@ -17,13 +18,6 @@ const manuscriptCredit = {
   url: 'https://commons.wikimedia.org/wiki/File:Seyahatname_C6_Evliya_%C3%87elebi.jpg',
 };
 
-// The site's own photography credit (matches the timeline / gallery byline).
-const ownCredit = {
-  author: 'Yunus Andreasson',
-  source: '@andreasson.photo',
-  url: 'https://www.instagram.com/andreasson.photo/',
-};
-
 interface Props {
   lang: Locale;
 }
@@ -31,10 +25,13 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 
+// The site's own photography credit (matches the timeline / gallery byline).
+const ownCredit = makerCredit(lang);
+
 // The person and portfolio behind the guide. Kept as data so the name appears
 // once, in the colophon, rather than throughout the copy.
-const authorName = 'Yunus Andreasson';
-const authorUrl = 'https://andreassonphoto.com';
+const authorName = makerName(lang);
+const authorUrl = MAKER_URL;
 
 interface Fact {
   term: string;
@@ -272,6 +269,56 @@ const copy: Record<Locale, AboutCopy> = {
     closingPhotoAlt:
       'Eski şehirde, bir ışık huzmesiyle aydınlanan, sık yapraklar arasından yükselen taş bir merdiven.',
     closingPhotoCaption: 'Eski şehirde merdivenler.',
+  },
+  sv: {
+    eyebrow: 'En inofficiell guide',
+    lede: 'En personlig, inofficiell guide till Gjakovas gamla stad — basaren, moskéerna och det osmanska och islamiska förflutna som formade dem.',
+    intro: [
+      'Det här är en långsam guide till Gjakova, en stad i västra Kosovo vars gamla kultur fortfarande lever i basaren, i moskéerna och i stenhusen uppe i höglandet omkring. Den dröjer särskilt vid den gamla staden och vid det osmanska och islamiska arv som gav staden dess form.',
+      'I stället för att jaga varje sevärdhet rör sig guiden varsamt: några få platser, väl berättade, mot en enda sammanhängande historisk tråd. Syftet är att hjälpa dig läsa den gamla staden så som dess hantverkare gjorde — tålmodigt, och med respekt för det som blev kvar.',
+    ],
+    hook: {
+      eyebrow: 'Varför Gjakova',
+      title: 'En stad som har fått minnas sig själv',
+      quote:
+        'En blomstrande och tilldragande stad om 2 000 hus, alla byggda av sten med tak och trädgårdar … två rikt smyckade fredagsmoskéer, flera bönehus, några han med blytak, ett förtjusande badhus och omkring 300 bodar likt näktergalsbon.',
+      attribution: 'Evliya Çelebi, Seyahatnâme · 1662',
+      leadIn: 'De där 300 bodarna är ',
+      bazaarLabel: 'Stora basaren',
+      midText:
+        ' — redan hundra år gammal när resenären räknade dem, full av ”tusen slags hantverk”. Under en enda vecka 1999 brann det mesta ned; den restes igen, bod för bod, längs just de gränder du fortfarande kan gå. Intill den låg ',
+      libraryLabel: 'Hadum-biblioteket',
+      tailText:
+        ', vars hyllor rymde en litteratur som de flesta besökare aldrig får veta finns — albanska skriven med arabisk skrift — tills handskrifterna gick förlorade i samma brand. Gjakova är en stad som mer än en gång har varit tvungen att minnas sig själv, medvetet — och det är just det som gör en vandring genom den till något av ett återtagande.',
+    },
+    quoteImageAlt: 'Titelsidan i Evliya Çelebis Seyahatnâme, reseskildringen från 1662.',
+    quoteImageCaption: 'Evliya Çelebis Seyahatnâme (1662), skildringen som citeras här.',
+    factsTitle: 'Gjakova i korthet',
+    facts: [
+      { term: 'Region', value: 'Dukagjin-slätten, västra Kosovo' },
+      { term: 'Folkmängd', value: '~41 800 i staden; ~78 700 i hela kommunen' },
+      {
+        term: 'Tro',
+        value: 'Mestadels muslimsk, med Kosovos största katolska församling (~17 %)',
+      },
+      { term: 'Först omnämnd', value: '1485, som by med marknad; stad på 1590-talet' },
+      { term: 'Höjd', value: '375 m ö.h.' },
+      { term: 'Floder', value: 'Krena och Erenik, som rinner ut i Vita Drin' },
+      { term: 'Gamla basaren', value: 'Çarshia e Madhe, bland de äldsta i regionen' },
+    ],
+    factsNote:
+      'Folkmängden kommer från den kosovanska folkräkningen 2024; den religiösa fördelningen från folkräkningen 2011; årtal och historia vilar på de källor som anges genom hela guiden.',
+    colophonTitle: 'Vem som står bakom',
+    colophonLeadBefore: `Guiden sätts samman av ${authorName} — fotograf (`,
+    colophonLeadAfter:
+      '), inte historiker och ingen lokal myndighet. Den har vuxit fram ur återkommande besök under det senaste decenniet: långa promenader genom det gamla kvarteret, värmen hos människorna som bor där, och det de var generösa nog att lära en nyfiken besökare om sin stads förflutna.',
+    colophonRest: [
+      'Läs den alltså som en resenärs anteckningar snarare än som en slutgiltig skildring. Där den kan lutar den sig mot publicerade källor och lokal forskning — men alla fel är mina, och rättelser tas tacksamt emot.',
+      'Sajten är ett pågående arbete. Platser, fotografier och berättelser fortsätter att tillkomma.',
+    ],
+    closingPhotoAlt:
+      'En stentrappa som klättrar genom tät grönska i den gamla staden, upplyst av ett ljusstråk.',
+    closingPhotoCaption: 'Trappsteg i den gamla staden.',
   },
 };
 
