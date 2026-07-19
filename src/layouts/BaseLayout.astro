@@ -13,6 +13,7 @@ import {
 } from '~/i18n/utils';
 import { ogLocales, type UIKey } from '~/i18n/ui';
 import { buildBreadcrumbJsonLd, buildOrganization, buildPerson } from '~/lib/jsonLd';
+import { makerName } from '~/lib/maker';
 import '~/styles/global.css';
 
 interface Props {
@@ -88,7 +89,7 @@ const ldGraph = [
     publisher: { '@id': `${origin.href}#org` },
   },
   buildOrganization({ name: siteName, origin: origin.href }),
-  buildPerson(),
+  buildPerson(lang),
   ...(breadcrumb ? [breadcrumb] : []),
   ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []),
 ];
@@ -117,7 +118,7 @@ const ld = { '@context': 'https://schema.org', '@graph': ldGraph };
 
     <title>{pageTitle}</title>
     <meta name="description" content={desc} />
-    <meta name="author" content="Yunus Andreasson" />
+    <meta name="author" content={makerName(lang)} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <link rel="canonical" href={canonical.href} />

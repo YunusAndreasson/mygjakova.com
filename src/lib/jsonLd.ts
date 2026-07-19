@@ -1,6 +1,7 @@
 import type { CollectionEntry } from 'astro:content';
 import { localizedPath, type Locale } from '~/i18n/utils';
 import { entrySlug } from '~/lib/collections';
+import { MAKER_URL, makerName } from '~/lib/maker';
 
 /**
  * Shared schema.org node builders, merged into the page `@graph` by BaseLayout
@@ -18,21 +19,25 @@ type Node = Record<string, unknown>;
  * the maker's own hub (andreassonphoto.com), not this site's origin, so the same
  * identity node is referenced identically across every project he builds.
  */
-export const MAKER_PERSON_ID = 'https://andreassonphoto.com/#person';
+export const MAKER_PERSON_ID = `${MAKER_URL}/#person`;
 
 /**
- * Person node for the maker (Yunus Andreasson). Its `@id` is the maker's own hub
- * fragment — identical on every site he builds — so search engines can resolve
- * the guide's `creator` to one canonical identity. `sameAs` ties his social
- * profiles to that identity (the same links rendered in the footer's follow row).
+ * Person node for the maker. Its `@id` is the maker's own hub fragment —
+ * identical on every site he builds — so search engines can resolve the guide's
+ * `creator` to one canonical identity. `sameAs` ties his social profiles to that
+ * identity (the same links rendered in the footer's follow row). `name` follows
+ * the page locale (see `makerName`); the other form stays in `alternateName`, so
+ * the locale mirrors never read as two different people.
  */
-export function buildPerson(): Node {
+export function buildPerson(lang: Locale): Node {
+  const name = makerName(lang);
+  const other = name === makerName('en') ? makerName('sv') : makerName('en');
   return {
     '@type': 'Person',
     '@id': MAKER_PERSON_ID,
-    name: 'Yunus Andreasson',
-    alternateName: ['Jonas Yūnus Andrèasson'],
-    url: 'https://andreassonphoto.com',
+    name,
+    alternateName: ['Jonas Yūnus Andrèasson', other],
+    url: MAKER_URL,
     sameAs: [
       'https://github.com/YunusAndreasson',
       'https://x.com/YunusAndreasson',
