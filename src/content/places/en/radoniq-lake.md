@@ -1,9 +1,11 @@
 ---
 title: Radoniq Lake
 summary: Kosovo's second-largest body of water — a vast reservoir below the mountains that waters the Dukagjin plain and supplies the city, its quiet, undeveloped shore the nearest open scenery to Gjakova.
+metaTitle: "Radoniq Lake (Liqeni i Radoniqit), Kosovo — Guide & History"
+metaDescription: "Kosovo’s second-largest lake, 11 km from Gjakova: built 1977–86, about 30 m deep, a drinking-water reservoir — no swimming, but fishing is popular."
 category: nature
 hero: ../../../assets/places/radoniq-lake.png
-heroAlt: "A broad, calm reservoir at golden hour, wooded hills and a distant grey mountain wall behind, reeds in the foreground."
+heroAlt: "Radoniq Lake near Gjakova, a broad, calm reservoir at golden hour, wooded hills and a distant grey mountain wall behind, reeds in the foreground."
 era: Reservoir, 1977–1986
 coordinates:
   lat: 42.4875
@@ -45,7 +47,7 @@ gallery:
       url: "https://commons.wikimedia.org/wiki/File%3ARadoniqi_Lake_from_air_01.jpg"
 ---
 
-Not every lake is made by nature. **Radoniq Lake** — *Liqeni i Radoniqit* — is the broad sheet of water that lies below the mountains south-west of Gjakova, and it is entirely the work of human hands: an artificial reservoir, raised in the 1980s, that serves at once as the region's water supply and its nearest piece of open country.
+Not every lake is made by nature. **Radoniq Lake** — *Liqeni i Radoniqit* — is the broad sheet of water that lies below the mountains north of Gjakova, and it is entirely the work of human hands: an artificial reservoir, raised in the 1980s, that serves at once as the region's water supply and its nearest piece of open country.
 
 ## A lake that was built
 

@@ -1,6 +1,8 @@
 ---
 title: Radoniq-sjön
 summary: Kosovos näst största vattenyta — en väldig reservoar nedanför bergen som vattnar Dukagjin-slätten och försörjer staden, med en tyst, oexploaterad strand som är det närmaste öppna landskapet vid Gjakova.
+metaTitle: "Radoniq-sjön vid Gjakova, Kosovo — historia och besök"
+metaDescription: "Kosovos näst största sjö, 11 km från Gjakova: byggd 1977–86 som dricksvattenreservoar, cirka 30 m djup. Bad är inte tillåtet, men fiske är populärt."
 category: nature
 hero: ../../../assets/places/radoniq-lake.png
 heroAlt: "En bred, stilla reservoar i gyllene kvällsljus, med skogklädda kullar och en avlägsen grå bergvägg bakom och vass i förgrunden."
@@ -45,7 +47,7 @@ gallery:
       url: "https://commons.wikimedia.org/wiki/File%3ARadoniqi_Lake_from_air_01.jpg"
 ---
 
-Alla sjöar är inte naturens verk. **Radoniq-sjön** — *Liqeni i Radoniqit* — är den breda vattenyta som ligger nedanför bergen sydväst om Gjakova, och den är helt och hållet människohänders verk: en konstgjord reservoar, anlagd på 1980-talet, som på en gång är regionens vattentäkt och dess närmaste stycke öppet landskap.
+Alla sjöar är inte naturens verk. **Radoniq-sjön** — *Liqeni i Radoniqit* — är den breda vattenyta som ligger nedanför bergen norr om Gjakova, och den är helt och hållet människohänders verk: en konstgjord reservoar, anlagd på 1980-talet, som på en gång är regionens vattentäkt och dess närmaste stycke öppet landskap.
 
 ## En sjö som byggdes
 

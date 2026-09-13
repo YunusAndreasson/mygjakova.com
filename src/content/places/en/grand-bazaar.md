@@ -1,9 +1,11 @@
 ---
 title: The Grand Bazaar
 summary: The beating heart of old Gjakova — a kilometre of cobbled lanes lined with craftsmen's shops, the oldest and longest bazaar in Kosovo, burned in 1999 and rebuilt shop by shop.
+metaTitle: "Gjakova’s Old Bazaar (Çarshia e Madhe) — History & Guide"
+metaDescription: "Kosovo’s oldest and longest bazaar: a kilometre of cobbled lanes and craftsmen’s shops in Gjakova, burned in 1999 and rebuilt shop by shop. What to see."
 category: bazaar
 hero: ../../../assets/places/grand-bazaar.png
-heroAlt: "A long cobbled bazaar arcade of low timber-fronted craftsmen's shops receding into the distance, with a mosque dome and minaret at the far end."
+heroAlt: "Gjakova’s Grand Bazaar (Çarshia e Madhe): a long cobbled arcade of low timber-fronted craftsmen's shops receding into the distance, with a mosque dome and minaret at the far end."
 era: 16th century
 coordinates:
   lat: 42.3806

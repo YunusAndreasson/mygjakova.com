@@ -1,6 +1,8 @@
 ---
 title: Die Hadum-Moschee
 summary: Die spätosmanische Moschee am Kopf des Basars — ihr Inneres ein gemalter Garten aus Zypressen und Blumen, und die Stiftung, aus der die ganze Altstadt hervorging.
+metaTitle: "Hadum-Moschee in Gjakova (1594) — Geschichte & Malereien"
+metaDescription: "Die osmanische Moschee (1594–95) am Kopf des Basars von Gjakova: das wie ein Garten bemalte Innere, ihr Stifter, ein Eunuch, und die Stadt, die aus ihr wuchs."
 category: mosque
 hero: ../../../assets/places/hadum-mosque.png
 heroAlt: "Eine einkuppelige osmanische Moschee mit niedriger bleigrauer Kuppel und schlankem Minarett, ihre dreibogige Vorhalle mit Zypressen und Blumen bemalt, am Kopf des kopfsteingepflasterten Basars."

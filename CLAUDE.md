@@ -62,6 +62,9 @@ culture. Static Astro site deployed to Cloudflare Pages.
   markdown. When `hero` is absent, `PlaceholderPlate.astro` renders an intentional
   typographic/duotone "plate" (no image request) keyed by `category` — so the design
   reads as deliberate, not as a missing photo, until real photography arrives.
+- **Search titles:** places take optional `metaTitle` (full `<title>`, used verbatim) and
+  `metaDescription` (replaces `summary` in the meta description), worded around real search
+  queries — keep `title`/`summary` editorial. See [`docs/SEO.md`](docs/SEO.md).
 - **Citations:** both collections take a `sources: [{ label, url? }]` field. Cite real
   entries from [`docs/SOURCES.md`](docs/SOURCES.md). They render via `Sources.astro`
   (`variant="block"` on guides, `variant="inline"` on the timeline).

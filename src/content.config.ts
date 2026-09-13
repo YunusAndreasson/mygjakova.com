@@ -40,6 +40,14 @@ const places = defineCollection({
     z.object({
       title: z.string(),
       summary: z.string(),
+      /**
+       * Search-result overrides. `metaTitle` is the full <title> (no " — Gjakova"
+       * suffix is appended) and `metaDescription` replaces `summary` in the meta
+       * description — worded around what people actually search for (see
+       * docs/SEO.md), while `title`/`summary` stay editorial on the page itself.
+       */
+      metaTitle: z.string().optional(),
+      metaDescription: z.string().optional(),
       category: z.enum(PLACE_CATEGORIES),
       era: z.string().optional(),
       hero: image().optional(),

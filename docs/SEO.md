@@ -11,8 +11,9 @@ renders through it, so meta tags and the JSON-LD graph are emitted once, per loc
 
 | Signal | Source | Notes |
 | --- | --- | --- |
-| `<title>` | `BaseLayout` | `"{title} — {siteName}"`, or `"{siteName} — {tagline}"` on the home page. |
-| `<meta name="description">` | page `description` prop → `t('site.description')` fallback | Every section sets its own; About uses `about.description`. |
+| `<title>` | `BaseLayout` | `"{title} — {siteName}"`, or `"{siteName} — {tagline}"` on the home page — unless a `metaTitle` prop is passed, which is used verbatim (see *Search-intent titles* below). |
+| `<meta name="description">` | page `description` prop → `t('site.description')` fallback | Every section sets its own; About uses `about.description`; place guides prefer front-matter `metaDescription` over `summary`. |
+| Internal links | `localizedPath()` (`src/i18n/utils.ts`) | Always end in `/` (file routes like `/rss.xml` excepted), matching canonical + sitemap — a slashless link is a 308 hop and a duplicate URL in Search Console. |
 | Canonical | `BaseLayout` | Self-referential, absolute, per-locale (built from `stripLocale` + `localizedPath`). |
 | `hreflang` | `BaseLayout` | All 5 locales + `x-default` on every page. |
 | Open Graph / Twitter | `BaseLayout` | Full set; `og:image` is the per-place card or `og-default.jpg`; `og:locale` from `ogLocales`. |
@@ -20,6 +21,22 @@ renders through it, so meta tags and the JSON-LD graph are emitted once, per loc
 | RSS autodiscovery | `BaseLayout` `<head>` | `<link rel="alternate" type="application/rss+xml">`, per locale. |
 | `robots` | `BaseLayout` (`noindex` prop) | Only the 404 page is `noindex`. `public/robots.txt` allows all + points at the sitemap. |
 | Sitemap | `@astrojs/sitemap` (`astro.config.mjs`) | i18n-aware; `serialize` adds `priority`/`changefreq`/`lastmod`. |
+
+## Search-intent titles
+
+The editorial `title`/`summary` read well on the page but make weak search results
+(`Radoniq Lake — Gjakova`, 22 characters). So titles and descriptions that searchers see
+can be worded separately, from what Search Console shows people actually type:
+
+- **Place guides:** optional front-matter `metaTitle` (full `<title>`, ≤ 60 chars, no suffix
+  appended) and `metaDescription` (~130–155 chars), declared in `src/content.config.ts` and
+  passed by each `places/[...slug].astro` route. Lead with the name in the searcher's language
+  (e.g. *Liqeni i Radoniqit*, *Radoniq-See*), add the city/country, then the practical draw.
+- **Home + Visit:** `home.metaTitle` / `visit.metaTitle` in `src/i18n/ui.ts` (with
+  `site.description` / `visit.description`); the Visit titles answer "where is Gjakova?"
+  (*gjakova nerede*, *wo liegt gjakova*).
+- Only promise what the page covers. Re-check with the `google-search-console` skill
+  (`--site https://mygjakova.com/`, a URL-prefix property) a few weeks after a change.
 
 ## Structured data (JSON-LD `@graph`)
 

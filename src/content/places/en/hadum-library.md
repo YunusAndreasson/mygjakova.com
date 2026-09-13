@@ -3,7 +3,7 @@ title: The Hadum Library & Madrasa
 summary: The college and famed library beside the Hadum Mosque — for centuries the old city's house of learning, until its manuscripts burned in 1999. The building has risen again; the books are gone for good.
 category: monument
 hero: ../../../assets/places/hadum-library.png
-heroAlt: "A warm Ottoman library interior — arched windows with wooden lattice grilles, shelves of bound manuscripts, and an open Qur'an on a carved reading-stand."
+heroAlt: "The Hadum Library in Gjakova, a warm Ottoman library interior — arched windows with wooden lattice grilles, shelves of bound manuscripts, and an open Qur'an on a carved reading-stand."
 era: founded 1595
 coordinates:
   lat: 42.3810

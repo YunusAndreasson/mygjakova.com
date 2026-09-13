@@ -18,6 +18,11 @@ import '~/styles/global.css';
 
 interface Props {
   title?: string;
+  /**
+   * Full <title> override, used verbatim (no " — siteName" suffix) — for titles
+   * worded around search intent. `title` still names the breadcrumb leaf.
+   */
+  metaTitle?: string;
   description?: string;
   /** Path to an OG image under /public, or absolute URL. */
   image?: string;
@@ -26,14 +31,21 @@ interface Props {
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const { title, description, image = '/og-default.jpg', noindex = false, jsonLd } = Astro.props;
+const {
+  title,
+  metaTitle,
+  description,
+  image = '/og-default.jpg',
+  noindex = false,
+  jsonLd,
+} = Astro.props;
 
 const lang = resolveLocale(Astro.currentLocale);
 const dir = getDirection(lang);
 const t = useTranslations(lang);
 
 const siteName = t('site.name');
-const pageTitle = title ? `${title} — ${siteName}` : `${siteName} — ${t('site.tagline')}`;
+const pageTitle = metaTitle ?? (title ? `${title} — ${siteName}` : `${siteName} — ${t('site.tagline')}`);
 const desc = description ?? t('site.description');
 
 // Canonical + hreflang are built from the locale-agnostic path so language

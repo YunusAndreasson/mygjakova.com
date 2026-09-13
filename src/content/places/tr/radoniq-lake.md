@@ -1,6 +1,8 @@
 ---
 title: Radoniq Gölü
 summary: Kosova’nın ikinci büyük su kütlesi — dağların altında Dukagjin ovasını sulayan ve şehre su sağlayan engin bir rezervuar; sakin, el değmemiş kıyısı Gjakova’ya en yakın açık manzara.
+metaTitle: "Radoniq Gölü, Gjakova (Kosova) — tarihçe ve gezi rehberi"
+metaDescription: "Kosova’nın ikinci büyük gölü, Gjakova’ya 11 km: 1977–86’da içme suyu rezervuarı olarak yapıldı, yaklaşık 30 m derin; yüzmek yasak, balıkçılık yaygın."
 category: nature
 hero: ../../../assets/places/radoniq-lake.png
 heroAlt: "Altın saatte geniş ve durgun bir rezervuar; arkada ağaçlık tepeler ve uzakta gri bir dağ duvarı, ön planda sazlar."
@@ -45,7 +47,7 @@ gallery:
       url: "https://commons.wikimedia.org/wiki/File%3ARadoniqi_Lake_from_air_01.jpg"
 ---
 
-Her göl doğanın eseri değildir. **Radoniq Gölü** — *Liqeni i Radoniqit* — Gjakova’nın güneybatısında dağların altında uzanan geniş su tabakasıdır ve tümüyle insan elinin işidir: 1980’lerde yükseltilen yapay bir rezervuar; aynı anda hem bölgenin su kaynağı hem de ona en yakın açık kır parçası.
+Her göl doğanın eseri değildir. **Radoniq Gölü** — *Liqeni i Radoniqit* — Gjakova’nın kuzeyinde dağların altında uzanan geniş su tabakasıdır ve tümüyle insan elinin işidir: 1980’lerde yükseltilen yapay bir rezervuar; aynı anda hem bölgenin su kaynağı hem de ona en yakın açık kır parçası.
 
 ## İnşa edilen bir göl
 

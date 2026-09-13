@@ -1,6 +1,8 @@
 ---
 title: Der Große Basar
 summary: Das schlagende Herz des alten Gjakova — ein Kilometer kopfsteingepflasterter Gassen, gesäumt von Handwerkerläden, der älteste und längste Basar des Kosovo, 1999 niedergebrannt und Laden für Laden wieder aufgebaut.
+metaTitle: "Alter Basar von Gjakova (Çarshia e Madhe), Kosovo"
+metaDescription: "Der älteste und längste Basar des Kosovo: ein Kilometer Kopfsteinpflaster und Handwerkerläden in Gjakovas Altstadt, 1999 niedergebrannt und wieder aufgebaut."
 category: bazaar
 hero: ../../../assets/places/grand-bazaar.png
 heroAlt: "Eine lange, kopfsteingepflasterte Basararkade aus niedrigen Handwerkerläden mit Holzfassaden, die sich in die Ferne verliert, am hinteren Ende eine Moscheekuppel und ein Minarett."

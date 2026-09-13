@@ -1,10 +1,12 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
 import HomeView from '~/components/views/HomeView.astro';
+import { useTranslations } from '~/i18n/utils';
 
 const lang = 'tr' as const;
+const t = useTranslations(lang);
 ---
 
-<BaseLayout>
+<BaseLayout metaTitle={t('home.metaTitle')}>
   <HomeView lang={lang} />
 </BaseLayout>

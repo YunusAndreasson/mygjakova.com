@@ -1,6 +1,8 @@
 ---
 title: Der Radoniq-See
 summary: Das zweitgrößte Gewässer des Kosovo — ein weiter Stausee unterhalb der Berge, der die Dukagjin-Ebene bewässert und die Stadt versorgt, sein stilles, unbebautes Ufer die nächstgelegene offene Landschaft bei Gjakova.
+metaTitle: "Radoniq-See (Liqeni i Radoniqit) bei Gjakova, Kosovo"
+metaDescription: "Der zweitgrößte See des Kosovo, 11 km von Gjakova: 1977–86 als Trinkwasserspeicher gebaut, rund 30 m tief — Schwimmen verboten, Angeln beliebt."
 category: nature
 hero: ../../../assets/places/radoniq-lake.png
 heroAlt: "Ein breiter, ruhiger Stausee zur goldenen Stunde, bewaldete Hügel und eine ferne graue Bergwand dahinter, Schilf im Vordergrund."
@@ -45,7 +47,7 @@ gallery:
       url: "https://commons.wikimedia.org/wiki/File%3ARadoniqi_Lake_from_air_01.jpg"
 ---
 
-Nicht jeder See ist von der Natur geschaffen. Der **Radoniq-See** — *Liqeni i Radoniqit* — ist die breite Wasserfläche, die unterhalb der Berge südwestlich von Gjakova liegt, und er ist ganz und gar das Werk von Menschenhand: ein künstlicher Stausee, in den 1980er-Jahren aufgestaut, der zugleich als Wasserversorgung der Region und als ihr nächstgelegenes Stück offenes Land dient.
+Nicht jeder See ist von der Natur geschaffen. Der **Radoniq-See** — *Liqeni i Radoniqit* — ist die breite Wasserfläche, die unterhalb der Berge nördlich von Gjakova liegt, und er ist ganz und gar das Werk von Menschenhand: ein künstlicher Stausee, in den 1980er-Jahren aufgestaut, der zugleich als Wasserversorgung der Region und als ihr nächstgelegenes Stück offenes Land dient.
 
 ## Ein See, der gebaut wurde
 

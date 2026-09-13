@@ -1,6 +1,8 @@
 ---
 title: The Accursed Mountains
 summary: The alpine wall west of Gjakova — the Bjeshkët e Nemuna rising beyond the Erenik valley, with glacial lakes, high summer pastures, and Kosovo's highest peak within a day's reach.
+metaTitle: "Accursed Mountains from Gjakova — Kosovo Side & Gjeravica"
+metaDescription: "The Kosovo side of the Accursed Mountains (Bjeshkët e Nemuna), west of Gjakova: Gjeravica, Kosovo’s highest peak, glacial lakes and old shepherds’ trails."
 category: nature
 hero: ../../../assets/places/accursed-mountains.png
 heroAlt: "A dramatic limestone alpine ridge streaked with late snow above a still mountain lake."

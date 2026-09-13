@@ -7,6 +7,10 @@ const lang = 'tr' as const;
 const t = useTranslations(lang);
 ---
 
-<BaseLayout title={t('visit.title')} description={t('visit.description')}>
+<BaseLayout
+  title={t('visit.title')}
+  metaTitle={t('visit.metaTitle')}
+  description={t('visit.description')}
+>
   <VisitView lang={lang} />
 </BaseLayout>

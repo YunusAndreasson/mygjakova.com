@@ -40,15 +40,23 @@ describe('getDirection', () => {
 
 describe('localizedPath', () => {
   it('does not prefix the default locale', () => {
-    expect(localizedPath('en', '/places')).toBe('/places');
+    expect(localizedPath('en', '/places')).toBe('/places/');
     expect(localizedPath('en', '/')).toBe('/');
   });
   it('prefixes non-default locales', () => {
-    expect(localizedPath('sq', '/places')).toBe('/sq/places');
+    expect(localizedPath('sq', '/places')).toBe('/sq/places/');
     expect(localizedPath('sq', '/')).toBe('/sq/');
   });
   it('normalises a missing leading slash', () => {
-    expect(localizedPath('sq', 'places')).toBe('/sq/places');
+    expect(localizedPath('sq', 'places')).toBe('/sq/places/');
+  });
+  it('ends page paths in the canonical trailing slash, once', () => {
+    expect(localizedPath('en', '/places/hadum-mosque')).toBe('/places/hadum-mosque/');
+    expect(localizedPath('de', '/places/hadum-mosque/')).toBe('/de/places/hadum-mosque/');
+  });
+  it('leaves file routes without a trailing slash', () => {
+    expect(localizedPath('en', '/rss.xml')).toBe('/rss.xml');
+    expect(localizedPath('tr', '/rss.xml')).toBe('/tr/rss.xml');
   });
 });
 

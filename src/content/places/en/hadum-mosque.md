@@ -1,9 +1,11 @@
 ---
 title: The Hadum Mosque
 summary: The late-Ottoman mosque at the head of the bazaar — its interior a painted garden of cypresses and flowers, and the endowment from which the whole old city grew.
+metaTitle: "Hadum Mosque, Gjakova (1594) — History & Painted Interior"
+metaDescription: "Gjakova’s first stone: the Ottoman mosque (1594–95) at the head of the bazaar — its garden-painted interior, the eunuch who founded it, and the city it seeded."
 category: mosque
 hero: ../../../assets/places/hadum-mosque.png
-heroAlt: "A single-domed Ottoman mosque with a low lead-grey dome and a slim minaret, its three-arched porch painted with cypresses and flowers, at the head of the cobbled bazaar."
+heroAlt: "The Hadum Mosque in Gjakova, a single-domed Ottoman mosque with a low lead-grey dome and a slim minaret, its three-arched porch painted with cypresses and flowers, at the head of the cobbled bazaar."
 era: c. 1594
 coordinates:
   lat: 42.3809

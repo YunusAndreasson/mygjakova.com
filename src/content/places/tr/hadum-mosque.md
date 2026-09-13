@@ -1,6 +1,8 @@
 ---
 title: Hadım Camii
 summary: Çarşının başındaki geç Osmanlı camii — iç mekânı selvi ve çiçeklerden oluşan boyalı bir bahçe, ve bütün eski şehrin içinden büyüdüğü vakıf.
+metaTitle: "Hadım Camii, Gjakova (Yakova) — tarihçe ve süslemeler"
+metaDescription: "Gjakova çarşısının başındaki Osmanlı camii (1594–95): bahçe gibi boyanmış iç süslemeleri, onu yaptıran Süleyman Hadım Ağa ve şehri doğuran vakıf."
 category: mosque
 hero: ../../../assets/places/hadum-mosque.png
 heroAlt: "Alçak, kurşuni gri kubbeli ve ince minareli tek kubbeli bir Osmanlı camii; selvi ve çiçeklerle boyanmış üç kemerli son cemaat revakıyla, arnavut kaldırımı çarşının başında."

@@ -42,15 +42,18 @@ export function localeName(lang: Locale): string {
 /**
  * Build a path for a given locale. The default locale has no prefix
  * (prefixDefaultLocale: false); other locales are prefixed with `/<locale>`.
- * `path` is locale-agnostic and should start with "/", e.g. "/places".
+ * `path` is locale-agnostic and should start with "/", e.g. "/places" → "/sq/places/".
  *
  * Kept dependency-free (no astro:i18n import) so it is usable anywhere,
  * including plain .ts modules and tests.
  */
 export function localizedPath(lang: Locale, path = '/'): string {
-  const clean = `/${path.replace(/^\/+/, '')}`;
-  if (lang === defaultLang) return clean === '/' ? '/' : clean;
-  return clean === '/' ? `/${lang}/` : `/${lang}${clean}`;
+  let clean = `/${path.replace(/^\/+/, '')}`;
+  // Pages build as directories, so their canonical URLs (and the sitemap) end in
+  // "/". A slashless link costs every click a 308 redirect and lets Google index
+  // the slashless duplicate. File routes such as "/rss.xml" are left as they are.
+  if (!clean.endsWith('/') && !/\.[a-z0-9]+$/i.test(clean)) clean += '/';
+  return lang === defaultLang ? clean : `/${lang}${clean}`;
 }
 
 /**

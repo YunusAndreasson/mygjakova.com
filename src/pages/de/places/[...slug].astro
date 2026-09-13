@@ -27,6 +27,12 @@ const placeLd = buildPlaceJsonLd({
 });
 ---
 
-<BaseLayout title={place.data.title} description={place.data.summary} image={image} jsonLd={placeLd}>
+<BaseLayout
+  title={place.data.title}
+  metaTitle={place.data.metaTitle}
+  description={place.data.metaDescription ?? place.data.summary}
+  image={image}
+  jsonLd={placeLd}
+>
   <PlaceGuide place={place} lang={lang} />
 </BaseLayout>

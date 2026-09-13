@@ -43,7 +43,8 @@ export const ui = {
     'site.name': 'Gjakova',
     'site.tagline': 'A cultural guide to the old city',
     'site.description':
-      'An elegant guide to the old culture of Gjakova, Kosovo — its bazaar, mosques, stone houses and the people who shaped them.',
+      'A guide to Gjakova’s old town in western Kosovo — the Grand Bazaar, the Hadum Mosque, stone kullas, the Clock Tower and five centuries of history.',
+    'home.metaTitle': 'Gjakova, Kosovo — Old Town Guide: Bazaar, Mosques & Kullas',
 
     'nav.home': 'Home',
     'nav.places': 'Places',
@@ -105,7 +106,8 @@ export const ui = {
 
     'visit.title': 'Visiting Gjakova',
     'visit.description':
-      'How to get to Gjakova, where to stay in the old town, when to come, and the halal and prayer practicalities — a practical guide to visiting western Kosovo’s Ottoman-heritage city.',
+      'Gjakova is in western Kosovo, ~1.5 h by bus from Prishtina and 2 h 40 from Tirana airport. How to get there, where to stay in the old town, when to go.',
+    'visit.metaTitle': 'Visiting Gjakova, Kosovo — Getting There, Stays & Weather',
 
     'locator.title': 'Where Gjakova sits in Kosovo',
     'locator.alt':
@@ -121,7 +123,8 @@ export const ui = {
     'site.name': 'Gjakova',
     'site.tagline': 'Një udhërrëfyes kulturor për qytetin e vjetër',
     'site.description':
-      'Një udhërrëfyes elegant për kulturën e vjetër të Gjakovës, Kosovë — çarshia, xhamitë, shtëpitë e gurta dhe njerëzit që e formësuan atë.',
+      'Udhërrëfyes për Gjakovën e vjetër në Kosovë — Çarshia e Madhe, Xhamia e Hadumit, kullat e gurta, Kulla e Sahatit dhe pesë shekuj histori.',
+    'home.metaTitle': 'Gjakova (Gjakovë): Çarshia e Vjetër, xhamitë dhe historia',
 
     'nav.home': 'Ballina',
     'nav.places': 'Vendet',
@@ -184,7 +187,8 @@ export const ui = {
 
     'visit.title': 'Vizita në Gjakovë',
     'visit.description':
-      'Si të arrini në Gjakovë, ku të rrini në qytetin e vjetër, kur të vini, dhe çështjet praktike të ushqimit hallall e të faljes — një udhërrëfyes praktik për qytetin e Gjakovës me trashëgimi osmane.',
+      'Gjakova shtrihet në perëndim të Kosovës, rreth një orë e gjysmë me autobus nga Prishtina. Si të vini, ku të rrini në qytetin e vjetër dhe kur.',
+    'visit.metaTitle': 'Vizita në Gjakovë: si të vini, ku të rrini dhe moti',
 
     'locator.title': 'Ku ndodhet Gjakova në Kosovë',
     'locator.alt':
@@ -200,7 +204,8 @@ export const ui = {
     'site.name': 'Gjakova',
     'site.tagline': 'Ein Kulturführer durch die Altstadt',
     'site.description':
-      'Ein eleganter Führer durch die alte Kultur von Gjakova, Kosovo — ihren Basar, ihre Moscheen, ihre Steinhäuser und die Menschen, die sie geprägt haben.',
+      'Gjakova im Westen des Kosovo — der Große Basar, die Hadum-Moschee, steinerne Kullas, der Uhrturm und fünf Jahrhunderte Geschichte der Altstadt.',
+    'home.metaTitle': 'Gjakova (Kosovo): Altstadt, Basar & Sehenswürdigkeiten',
 
     'nav.home': 'Start',
     'nav.places': 'Orte',
@@ -264,7 +269,8 @@ export const ui = {
 
     'visit.title': 'Gjakova besuchen',
     'visit.description':
-      'Wie man nach Gjakova kommt, wo man in der Altstadt übernachtet, wann man kommen sollte und das Praktische zu Halal und Gebet — ein praktischer Führer für den Besuch der osmanisch geprägten Stadt im Westen des Kosovo.',
+      'Gjakova liegt im Westen des Kosovo, ~1,5 Std. mit dem Bus ab Prishtina, 2 Std. 40 ab Flughafen Tirana. Anreise, Unterkunft in der Altstadt, Reisezeit.',
+    'visit.metaTitle': 'Wo liegt Gjakova? Anreise, Unterkunft & Wetter im Kosovo',
 
     'locator.title': 'Wo Gjakova im Kosovo liegt',
     'locator.alt':
@@ -280,7 +286,8 @@ export const ui = {
     'site.name': 'Gjakova',
     'site.tagline': 'Eski şehre kültürel bir rehber',
     'site.description':
-      'Kosova’nın Gjakova şehrinin eski kültürüne zarif bir rehber — çarşısı, camileri, taş evleri ve onları biçimlendiren insanlar.',
+      'Batı Kosova’daki Gjakova’nın (Yakova) eski şehri — Büyük Çarşı, Hadım Camii, taş kullalar, Saat Kulesi ve beş yüzyıllık tarih.',
+    'home.metaTitle': 'Gjakova (Yakova), Kosova — Eski Çarşı, camiler ve tarih',
 
     'nav.home': 'Ana Sayfa',
     'nav.places': 'Yerler',
@@ -344,7 +351,8 @@ export const ui = {
 
     'visit.title': 'Gjakova’yı ziyaret',
     'visit.description':
-      'Gjakova’ya nasıl gidilir, eski şehirde nerede kalınır, ne zaman gelinir ve helal ile namaz pratikleri — batı Kosova’nın Osmanlı miraslı şehrini ziyaret için pratik bir rehber.',
+      'Gjakova batı Kosova’da: Priştine’den otobüsle ~1,5 sa, Tiran Havalimanı’ndan 2 sa 40. Ulaşım, eski şehirde konaklama ve en iyi ziyaret zamanı.',
+    'visit.metaTitle': 'Gjakova nerede? Kosova’da ulaşım, konaklama ve hava',
 
     'locator.title': 'Gjakova Kosova’nın neresinde',
     'locator.alt': 'Kosova haritası: Gjakova batıda, başkent Priştine kuzeydoğuda işaretli.',
@@ -359,7 +367,8 @@ export const ui = {
     'site.name': 'Gjakova',
     'site.tagline': 'En kulturguide till den gamla staden',
     'site.description':
-      'En stillsam guide till den gamla kulturen i Gjakova, Kosovo — basaren, moskéerna, stenhusen och människorna som formade dem.',
+      'En guide till gamla Gjakova i västra Kosovo — Stora basaren, Hadum-moskén, stenkullorna, Klocktornet och fem sekler av historia.',
+    'home.metaTitle': 'Gjakova, Kosovo — gamla basaren, moskéerna och historien',
 
     'nav.home': 'Hem',
     'nav.places': 'Platser',
@@ -422,7 +431,8 @@ export const ui = {
 
     'visit.title': 'Att besöka Gjakova',
     'visit.description':
-      'Hur du tar dig till Gjakova, var du bor i gamla staden, när du bör komma och vad som är bra att veta på plats — en handfast guide till västra Kosovos osmanska kulturstad.',
+      'Gjakova ligger i västra Kosovo, ~1,5 tim med buss från Pristina och 2 tim 40 från Tiranas flygplats. Resväg, boende i gamla staden och bästa restid.',
+    'visit.metaTitle': 'Resa till Gjakova i Kosovo — resväg, boende och väder',
 
     'locator.title': 'Var Gjakova ligger i Kosovo',
     'locator.alt':
