@@ -125,5 +125,5 @@ sharp fails to install on a machine with libvips installed system-wide, set
 
 The code is [MIT](LICENSE). The written guide, the photographs, the
 illustrations and the myGjakova name and mark are not; images from Wikimedia
-Commons keep their own licences. [LICENSE](LICENSE) lists which files are
+Commons keep their own licences. [NOTICE.md](NOTICE.md) lists which files are
 which.
