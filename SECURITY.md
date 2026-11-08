@@ -8,7 +8,7 @@ privately.
 ## Reporting a vulnerability
 
 Use GitHub's private reporting:
-[report a vulnerability](https://github.com/YunusAndreasson/mygjakova/security/advisories/new).
+[report a vulnerability](https://github.com/YunusAndreasson/mygjakova.com/security/advisories/new).
 Please don't open a public issue.
 
 Include the URL, your browser, what you did, what happened, and what an
