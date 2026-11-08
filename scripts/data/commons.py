@@ -17,7 +17,7 @@ import urllib.parse
 import urllib.request
 
 API = "https://commons.wikimedia.org/w/api.php"
-UA = "GjakovaCulturalGuide/1.0 (https://gjakova.pages.dev; yunus@edenmind.com)"
+UA = "GjakovaCulturalGuide/1.0 (https://mygjakova.com; yunus@edenmind.com)"
 
 # License short-names we treat as freely reusable (with attribution where due).
 FREE = re.compile(
