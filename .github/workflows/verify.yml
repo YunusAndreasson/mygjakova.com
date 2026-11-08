@@ -1,0 +1,30 @@
+name: verify
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '26.13.0'
+      # package.json has no packageManager field, so pnpm's version is pinned here.
+      - name: Install pinned package manager
+        run: npm install --global pnpm@11.28.4
+      - run: pnpm install --frozen-lockfile
+        env:
+          # Use sharp's prebuilt binary even if the runner image ships libvips.
+          SHARP_IGNORE_GLOBAL_LIBVIPS: '1'
+      # Biome, astro check, Vitest, then the build (icons, share cards and the
+      # static site, with every image optimised).
+      - run: pnpm verify
