@@ -1,0 +1,31 @@
+name: Correction
+description: A fact, date, name or translation in the guide is wrong or out of date.
+labels: [content]
+body:
+  - type: input
+    id: url
+    attributes:
+      label: Page
+      placeholder: https://mygjakova.com/timeline/
+    validations:
+      required: true
+  - type: textarea
+    id: wrong
+    attributes:
+      label: What it says
+      description: Quote the sentence, in the language you read it in.
+    validations:
+      required: true
+  - type: textarea
+    id: right
+    attributes:
+      label: What it should say
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: Where the correct version comes from. A book with its page, an official record, or your own visit with the date.
+    validations:
+      required: true

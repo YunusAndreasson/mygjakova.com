@@ -1,0 +1,21 @@
+name: Suggestion
+description: A place, event or feature the guide should have.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What's missing
+      description: The place, event or page you looked for, or what got in the way while you used the site.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it belongs
+      description: What a visitor to Gjakova would get from it.
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources
+      description: Anything the guide could cite for it.
