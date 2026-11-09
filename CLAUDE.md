@@ -95,6 +95,27 @@ Edit*). `--branch main` = production; any other branch = a preview URL. Update `
 in `astro.config.mjs` and the Sitemap URL in `public/robots.txt` when a custom domain
 is connected.
 
+## Open source
+
+The repository is public. MIT covers the code; [NOTICE.md](NOTICE.md) lists what it
+doesn't: the guide's text in every language, the author's photographs, the hero
+plates and the myGjakova mark, plus third-party material under its own licence.
+
+- A new Commons image goes into `docs/IMAGES.md` with its licence, author and file
+  page, and is credited where it appears (`ImageCredit.astro`). An image without a
+  licence that allows redistribution doesn't go in.
+- No Cloudflare token in the repo: `pnpm deploy` uploads from this machine, and CI
+  holds no credentials.
+- Dependabot opens grouped pull requests weekly. `.github/dependabot.yml` holds
+  TypeScript back until `astro check` supports its native compiler. A merge deploys
+  nothing.
+- If `astro check` says "The `@astrojs/check` and `typescript` packages are
+  required" while both are installed, look at the `@emnapi/*` overrides in
+  `pnpm-workspace.yaml` before anything else: a beta emnapi from rolldown's wasm
+  binding causes it.
+- Biome skips Markdown, SVG and YAML (`biome.json`), so the place pages'
+  frontmatter stays hand-formatted.
+
 ## Deferred (not yet built)
 
 Search, a CMS, dark theme, and original (own) photography. Note: freely-licensed
