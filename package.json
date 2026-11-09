@@ -27,7 +27,7 @@
     "@astrojs/mdx": "^6.0.3",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
-    "astro": "6.4.8",
+    "astro": "7.3.3",
     "maplibre-gl": "^5.24.0",
     "pmtiles": "^4.5.0"
   },
