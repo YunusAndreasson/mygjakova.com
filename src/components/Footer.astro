@@ -17,9 +17,13 @@ const items = [
   { key: 'nav.about', path: '/about' },
 ] as const;
 
-// The maker's projects page — a single quiet credit link. The other apps he
-// builds live on that page, so this footer stays one line (no socials row).
+// The maker's credit line: his projects page (the other apps he builds live
+// there), a contact address and his GitHub — one quiet line, no socials row.
+// The address and "GitHub" read the same in every locale, so need no strings.
+// contact@ forwards to the maker (Cloudflare Email Routing).
 const makerProjects = 'https://andreassonphoto.com/projects';
+const contactEmail = 'contact@mygjakova.com';
+const makerGitHub = 'https://github.com/YunusAndreasson';
 ---
 
 <footer class="site-footer">
@@ -53,6 +57,10 @@ const makerProjects = 'https://andreassonphoto.com/projects';
     <p>© {year} {t('site.name')}. {t('footer.rights')}</p>
     <p class="site-footer__credit">
       <a href={makerProjects} rel="me noopener noreferrer" target="_blank">{t('footer.credit')}</a>
+      <span aria-hidden="true">·</span>
+      <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+      <span aria-hidden="true">·</span>
+      <a href={makerGitHub} rel="me noopener noreferrer" target="_blank">GitHub</a>
     </p>
   </div>
 </footer>
@@ -143,6 +151,11 @@ const makerProjects = 'https://andreassonphoto.com/projects';
   }
   .site-footer__base p {
     margin: 0;
+  }
+  .site-footer__credit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-sm);
   }
   .site-footer__credit a {
     color: var(--color-sand-400);
