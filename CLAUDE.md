@@ -13,6 +13,10 @@ culture. Static Astro site deployed to Cloudflare Pages.
   mapped to Tailwind `font-display/serif/sans`.
 - **Images**: Astro `<Image>` + Sharp at build time (no Cloudflare adapter).
 - View transitions via `<ClientRouter />`; built-in CSP (`security.csp`).
+- Cloudflare Web Analytics (cookieless, no personal data): one beacon `<script>` in
+  `BaseLayout.astro`, persisted across `<ClientRouter />` navigations. Its two origins
+  (`static.cloudflareinsights.com` in script-src, `cloudflareinsights.com` in connect-src)
+  are the only third-party sources in the CSP.
 
 ## Commands
 

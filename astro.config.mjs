@@ -53,17 +53,26 @@ export default defineConfig({
   //   • connect-src 'self'      — PMTiles range requests + glyph PBFs (/map/…).
   //   • img-src 'self' data: blob: — Astro images, the inline `data:` paper
   //     grain, and MapLibre canvas/texture sources.
+  // The one third-party exception is Cloudflare Web Analytics (cookieless, no
+  // personal data): its beacon script loads from static.cloudflareinsights.com
+  // and reports to cloudflareinsights.com — so script-src and connect-src name
+  // exactly those two origins and nothing else.
   security: {
     csp: {
       directives: [
         "default-src 'self'",
         "img-src 'self' data: blob:",
         "worker-src 'self' blob:",
-        "connect-src 'self'",
+        "connect-src 'self' https://cloudflareinsights.com",
         "base-uri 'self'",
         "object-src 'none'",
         "frame-ancestors 'self'",
       ],
+      // Overrides Astro's default script-src sources, so 'self' is restated.
+      // Astro still appends the per-build hashes of its own scripts.
+      scriptDirective: {
+        resources: ["'self'", 'https://static.cloudflareinsights.com'],
+      },
     },
   },
 

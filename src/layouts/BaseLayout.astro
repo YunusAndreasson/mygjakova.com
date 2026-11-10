@@ -176,6 +176,20 @@ const ld = { '@context': 'https://schema.org', '@graph': ldGraph };
     <Font cssVariable="--ff-sans" preload />
 
     <ClientRouter />
+
+    <!--
+      Cloudflare Web Analytics: cookieless, stores no personal data. is:inline
+      ships the tag as written (no bundling). transition:persist keeps this one
+      element in <head> across <ClientRouter /> navigations, so it is never
+      dropped or duplicated; the beacon counts those soft navigations itself
+      from history.pushState.
+    -->
+    <script
+      is:inline
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "f6ed9ea668a04e2a889faad882112445"}'
+      transition:persist="cf-web-analytics"></script>
   </head>
 
   <body>
