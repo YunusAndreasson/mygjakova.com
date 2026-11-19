@@ -16,7 +16,8 @@ culture. Static Astro site deployed to Cloudflare Pages.
 - Cloudflare Web Analytics (cookieless, no personal data): one beacon `<script>` in
   `BaseLayout.astro`, persisted across `<ClientRouter />` navigations. Its two origins
   (`static.cloudflareinsights.com` in script-src, `cloudflareinsights.com` in connect-src)
-  are the only third-party sources in the CSP.
+  are the only third-party sources in the CSP. Disclosed in one line of the About page's
+  colophon (`colophonRest` in `AboutView.astro`, every locale), deliberately low-key.
 
 ## Commands
 

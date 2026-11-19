@@ -25,7 +25,7 @@ export const MAKER_PERSON_ID = `${MAKER_URL}/#person`;
  * Person node for the maker. Its `@id` is the maker's own hub fragment —
  * identical on every site he builds — so search engines can resolve the guide's
  * `creator` to one canonical identity. `sameAs` ties his social profiles to that
- * identity (the same links rendered in the footer's follow row). `name` follows
+ * identity (the footer links only GitHub; the full list lives here). `name` follows
  * the page locale (see `makerName`); the other form stays in `alternateName`, so
  * the locale mirrors never read as two different people.
  */
